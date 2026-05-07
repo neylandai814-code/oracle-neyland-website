@@ -362,7 +362,10 @@ function rebindTabs(doc) {{
       doc.querySelectorAll('nav.tabs button').forEach(x => x.classList.remove('active'));
       doc.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       fresh.classList.add('active');
-      const target = doc.getElementById(fresh.dataset.tab);
+      // Dashboard panels use id="panel-<tid>" (e.g. "panel-overview").
+      // Injected panels use the raw id (e.g. "inj-map"). Try both.
+      const tid = fresh.dataset.tab;
+      const target = doc.getElementById('panel-' + tid) || doc.getElementById(tid);
       if (target) target.classList.add('active');
     }});
   }});
