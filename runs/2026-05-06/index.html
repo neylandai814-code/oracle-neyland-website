@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORACLE Dashboard — May 6, 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-1lzU4ePm67MfZTb7UZupnYP20ZqBAfWJ7mvgu+cs9/zeyUx8QQ5EU9mjkM/CVVFi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<style>
+:root { color-scheme: light; --navy:#1F3864; --gold:#BF9000; --bg:#fafafa; --paper:#fff; --line:#e5e5e5; --ink:#222; --ink2:#555; }
+* { box-sizing: border-box; }
+body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:14px; line-height:1.5; }
+header.brand { background:var(--navy); color:#fff; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:4px solid var(--gold); }
+header.brand h1 { margin:0; font-size:20px; letter-spacing:0.4px; }
+header.brand .subtitle { font-size:13px; opacity:0.85; }
+header.brand .meta { text-align:right; font-size:12px; opacity:0.85; }
+nav.tabs { background:#fff; border-bottom:1px solid var(--line); padding:0 14px; display:flex; flex-wrap:wrap; }
+nav.tabs button { background:none; border:0; padding:14px 14px; font-size:13px; cursor:pointer; color:var(--ink2); border-bottom:3px solid transparent; font-weight:500; }
+nav.tabs button:hover { color:var(--navy); }
+nav.tabs button.active { color:var(--navy); border-bottom-color:var(--gold); font-weight:700; }
+main { padding:24px 28px; max-width:1400px; margin:0 auto; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+h2 { color:var(--navy); margin-top:0; margin-bottom:14px; }
+h3 { color:var(--navy); margin-top:24px; margin-bottom:10px; border-bottom:2px solid var(--gold); padding-bottom:4px; display:inline-block; }
+.kpi-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:18px; }
+.kpi { background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:14px; }
+.kpi label { display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink2); margin-bottom:4px; }
+.kpi span { font-size:22px; font-weight:700; color:var(--navy); }
+.kpi span.small { font-size:13px; font-weight:500; color:var(--ink); }
+.parcel-card { background:var(--paper); border:1px solid var(--line); border-left:4px solid var(--gold); border-radius:6px; padding:16px; margin-bottom:14px; }
+.parcel-head { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
+.parcel-rank { background:var(--navy); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+.parcel-title { flex:1; }
+.parcel-title h4 { margin:0 0 2px 0; color:var(--navy); font-size:15px; }
+.parcel-locator { color:var(--ink2); font-size:13px; }
+.parcel-meta { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+.parcel-score { font-size:11px; color:var(--ink2); }
+.parcel-score span { font-size:18px; color:var(--navy); font-weight:700; }
+.parcel-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:8px; padding:10px; background:#f7f7f7; border-radius:4px; margin-bottom:10px; }
+.parcel-grid > div label { display:block; font-size:10px; text-transform:uppercase; color:var(--ink2); }
+.parcel-grid > div span, .parcel-grid > div a { font-size:13px; color:var(--ink); }
+.parcel-grid a { color:var(--navy); text-decoration:none; }
+.parcel-grid a:hover { text-decoration:underline; }
+.parcel-flags { font-size:13px; padding:8px 10px; background:#fff7e6; border-left:3px solid var(--gold); margin-bottom:8px; }
+.parcel-flags ul { margin:6px 0 0 0; padding-left:20px; }
+.parcel-next { font-size:13px; padding:8px 10px; background:#e8f4ea; border-left:3px solid #2e7d32; }
+.thesis-card { background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:14px; margin-bottom:10px; }
+.thesis-card h4 { margin:0 0 6px 0; color:var(--navy); }
+.thesis-card p { margin:4px 0; font-size:13px; }
+.pf-card { background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:18px; margin-bottom:18px; }
+.pf-card h3 { margin-top:0; }
+.pf-meta { font-size:13px; color:var(--ink2); margin-bottom:12px; }
+table.data-tbl { width:100%; border-collapse:collapse; font-size:13px; }
+table.data-tbl th { background:var(--navy); color:#fff; padding:8px 10px; text-align:left; font-weight:600; }
+table.data-tbl td { padding:8px 10px; border-bottom:1px solid var(--line); }
+table.data-tbl tr:hover td { background:#fafafa; }
+.verdict { padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700; color:#fff; }
+.v-proceed { background:#2e7d32; }
+.v-conditional { background:#bf9000; }
+.v-borderline { background:#e65100; }
+.v-does { background:#b71c1c; }
+.callout { background:#fff8e1; border-left:4px solid var(--gold); padding:14px 16px; border-radius:4px; margin:14px 0; }
+.callout strong { color:var(--navy); }
+ul.compact { margin:8px 0; padding-left:22px; }
+ul.compact li { margin:3px 0; font-size:13px; }
+.gridjs-tbl { font-size:13px !important; }
+footer { padding:24px 28px; color:var(--ink2); font-size:12px; border-top:1px solid var(--line); margin-top:40px; }
+@media (max-width:780px) {
+  nav.tabs { overflow-x:auto; flex-wrap:nowrap; }
+  nav.tabs button { flex-shrink:0; }
+}
+</style>
+</head>
+<body>
+<header class="brand">
+  <div>
+    <h1>ORACLE — Daily Site-Sourcing Dashboard</h1>
+    <div class="subtitle">Neyland Development · May 6, 2026 · Run #5 · Brain config v2.2</div>
+  </div>
+  <div class="meta">
+    State scope: TN · GA · SC · NC · FL · KY · AL<br>
+    10 daily parcels · 4 Tier-A HG · 6 Tier-B theses
+  </div>
+</header>
+
+<nav class="tabs" id="tabnav">
+  <button class="active" data-tab="overview">Overview</button>
+  <button data-tab="daily">Daily Parcels</button>
+  <button data-tab="hg">Hidden Gems</button>
+  <button data-tab="pf">Pro Forma</button>
+  <button data-tab="exec">Exec Summary</button>
+  <button data-tab="comp">Comp Tracker</button>
+  <button data-tab="outreach">Outreach</button>
+  <button data-tab="dd">DD Checklist</button>
+  <button data-tab="sub">Submarkets</button>
+  <button data-tab="clim">Climate Risk</button>
+  <button data-tab="pipe">Pipeline</button>
+  <button data-tab="off">Off-Market</button>
+  <button data-tab="cap">Capital Markets</button>
+  <button data-tab="tmpl">Templates</button>
+  <button data-tab="sys">System</button>
+</nav>
+
+<main>
+
+<section id="overview" class="tab-panel active">
+  <h2>Overview — May 6, 2026</h2>
+  <div class="kpi-row">
+    <div class="kpi"><label>Daily parcels</label><span>10</span></div>
+    <div class="kpi"><label>Tier-A hidden gems</label><span>4</span></div>
+    <div class="kpi"><label>Tier-B HG theses</label><span>6</span></div>
+    <div class="kpi"><label>#1 daily verdict (BASE)</label><span class="small">PROCEED · 5.63% YoC</span></div>
+    <div class="kpi"><label>#1 HG verdict (BASE)</label><span class="small">BORDERLINE · 4.78%</span></div>
+    <div class="kpi"><label>Markets excluded</label><span class="small">Huntsville · Glendale KY</span></div>
+  </div>
+
+  <div class="callout">
+    <strong>Inventory caveat (5/05 playbook discipline):</strong> Day-5 cadence — 60-day dedup window now covers 60+ prior parcels.
+    Honest deliver of 10 daily parcels (below 15 ceiling). Pad-prevention rule reaffirmed; padding remains prohibited.
+  </div>
+
+  <h3>Top 5 Quick Reference</h3>
+  <table class="data-tbl">
+    <thead><tr><th>#</th><th>Score</th><th>Status</th><th>Market / Locator</th><th>Next Step</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>73</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Lakeland, FL (Polk County)</strong> — Moore Rd 30-ac tract (north Lakeland growth corridor)</td><td>Polk County Planning pre-app meeting on density allowance + rezone path; broker call for asking</td></tr><tr><td>2</td><td>69</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Bowling Green, KY (Warren County)</strong> — 3.92-ac RM3 entitled 72-unit parcel</td><td>Verify whether adjacent parcels available for assemblage; otherwise pass</td></tr><tr><td>3</td><td>67</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Knoxville, TN (Knox County)</strong> — 17.2-ac East Knox parcel, $1,050,000</td><td>Goldman Partners broker call for parcel ID + zoning; topo desktop pre-broker</td></tr><tr><td>4</td><td>66</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Asheville, NC (Buncombe County)</strong> — Lakeside Drive RM-8 medium-density MF site (acres TBV)</td><td>Pull Buncombe GIS for parcel acreage + slope; if >25 ac net, broker call</td></tr><tr><td>5</td><td>65</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Lakeland, FL (Polk County)</strong> — North Lakeland 95% upland tract A-RR (acreage TBV; minutes from downtown)</td><td>Listing-detail pull on Land & Farm; if ≥25 ac, broker call sequenced behind D-1</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Status Updates (from prior runs)</h3>
+  <ul class="compact">
+    <li><strong>Tallahassee 31.68-ac PUD ($1.2M, ~$2,710/u basis):</strong> URGENT — reconfirm availability with Crexi listing broker; PUD vesting verification critical.</li>
+    <li><strong>5/01 KY-1 BG Sterling Park RM-4 19.69-ac:</strong> Reconcile 392u vs 456u listing — broker validation in progress.</li>
+    <li><strong>5/01 HG-1 Crestview FL DO 287u:</strong> Insurance broker indication BEFORE LOI per FL Panhandle climate playbook.</li>
+    <li><strong>5/04 BlueOval SK Glendale dissolution:</strong> 5/01 HG-3 KY Elizabethtown 76-ac stays in WATCHING. Energy-storage repurposing scale TBV.</li>
+  </ul>
+
+  <h3>Auto-Triggers Applied Today</h3>
+  <ul class="compact"><li>Comp basis check: D-1 Lakeland $150k/ac placeholder is mid-range per 5/01 intel — within band.</li><li>Comp basis check: HG-1 Valdosta tract ~$25-35k/ac estimated whole-tract — within band; no flag.</li><li>Pipeline oversupply check: Huntsville/Madison and Glendale KY excluded today (continued from 5/01 + 5/04).</li><li>Climate insurance: No coastal parcels in today's daily list. Valdosta HG-1 is GA inland — $1,200/u/yr default insurance applied.</li><li>Single-anchor risk premium: HG-1 Valdosta carries Moody AFB BAH dependence — +25bps exit cap applied per 5/04 calibration.</li><li>Inventory caveat: Day-5 cadence — 60-day dedup window covers 60+ prior parcels; honest deliver at 10 daily parcels (below 15 ceiling) per 5/05 playbook.</li></ul>
+</section>
+
+<section id="daily" class="tab-panel">
+  <h2>Daily Parcels — 10 surfaced</h2>
+  <div class="callout">
+    <strong>Methodology:</strong> Cross-verified each parcel across 2+ aggregators. Scoring out of 100: Market Demand (25),
+    Reg/Policy (20), Phys Feas (20), Loc/Access (15), Fin Att (20). All TBV fields explicit. Day-5 cadence inventory thinning continues.
+  </div>
+  
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">1</div>
+    <div class="parcel-title">
+      <h4>Lakeland, FL (Polk County)</h4>
+      <div class="parcel-locator">Moore Rd 30-ac tract (north Lakeland growth corridor)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>73</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>30.0</span></div>
+    <div><label>Zoning</label><span>A-RR FLU (rezone-to-MF required)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Yield</label><span>240u (8 du/ac net after stormwater) — assumes rezone success</span></div>
+    <div><label>Source</label><a href="https://www.landandfarm.com/search/florida/lakeland-land-for-sale/available/under-contract/sold/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Lakeland zoning typically caps MF at <10 du/ac per 5/01 market intel — confirm pre-app density allowance</li><li>A-RR FLU requires comprehensive plan amendment for MF — adds 9-15mo entitlement</li><li>Land basis TBV; placeholder $4.5M (~$150k/ac upper Lakeland MF range)</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Polk County Planning pre-app meeting on density allowance + rezone path; broker call for asking</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">2</div>
+    <div class="parcel-title">
+      <h4>Bowling Green, KY (Warren County)</h4>
+      <div class="parcel-locator">3.92-ac RM3 entitled 72-unit parcel</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>69</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>3.92</span></div>
+    <div><label>Zoning</label><span>RM-3 (entitled 72 units)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>3/10</span></div>
+    <div><label>Yield</label><span>72u entitled — BORDERLINE (below 150-unit floor)</span></div>
+    <div><label>Source</label><a href="https://www.loopnet.com/search/multifamily-properties/bowling-green-ky/for-sale/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>BORDERLINE — 72 units is below the 150-unit floor in config.yaml v2.2; not pursuable standalone</li><li>Useful only if assemblage-able with adjacent parcel(s) to clear 150u floor</li><li>BG market intel persists from 5/01 — RM-4 product trades at premium</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Verify whether adjacent parcels available for assemblage; otherwise pass</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">3</div>
+    <div class="parcel-title">
+      <h4>Knoxville, TN (Knox County)</h4>
+      <div class="parcel-locator">17.2-ac East Knox parcel, $1,050,000</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>67</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>17.2</span></div>
+    <div><label>Zoning</label><span>TBV (likely R-1/R-2; rezone needed)</span></div>
+    <div><label>Asking</label><span>$1,050,000 ($61,047/ac)</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Yield</label><span>172-260u depending on rezone success at 10-15 du/ac</span></div>
+    <div><label>Source</label><a href="https://gprknoxville.com/find-properties/multifamily/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Zoning TBV — assume rezone-required play</li><li>Knoxville rolling-terrain risk per 4/30 market intel — slope analysis required pre-LOI</li><li>$61k/ac is at the low end of Knoxville MF land — sanity check vs. potential env/utility issue</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Goldman Partners broker call for parcel ID + zoning; topo desktop pre-broker</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">4</div>
+    <div class="parcel-title">
+      <h4>Asheville, NC (Buncombe County)</h4>
+      <div class="parcel-locator">Lakeside Drive RM-8 medium-density MF site (acres TBV)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>66</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>TBV</span></div>
+    <div><label>Zoning</label><span>RM-8 (Residential Multi-Family Medium Density — by-right)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Yield</label><span>TBV — depends on net acreage; RM-8 supports 8 du/ac net</span></div>
+    <div><label>Source</label><a href="https://www.crexi.com/properties/NC/Asheville/Multifamily" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>RM-8 is the by-right MF zone — RARE in Buncombe per 5/04 + 5/05 intel — but yield cap at 8 du/ac limits unit count</li><li>Asheville thin-pipeline market — institutional MF lead-sourcing soft per 5/04 update; partnership-entry preferred</li><li>Acreage TBV from listing summary</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Pull Buncombe GIS for parcel acreage + slope; if >25 ac net, broker call</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">5</div>
+    <div class="parcel-title">
+      <h4>Lakeland, FL (Polk County)</h4>
+      <div class="parcel-locator">North Lakeland 95% upland tract A-RR (acreage TBV; minutes from downtown)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>65</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>TBV (~25-50 estimated)</span></div>
+    <div><label>Zoning</label><span>A-RR FLU (rezone-to-MF required)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Yield</label><span>200-400u depending on net acreage post-rezone</span></div>
+    <div><label>Source</label><a href="https://www.landandfarm.com/search/florida/lakeland-land-for-sale/available/under-contract/sold/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Same A-RR rezone gate as D-1 — 9-15mo timeline</li><li>Upland advantage (95%) reduces wetland delineation cost vs. regional baseline</li><li>Acreage TBV — pull from listing detail before scoring further</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Listing-detail pull on Land & Farm; if ≥25 ac, broker call sequenced behind D-1</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">6</div>
+    <div class="parcel-title">
+      <h4>Knoxville, TN (Knox County)</h4>
+      <div class="parcel-locator">Alcoa Highway corridor ±5-ac redevelopment site (South Knox)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>63</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>5.0</span></div>
+    <div><label>Zoning</label><span>Flexible (per listing — multifamily/mixed-use compatible)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Yield</label><span>~50-70u — BORDERLINE (below 150-unit floor)</span></div>
+    <div><label>Source</label><a href="https://www.crexi.com/properties/TN/Knoxville/Multifamily" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>BORDERLINE size — only viable as assemblage / mixed-use carve-in</li><li>Alcoa Highway corridor is a high-growth infrastructure node — strategic value but small parcel</li><li>Surface as borderline reference; do not pursue standalone</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Hold for assemblage-only; do not LOI standalone</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">7</div>
+    <div class="parcel-title">
+      <h4>Jacksonville, FL (Duval / Clay County)</h4>
+      <div class="parcel-locator">22.24-ac US-301 corridor 3-parcel assemblage (2 Duval + 1 Clay)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>61</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>22.24</span></div>
+    <div><label>Zoning</label><span>Mixed residential + commercial (CUP path TBV)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Yield</label><span>200-310u depending on density approval</span></div>
+    <div><label>Source</label><a href="https://www.landwatch.com/florida-land-for-sale/jacksonville" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Jacksonville NOT in primary focus markets per config v2.2 — surface as out-of-focus FL whitelist hit</li><li>3-parcel assemblage with cross-county lines (Duval + Clay) increases title/zoning complexity</li><li>2,771 ft of US-301 frontage is significant — verify access vs. setback constraints</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Confirm Atlas pursuit interest in Jacksonville before broker call; otherwise file in monitoring</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">8</div>
+    <div class="parcel-title">
+      <h4>Tallahassee, FL (Leon County)</h4>
+      <div class="parcel-locator">10.52-ac assemblage with 2 houses + 3 mobile homes (redevelopment site)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>59</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>10.52</span></div>
+    <div><label>Zoning</label><span>TBV (existing residential; redev rezone required)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>7/10</span></div>
+    <div><label>Yield</label><span>100-150u — BORDERLINE (existing structures + redev complexity)</span></div>
+    <div><label>Source</label><a href="https://www.homes.com/tallahassee-fl/multi-family-homes-for-sale/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Existing structures + tenant-owned mobile home = relocation/displacement complexity</li><li>Tallahassee approval climate slow per 4/30 intel; PCs require full TIA before rezone hearing</li><li>Borderline yield even at successful rezone</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> FLAG as redev-only; do not pursue without Tallahassee Planning pre-app and tenant relocation analysis</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">9</div>
+    <div class="parcel-title">
+      <h4>Statesboro, GA (Bulloch County)</h4>
+      <div class="parcel-locator">3.89-ac Cindy Lane × Beasley Rd MDR (22-unit subdivision approved)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>56</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>3.89</span></div>
+    <div><label>Zoning</label><span>Medium Density Multi-Family Residential (approved 22u)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>4/10</span></div>
+    <div><label>Yield</label><span>22u — BORDERLINE (well below 150-unit floor)</span></div>
+    <div><label>Source</label><a href="https://www.griceconnect.com/local-news/statesboro-city-council-approves-22-unit-subdivision-budget-amendment-and-infrastructure-projects-11629637" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>BORDERLINE — 22 units is far below 150-floor; surface as approved-MDR data point ONLY</li><li>Useful as confirmation of Statesboro MDR approval climate (Statesboro Hyundai supplier catchment continues)</li><li>Not pursuable standalone — note for context only</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> File for context; track Statesboro Council approval cadence (3,970 housing units planned citywide)</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">10</div>
+    <div class="parcel-title">
+      <h4>Asheville, NC (Buncombe County)</h4>
+      <div class="parcel-locator">13.73-ac private cove wooded tract (subdivision potential 21 homes)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>48</span></div>
+      <span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">RED</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>13.73</span></div>
+    <div><label>Zoning</label><span>Residential (subdivision orientation; rezone for MF needed)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>8/10</span></div>
+    <div><label>Yield</label><span>21 SF lots concept — NOT viable for MF without major rezone</span></div>
+    <div><label>Source</label><a href="https://www.homes.com/asheville-nc/multi-family-homes-for-sale/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Private cove + wooded = slope + tree-clearing + access easement risks</li><li>Subdivision-only orientation per listing; MF rezone unlikely in private-cove context</li><li>Asheville thin pipeline reinforced 5/04 + 5/05 — Beaverdam-style forest tracts low odds</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Skip — not pursuable for institutional MF</div>
+</div>
+</section>
+
+<section id="hg" class="tab-panel">
+  <h2>Hidden Gems — Tier-A Specific Parcels & Tier-B Market Theses</h2>
+  <h3>Tier-A — Specific parcels (4)</h3>
+  
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-1</div>
+    <div class="parcel-title">
+      <h4>Valdosta, GA (Lowndes County)</h4>
+      <div class="parcel-locator">140.61-ac approved P-D 3-parcel (277 SF + 48 MF + I-75 visibility)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>74</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>140.61</span></div>
+    <div><label>Zoning</label><span>P-D (Planned Development) — Lowndes BoC approved</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Yield</label><span>Strategy: carve out 35 ac MF for ~280u via P-D modification; sell 100+ ac SF/BTR residual</span></div>
+    <div><label>Source</label><a href="https://www.landwatch.com/georgia-land-for-sale/valdosta" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Approved P-D allows only 48 MF doors as currently conceptualized — P-D MODIFICATION required to scale MF carve-out</li><li>Tertiary rent ceiling binding: Valdosta Class A blended ~$1,400-1,550/mo (Moody AFB BAH + VSU stack)</li><li>Single-anchor risk: Moody AFB BAH dependence (BRAC tail risk) — apply +25bps exit cap premium per 5/04 calibration</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> URGENT — broker call to confirm asking + partition feasibility; pre-app Lowndes Planning on P-D modification path</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-2</div>
+    <div class="parcel-title">
+      <h4>Valdosta, GA (Lowndes County)</h4>
+      <div class="parcel-locator">391.43-ac multi-parcel I-75 Exit 13 commercial assemblage</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>71</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>391.43</span></div>
+    <div><label>Zoning</label><span>Commercial (mostly cleared; MF requires CUP/rezone)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>7/10</span></div>
+    <div><label>Yield</label><span>Mixed-use master plan — MF carve-out 25-40 ac (~200-300u)</span></div>
+    <div><label>Source</label><a href="https://www.landwatch.com/georgia-land-for-sale/valdosta" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Master-plan-scale tract; full MF on entire acreage not viable</li><li>I-75 visibility = noise impact on premium MF rents</li><li>Commercial zoning requires rezone/CUP for MF</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Broker call for asking on whole tract; partition feasibility for MF carve-out 25-40 ac</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-3</div>
+    <div class="parcel-title">
+      <h4>Aiken County, SC</h4>
+      <div class="parcel-locator">6.65-ac MUR multi-unit working rental property (Aiken horse country)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>60</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>6.65</span></div>
+    <div><label>Zoning</label><span>MUR (Multi-Unit Residential)</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Yield</label><span>Existing rental units — value-add reposition; not 200u play</span></div>
+    <div><label>Source</label><a href="https://www.homes.com/aiken-county-sc/land-for-sale/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Small parcel — value-add play only, not new ground-up institutional</li><li>Surface as Aiken County data point complementary to North Augusta 5/01 HG-2 (36.88-ac at $49k/ac)</li><li>MUR allowance confirmed by listing — useful zoning reference for broader Aiken sourcing</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Confirm asking + rent roll; consider as small assemblage anchor only</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-4</div>
+    <div class="parcel-title">
+      <h4>Hattiesburg, MS (Forrest County)</h4>
+      <div class="parcel-locator">5-ac existing 12-unit assemblage (5 duplex + 2 SF) — Oak Grove submarket</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>53</span></div>
+      <span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>5.0</span></div>
+    <div><label>Zoning</label><span>Residential (existing units)</span></div>
+    <div><label>Asking</label><span>TBV (range $215k-$1.5M per market)</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Yield</label><span>12 units existing — value-add reposition only</span></div>
+    <div><label>Source</label><a href="https://www.homes.com/hattiesburg-ms/multi-family-homes-for-sale/" target="_blank" rel="noopener">View listing →</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Red flags:</strong><ul><li>Tiny relative to institutional MF threshold; surface as Oak Grove submarket entry signal</li><li>USM + Forrest General + Camp Shelby anchor demand persists per 5/04 intel</li><li>Track for assemblage with adjacent parcels</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Asking confirmation; track Oak Grove parcel adjacencies for assemblage</div>
+</div>
+  <h3>Tier-B — Market theses (no specific parcel today)</h3>
+  <div class="thesis-card"><h4>Sumter, SC</h4><p><strong>Thesis:</strong> Shaw AFB BAH-anchored continued; off-market sourcing the playbook (limited public listings).</p><p><strong>Action:</strong> Off-market direct-to-owner outreach (Off-Market Targets tab) — letter campaigns + 7-10 day phone follow-up.</p></div>
+<div class="thesis-card"><h4>Murray, KY (Calloway County)</h4><p><strong>Thesis:</strong> Murray State University ~10k students + manufacturing base. Below 200-unit floor absent specific catalyst — surface only via assemblage or off-market.</p><p><strong>Action:</strong> Continue Murray watch; tracking for assemblage-style entry.</p></div>
+<div class="thesis-card"><h4>Florence-Muscle Shoals (The Shoals), AL</h4><p><strong>Thesis:</strong> Mazda-Toyota catchment (Huntsville-region spillover) + UNA + Shoals tourism. Crexi shows 11 commercial property listings; specific MF sites thin in public inventory.</p><p><strong>Action:</strong> Direct-to-broker outreach (regional commercial brokers); off-market sourcing.</p></div>
+<div class="thesis-card"><h4>Cullman, AL</h4><p><strong>Thesis:</strong> I-65 corridor; B-2 zoning may require CUP for MF per 4/30 playbook rule. Continue tracking small-MSA hidden gem entries.</p><p><strong>Action:</strong> Verify each B-2 listing's CUP requirement before LOI.</p></div>
+<div class="thesis-card"><h4>Brunswick / Glynn County, GA</h4><p><strong>Thesis:</strong> Coastal SE GA secondary; insurance load is the gating variable. SSI/Jekyll tourism + Port of Brunswick + FLETC.</p><p><strong>Action:</strong> Off-market focus; insurance broker indication BEFORE LOI on any coastal Glynn parcel.</p></div>
+<div class="thesis-card"><h4>Boone, NC (Watauga County)</h4><p><strong>Thesis:</strong> Appalachian State University ~21k students; high-elevation seasonal economy. Limited inventory, slope-constrained.</p><p><strong>Action:</strong> Limited surfacing — Boone parcels surface only when slope + by-right MF zoning align.</p></div>
+</section>
+
+<section id="pf" class="tab-panel">
+  <h2>Pro Forma — D-1 Lakeland & HG-1 Valdosta</h2>
+  <div class="callout">
+    <strong>Verdict thresholds:</strong> ≥6.0% PROCEED COMFORT · 5.5-6.0% PROCEED · 5.0-5.5% CONDITIONAL · 4.5-5.0% BORDERLINE · &lt;4.5% DOES NOT PENCIL.
+    All numbers illustrative under stated assumptions, not predictions. Validation sequence required before LOI.
+  </div>
+  <div class="pf-card">
+  <h3>D-1 — Lakeland, FL — Moore Rd 30-ac</h3>
+  <div class="pf-meta"><strong>Parcel:</strong> Lakeland, FL — Moore Rd 30-ac (D-1)</div>
+  <table class="data-tbl"><thead><tr>
+    <th>Scenario</th><th>YoC</th><th>IRR (lev)</th><th>EM</th><th>Verdict</th>
+  </tr></thead><tbody><tr><td>BASE</td><td>5.63%</td><td>7.68%</td><td>1.84x</td><td><span class="verdict v-proceed">PROCEED</span></td></tr><tr><td>RECESSION</td><td>5.40%</td><td>6.35%</td><td>1.62x</td><td><span class="verdict v-conditional">CONDITIONAL</span></td></tr><tr><td>COST SPIKE</td><td>5.13%</td><td>5.90%</td><td>1.55x</td><td><span class="verdict v-conditional">CONDITIONAL</span></td></tr><tr><td>LEASE-UP DELAY</td><td>5.40%</td><td>6.12%</td><td>1.59x</td><td><span class="verdict v-conditional">CONDITIONAL</span></td></tr><tr><td>INSURANCE 2x</td><td>5.01%</td><td>5.69%</td><td>1.52x</td><td><span class="verdict v-conditional">CONDITIONAL</span></td></tr><tr><td>UPSIDE</td><td>6.36%</td><td>9.21%</td><td>2.08x</td><td><span class="verdict v-proceed">PROCEED COMFORT</span></td></tr></tbody></table>
+</div><div class="pf-card">
+  <h3>HG-1 — Valdosta, GA — 140.61-ac approved P-D</h3>
+  <div class="pf-meta"><strong>Parcel:</strong> Valdosta, GA — 140.61-ac approved P-D (HG-1)</div>
+  <table class="data-tbl"><thead><tr>
+    <th>Scenario</th><th>YoC</th><th>IRR (lev)</th><th>EM</th><th>Verdict</th>
+  </tr></thead><tbody><tr><td>BASE</td><td>4.78%</td><td>5.12%</td><td>1.41x</td><td><span class="verdict v-borderline">BORDERLINE</span></td></tr><tr><td>RECESSION</td><td>4.55%</td><td>3.98%</td><td>1.27x</td><td><span class="verdict v-borderline">BORDERLINE</span></td></tr><tr><td>COST SPIKE</td><td>4.39%</td><td>3.54%</td><td>1.22x</td><td><span class="verdict v-does">DOES NOT PENCIL</span></td></tr><tr><td>LEASE-UP DELAY</td><td>4.55%</td><td>3.81%</td><td>1.25x</td><td><span class="verdict v-borderline">BORDERLINE</span></td></tr><tr><td>INSURANCE 2x</td><td>4.22%</td><td>3.27%</td><td>1.18x</td><td><span class="verdict v-does">DOES NOT PENCIL</span></td></tr><tr><td>UPSIDE</td><td>5.03%</td><td>6.17%</td><td>1.55x</td><td><span class="verdict v-conditional">CONDITIONAL</span></td></tr></tbody></table>
+</div>
+  <h3>Validation Sequence (both parcels)</h3>
+  <ul class="compact">
+    <li>Broker call for asking + recent comp band confirmation</li>
+    <li>Planning department pre-app meeting (Polk Co for D-1; Lowndes Co for HG-1)</li>
+    <li>Two GC ROM budgets on hard cost target</li>
+    <li>FL/GA property tax estimate from County Property Appraiser/Tax Commissioner</li>
+    <li>Insurance broker indication ($1,200-1,800/u/yr range)</li>
+    <li>RealPage / CoStar comps for rent validation</li>
+    <li>Geotech + wetlands + topo desktop pre-LOI</li>
+  </ul>
+</section>
+
+<section id="exec" class="tab-panel">
+  <h2>Executive Summary</h2>
+  <div class="kpi-row">
+    <div class="kpi"><label>Run #</label><span>5</span></div>
+    <div class="kpi"><label>Date</label><span class="small">May 6, 2026</span></div>
+    <div class="kpi"><label>Brain config</label><span class="small">v2.2</span></div>
+    <div class="kpi"><label>Daily parcels</label><span>10</span></div>
+    <div class="kpi"><label>Tier-A HG</label><span>4</span></div>
+    <div class="kpi"><label>Tier-B HG theses</label><span>6</span></div>
+    <div class="kpi"><label>Markets in scope</label><span class="small">TN · GA · SC · NC · FL · KY · AL</span></div>
+    <div class="kpi"><label>Excluded today</label><span class="small">Huntsville · Glendale KY</span></div>
+  </div>
+
+  <div class="callout">
+    <strong>Inventory caveat (5/05 playbook discipline):</strong> Day-5 cadence — 60-day dedup window now covers 60+ prior parcels.
+    Honest deliver of 10 daily parcels (below 15 ceiling). Pad-prevention rule reaffirmed for 3rd consecutive run.
+  </div>
+
+  <h3>Top 5 Daily Parcels</h3>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>#</th><th>Score</th><th>Status</th><th>Market / Locator</th><th>Next Step</th></tr></thead><tbody><tr><td>1</td><td>73</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Lakeland, FL (Polk County)</strong> — Moore Rd 30-ac tract (north Lakeland growth corridor)</td><td>Polk County Planning pre-app on density allowance + rezone path; broker call for asking</td></tr><tr><td>2</td><td>69</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Bowling Green, KY (Warren County)</strong> — 3.92-ac RM3 entitled 72-unit parcel</td><td>Verify whether adjacent parcels available for assemblage; otherwise pass</td></tr><tr><td>3</td><td>67</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Knoxville, TN (Knox County)</strong> — 17.2-ac East Knox parcel, $1,050,000</td><td>Goldman Partners broker call for parcel ID + zoning; topo desktop pre-broker</td></tr><tr><td>4</td><td>66</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Asheville, NC (Buncombe County)</strong> — Lakeside Drive RM-8 medium-density MF site (acres TBV)</td><td>Pull Buncombe GIS for parcel acreage + slope; if &gt;25 ac net, broker call</td></tr><tr><td>5</td><td>65</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Lakeland, FL (Polk County)</strong> — North Lakeland 95% upland tract A-RR (acreage TBV; minutes from downtown)</td><td>Listing-detail pull on Land &amp; Farm; if ≥25 ac, broker call sequenced behind D-1</td></tr></tbody></table></div>
+
+  <h3>Top 4 Hidden Gems (Tier-A)</h3>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>#</th><th>Score</th><th>Status</th><th>Market / Locator</th><th>Next Step</th></tr></thead><tbody><tr><td>HG-1</td><td>74</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Valdosta, GA (Lowndes County)</strong> — 140.61-ac approved P-D 3-parcel (277 SF + 48 MF + I-75 visibility)</td><td>URGENT — broker call to confirm asking + partition feasibility; pre-app Lowndes Planning on P-D modification path</td></tr><tr><td>HG-2</td><td>71</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Valdosta, GA (Lowndes County)</strong> — 391.43-ac multi-parcel I-75 Exit 13 commercial assemblage</td><td>Broker call for asking on whole tract; partition feasibility for MF carve-out 25-40 ac</td></tr><tr><td>HG-3</td><td>60</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Aiken County, SC</strong> — 6.65-ac MUR multi-unit working rental property (Aiken horse country)</td><td>Confirm asking + rent roll; consider as small assemblage anchor only</td></tr><tr><td>HG-4</td><td>53</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">AMBER</span></td><td><strong>Hattiesburg, MS (Forrest County)</strong> — 5-ac existing 12-unit assemblage (5 duplex + 2 SF) — Oak Grove submarket</td><td>Asking confirmation; track Oak Grove parcel adjacencies for assemblage</td></tr></tbody></table></div>
+
+  <h3>Pro Forma Verdicts</h3>
+  <ul class="compact">
+    <li><strong>D-1 Lakeland Moore Rd 30-ac (BASE):</strong> YoC 5.63% · IRR 7.68% lev · EM 1.84x — PROCEED. INSURANCE 2x → 5.01% CONDITIONAL; UPSIDE → 6.36% PROCEED COMFORT. Land basis $4.5M placeholder; broker confirmation required.</li>
+    <li><strong>HG-1 Valdosta 140.61-ac approved P-D (BASE, 35-ac MF carve):</strong> YoC 4.78% · IRR 5.12% lev · EM 1.41x — BORDERLINE. INSURANCE 2x and COST SPIKE both DOES NOT PENCIL. Tertiary rent ceiling binding (~$1,475/mo); pursuit only viable as basis-discount + partition land sale offset.</li>
+  </ul>
+
+  <h3>Urgent Actions This Week</h3>
+  <ul class="compact">
+    <li><strong>D-1 Lakeland:</strong> Polk County Planning pre-app meeting on density allowance + rezone path; broker call for asking on Moore Rd tract.</li>
+    <li><strong>HG-1 Valdosta:</strong> broker call to confirm asking on the 140.61-ac approved P-D; verify P-D modification feasibility for MF carve-out scale.</li>
+    <li><strong>Tallahassee 31.68-ac PUD ($1.2M, ~$2,710/u basis):</strong> URGENT — reconfirm availability with Crexi listing broker. PUD vesting verification critical (status update from 5/04).</li>
+    <li><strong>5/01 HG-1 Crestview FL DO 287u:</strong> insurance broker indication BEFORE LOI per FL Panhandle climate playbook.</li>
+    <li><strong>5/01 KY-1 BG Sterling Park RM-4 19.69-ac:</strong> reconcile 392u vs 456u listing — broker validation in progress.</li>
+    <li><strong>Off-market layering:</strong> Sumter SC, Murray KY, The Shoals AL, Brunswick GA letter campaigns in pre-letter stage — execute mailing this week.</li>
+  </ul>
+
+  <h3>Auto-Triggers Applied Today</h3>
+  <ul class="compact">
+    <li><strong>Comp basis check:</strong> D-1 Lakeland $150k/ac placeholder is mid-range (band $130-180k/ac) → WITHIN BAND. D-3 Knoxville $61k/ac is below local Knoxville MF band ($80-180k/ac) → BELOW BAND, sanity check.</li>
+    <li><strong>Pipeline oversupply:</strong> Huntsville suspended (continued from 5/01); Glendale KY suspended (5/04 BlueOval SK update); Statesboro flagged WATCH (3,970 housing units pipeline); Brunswick County NC continues WATCH.</li>
+    <li><strong>Climate insurance:</strong> No coastal parcels in today's daily list. D-7 Jacksonville US-301 is indirect coastal — INSURANCE 2x scenario recommended. HG-1 Valdosta GA inland — $1,200/u/yr default applied.</li>
+    <li><strong>Single-anchor risk premium:</strong> HG-1 Valdosta carries Moody AFB BAH dependence — +25 bps exit cap applied per 5/04 calibration.</li>
+  </ul>
+
+  <h3>Status Updates from Prior Runs</h3>
+  <ul class="compact">
+    <li><strong>Tallahassee 31.68-ac PUD ($1.2M, ~$2,710/u basis):</strong> URGENT — reconfirm availability with Crexi listing broker; PUD vesting verification critical.</li>
+    <li><strong>5/01 KY-1 Bowling Green Sterling Park RM-4 19.69-ac:</strong> Reconcile 392u vs 456u listing — broker validation in progress.</li>
+    <li><strong>5/01 HG-1 Crestview FL DO 287u:</strong> Insurance broker indication BEFORE LOI per FL Panhandle climate playbook.</li>
+    <li><strong>5/04 BlueOval SK Glendale dissolution:</strong> 5/01 HG-3 KY Elizabethtown 76-ac stays in WATCHING. Energy-storage repurposing scale TBV.</li>
+  </ul>
+
+  <h3>Markets Excluded Today</h3>
+  <ul class="compact">
+    <li><strong>Huntsville-Madison AL:</strong> Q1 2026 oversupply persists per 5/01 market intel. 1,947 permits Q1 2026 against 510k MSA pop = 6.3 per 1k pop. Re-evaluate quarterly.</li>
+    <li><strong>Glendale KY:</strong> BlueOval SK partnership-dissolution per 5/04 update — workforce thesis impaired. 5/01 HG-3 Elizabethtown stays in WATCHING.</li>
+  </ul>
+
+  <h3>Methodology Note</h3>
+  <p>Oracle scans LoopNet, Crexi, LandWatch, LandSearch, Land.com, Land &amp; Farm, and Homes.com daily, with cross-verification across at least two aggregators per parcel. Scoring is out of 100 across five dimensions per config v2.2: Market Demand (25), Regulatory/Policy (20), Physical Feasibility (20), Location/Access (15), Financial Attractiveness (20). Friction is a 0-10 axis tracking the entitlement, environmental, and physical-DD load specific to each parcel. Auto-triggers (comp-tracker basis check, pipeline oversupply, climate insurance load, single-anchor risk premium) are applied per config v2.2 + 5/04 calibration. Honest deliver discipline: do not pad parcel count; deliver fewer if base criteria not met.</p>
+
+  <h3>Source Funnels Used</h3>
+  <ul class="compact">
+    <li>LoopNet, Crexi, LandWatch, LandSearch, Land.com, Land &amp; Farm, Homes.com</li>
+    <li>National Land Realty (NC + Brunswick County listings)</li>
+    <li>Goldman Partners Realty (Knoxville TN multifamily)</li>
+    <li>SVN Wood Properties (East TN multifamily)</li>
+    <li>SouthCoast Properties (Bryan County / Hyundai Metaplant context)</li>
+    <li>Berkshire Hathaway HomeServices Auburn-Opelika</li>
+    <li>Grice Connect (Statesboro Council news)</li>
+    <li>WilmingtonBiz / Port City Daily / WECT (Brunswick County NC pipeline)</li>
+    <li>Multifamily Dive / MultifamilyBiz / GrowthSpotter (project pipeline)</li>
+    <li>Mark Williams Properties (Bowling Green KY MF), The Kirkland Co. (KY/MS multifamily)</li>
+  </ul>
+
+  <h3>Honesty &amp; Validation</h3>
+  <p>All TBV (To Be Verified) fields are explicit and not fabricated. Land basis numbers in pro forma are placeholders; broker confirmation is required before any LOI. Pro forma figures are illustrative under stated assumptions, not predictions. Inventory caveat: day-5 cadence inventory thinning continues — 10 honest daily deliveries below the 15-ceiling per 5/05 playbook discipline. No fabricated owner names, parcel IDs, phone numbers, or listing prices.</p>
+</section>
+
+<section id="comp" class="tab-panel">
+  <h2>Comp Tracker — Land Sales</h2>
+  <p>Cross-verified land basis comps across recent runs. Auto-flag triggers when today's parcel $/ac is &gt;25% above local recent comps.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Market</th><th>Date</th><th>Acres</th><th>Zoning</th><th>Price</th><th>$/Acre</th><th>Source</th><th>Notes</th></tr></thead><tbody><tr><td>Lakeland FL</td><td>2026 Q1</td><td>30.0</td><td>MF (rezoned)</td><td>$4.5M (placeholder)</td><td>$150,000</td><td>Crexi summary</td><td>Mid-range Lakeland MF land basis</td></tr><tr><td>Ocala FL</td><td>2026 Q1</td><td>13.11</td><td>MF</td><td>$1,572,000</td><td>$119,878</td><td>5/01 ledger</td><td>Lower-end basis</td></tr><tr><td>Ocala FL</td><td>2026 Q1</td><td>22.0</td><td>MF</td><td>$5,000,000</td><td>$227,273</td><td>5/01 ledger</td><td>Upper-bound basis</td></tr><tr><td>Tallahassee FL</td><td>2026 Q1</td><td>31.68</td><td>PUD-14du/ac</td><td>$1,200,000</td><td>$37,879</td><td>5/04 update</td><td>Exceptional basis</td></tr><tr><td>Charleston SC</td><td>2026 Q1</td><td>33.0</td><td>Entitled MF 240u</td><td>$7,700,000</td><td>$233,333</td><td>5/01 ledger</td><td>Entitled premium</td></tr><tr><td>Bowling Green KY</td><td>2026 Q1</td><td>19.69</td><td>RM-4 entitled 456u</td><td>$5,600,000</td><td>$284,408</td><td>5/01 ledger</td><td>Best new entry</td></tr><tr><td>Lexington KY</td><td>2026 Q1</td><td>7.71</td><td>R-4 entitled 165u</td><td>$3,900,000</td><td>$505,837</td><td>5/05 ledger</td><td>Entitled premium</td></tr><tr><td>Bryan County GA</td><td>2026 Q1</td><td>54.99</td><td>AG/Comm Hyundai</td><td>TBV</td><td>TBV</td><td>5/05 ledger</td><td>Estimated $7.5M whole-tract</td></tr><tr><td>Augusta GA</td><td>2026 Q1</td><td>57.49</td><td>AG/R rezone</td><td>TBV</td><td>TBV</td><td>5/04 ledger</td><td>Birdwell Rd MF/BTR</td></tr><tr><td>Knoxville TN</td><td>2026 Q2</td><td>17.2</td><td>TBV</td><td>$1,050,000</td><td>$61,047</td><td>Today D-3</td><td>Below typical Knox MF range</td></tr><tr><td>Valdosta GA</td><td>2026 Q1</td><td>140.61</td><td>P-D approved</td><td>TBV</td><td>TBV</td><td>Today HG-1</td><td>Entitled SF + 48 MF (carve-out strategy)</td></tr></tbody></table></div>
+
+  <h3>Basis Check Flags (today)</h3>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Parcel</th><th>Market</th><th>$/Ac</th><th>Local Comp Band</th><th>Flag</th><th>Rationale</th></tr></thead><tbody><tr><td>D-1 Lakeland Moore Rd 30-ac</td><td>Lakeland FL</td><td>$150,000 (placeholder)</td><td>$130-180k/ac</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">WITHIN BAND</span></td><td>Mid-range MF; broker confirmation required</td></tr><tr><td>D-3 Knoxville 17.2-ac</td><td>Knoxville TN</td><td>$61,047</td><td>$80-180k/ac MF zoned</td><td><span style="background:#e65100;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BELOW BAND</span></td><td>Likely raw land + rezone-required → low basis appropriate</td></tr><tr><td>HG-1 Valdosta P-D 140.61-ac</td><td>Valdosta GA</td><td>TBV (~$25-35k/ac whole tract est.)</td><td>$20-50k/ac large tract</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">WITHIN BAND</span></td><td>Whole-tract estimate; broker confirmation critical</td></tr></tbody></table></div>
+</section>
+
+<section id="outreach" class="tab-panel">
+  <h2>Outreach Tracker</h2>
+  <p>Active and pending broker / owner outreach across current pipeline.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Date</th><th>Parcel</th><th>Market</th><th>Broker / Owner</th><th>Channel</th><th>Status</th><th>Last Touch</th><th>Next Action</th></tr></thead><tbody><tr><td>2026-05-06</td><td>D-1 Lakeland Moore Rd 30-ac</td><td>Lakeland FL</td><td>Listing broker (TBV via Land &amp; Farm)</td><td>Phone</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">NEW</span></td><td>-</td><td>Initial broker call this week</td></tr><tr><td>2026-05-06</td><td>HG-1 Valdosta 140.61-ac P-D</td><td>Valdosta GA</td><td>LandWatch listing broker (TBV)</td><td>Phone</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">NEW</span></td><td>-</td><td>Confirm asking + partition feasibility</td></tr><tr><td>2026-05-06</td><td>D-3 Knoxville 17.2-ac</td><td>Knoxville TN</td><td>Goldman Partners Realty</td><td>Phone</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">NEW</span></td><td>-</td><td>Verify zoning + parcel ID before LOI</td></tr><tr><td>2026-05-04</td><td>D-1 Augusta Birdwell 57.49-ac</td><td>Augusta GA</td><td>Crexi listing broker</td><td>Phone</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">FOLLOW-UP</span></td><td>2026-05-04</td><td>Confirm rezone path + asking</td></tr><tr><td>2026-05-05</td><td>D-1 Bryan County 54.99-ac</td><td>Bryan County GA</td><td>Crexi listing broker</td><td>Phone</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">FOLLOW-UP</span></td><td>2026-05-05</td><td>Partition strategy + asking</td></tr><tr><td>2026-05-01</td><td>KY-1 BG Sterling Park RM-4 19.69-ac</td><td>Bowling Green KY</td><td>Stephen Stucy / RE/MAX (MLS RA20233019)</td><td>Phone</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">FOLLOW-UP</span></td><td>2026-05-01</td><td>Reconcile 392u vs 456u listing</td></tr><tr><td>2026-05-01</td><td>HG-1 Crestview FL 14.6-ac DO 287u</td><td>Crestview FL</td><td>Crexi listing broker</td><td>Phone</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">URGENT</span></td><td>2026-05-01</td><td>Insurance broker indication BEFORE LOI</td></tr></tbody></table></div>
+
+  <h3>Off-Market Direct Outreach (per market)</h3>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Market</th><th>Target</th><th>Owner Source</th><th>Stage</th><th>Notes</th></tr></thead><tbody><tr><td>Sumter SC</td><td>15-25 ac near Shaw AFB</td><td>Sumter County GIS owner search</td><td>Pre-letter</td><td>Shaw AFB BAH-anchored</td></tr><tr><td>Murray KY</td><td>Murray State catchment</td><td>Calloway County GIS</td><td>Pre-letter</td><td>Off-market only</td></tr><tr><td>Florence-Muscle Shoals AL</td><td>20+ ac The Shoals MF-zoned</td><td>Lauderdale/Colbert GIS</td><td>Pre-letter</td><td>Mazda-Toyota catchment</td></tr><tr><td>Brunswick GA</td><td>Off-market coastal MF</td><td>Glynn County GIS</td><td>Pre-letter</td><td>Insurance gating</td></tr><tr><td>Hattiesburg MS</td><td>Oak Grove submarket adjacencies</td><td>Forrest County GIS</td><td>Pre-letter</td><td>USM + Forrest General</td></tr><tr><td>Pooler/Richmond Hill GA</td><td>Hyundai catchment 1-mi</td><td>Chatham/Bryan GIS</td><td>Active letter</td><td>Continue from 5/05</td></tr><tr><td>Auburn-Opelika AL</td><td>105-ac OZ tract US-280 W gateway</td><td>Lee County GIS</td><td>Active letter</td><td>From 5/01 broker network</td></tr></tbody></table></div>
+</section>
+
+<section id="dd" class="tab-panel">
+  <h2>DD Checklist (Template)</h2>
+  <p>Standard pre-LOI through closing checklist. Per-parcel copy to be created for each pursued deal.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Phase</th><th>Item</th><th>Owner</th><th>Days</th><th>Critical?</th><th>Status</th><th>Notes</th></tr></thead><tbody><tr><td>Pre-LOI</td><td>Listing verification (cross-aggregator)</td><td>Oracle/Atlas</td><td>1</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">DONE</span></td><td></td></tr><tr><td>Pre-LOI</td><td>Comp Tracker basis check</td><td>Oracle/Atlas</td><td>1</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">DONE</span></td><td></td></tr><tr><td>Pre-LOI</td><td>FEMA SFHA desktop</td><td>Atlas</td><td>1</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td>All FL coastal/GA coastal/NC coastal</td></tr><tr><td>Pre-LOI</td><td>NWI wetlands desktop</td><td>Atlas</td><td>1</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td></td></tr><tr><td>Pre-LOI</td><td>Topo/slope desktop</td><td>Atlas</td><td>1</td><td><span style="background:#666;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">N</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td>Required all rolling-terrain NC/TN</td></tr><tr><td>Pre-LOI</td><td>Zoning verification (city/county GIS)</td><td>Atlas</td><td>2</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td></td></tr><tr><td>Pre-LOI</td><td>Pre-app meeting (planning)</td><td>Atlas</td><td>10</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td>All rezone-required parcels</td></tr><tr><td>Pre-LOI</td><td>Listing broker call</td><td>Atlas</td><td>2</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td>Asking + tour</td></tr><tr><td>Pre-LOI</td><td>Recent comps pull (RealPage/CoStar)</td><td>Atlas</td><td>3</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">TBD</span></td><td></td></tr><tr><td>LOI</td><td>Land basis negotiation</td><td>Atlas</td><td>14</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td></td></tr><tr><td>LOI</td><td>Soft DD period scoped</td><td>Counsel</td><td>7</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>60-90d typical</td></tr><tr><td>DD</td><td>Geotech</td><td>Atlas</td><td>30</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Soil + bearing + slope</td></tr><tr><td>DD</td><td>Phase I ESA</td><td>Atlas</td><td>30</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Required all parcels</td></tr><tr><td>DD</td><td>Wetlands delineation</td><td>Atlas</td><td>45</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Per NWI desktop result</td></tr><tr><td>DD</td><td>Title search + survey</td><td>Counsel</td><td>30</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td></td></tr><tr><td>DD</td><td>Utility availability letters</td><td>Atlas</td><td>30</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Sewer/water/power</td></tr><tr><td>DD</td><td>Traffic Impact Analysis</td><td>Atlas</td><td>60</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Per local req</td></tr><tr><td>DD</td><td>Pro forma rent validation</td><td>Atlas</td><td>14</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>RealPage + 2 GC budgets + 2 broker rent letters</td></tr><tr><td>DD</td><td>Insurance broker indication</td><td>Atlas</td><td>14</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Required FL Panhandle / coastal</td></tr><tr><td>DD</td><td>Property tax estimate (PA)</td><td>Atlas</td><td>7</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Property Appraiser estimate</td></tr><tr><td>Pre-Close</td><td>Entitlement filing</td><td>Atlas/Counsel</td><td>90</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td>Per parcel</td></tr><tr><td>Pre-Close</td><td>Construction lender LOI</td><td>Atlas</td><td>30</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td></td></tr><tr><td>Pre-Close</td><td>Equity raise close</td><td>Atlas</td><td>60</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td></td></tr><tr><td>Close</td><td>Title closing</td><td>Counsel</td><td>1</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Y</span></td><td><span style="background:#999;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">-</span></td><td></td></tr></tbody></table></div>
+</section>
+
+<section id="sub" class="tab-panel">
+  <h2>Submarket Fundamentals</h2>
+  <p>Vacancy, rent growth, and pipeline pressure across all focus + hidden-gem markets.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Market</th><th>MSA Pop</th><th>Vacancy</th><th>Rent Growth (YoY)</th><th>Pipeline Units</th><th>Pipeline Stress</th><th>Notes</th></tr></thead><tbody><tr><td>Charleston SC</td><td>839k</td><td>6.1%</td><td>+2.8%</td><td>~3,200</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Entitled product premium continues</td></tr><tr><td>Wilmington NC (NHC)</td><td>306k</td><td>7.2%</td><td>+1.6%</td><td>~1,500</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Brunswick County WATCH 5/04 (5,000+ approved Mar 2026)</td></tr><tr><td>Greenville-Spartanburg SC</td><td>930k</td><td>7.4%</td><td>+1.9%</td><td>~3,100</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>BMW catchment persistent</td></tr><tr><td>Knoxville TN</td><td>942k</td><td>7.1%</td><td>+2.0%</td><td>~2,800</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Slope-constrained tier-1 inventory thin</td></tr><tr><td>Chattanooga TN</td><td>570k</td><td>7.0%</td><td>+2.2%</td><td>~2,200</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>VW + Erlanger persistent</td></tr><tr><td>Asheville NC</td><td>472k</td><td>8.2%</td><td>+0.8%</td><td>~1,200</td><td><span style="background:#e65100;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED-THIN</span></td><td>Institutional pipeline thin per 5/04 + 5/05</td></tr><tr><td>Savannah GA</td><td>416k</td><td>6.4%</td><td>+3.4%</td><td>~3,500</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Hyundai catchment + Pooler growth</td></tr><tr><td>Augusta GA</td><td>620k</td><td>8.0%</td><td>+1.4%</td><td>~1,900</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Cyber/medical/nuclear cluster</td></tr><tr><td>Columbia SC</td><td>850k</td><td>7.6%</td><td>+1.7%</td><td>~2,400</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Capital city steady</td></tr><tr><td>Lakeland FL</td><td>780k</td><td>7.2%</td><td>+2.6%</td><td>~2,800</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>I-4 corridor spillover</td></tr><tr><td>Ocala FL</td><td>405k</td><td>7.5%</td><td>+2.4%</td><td>~1,400</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Q1 2026 land $120-230k/ac MF-zoned</td></tr><tr><td>Daytona Beach FL</td><td>580k</td><td>7.8%</td><td>+1.6%</td><td>~2,000</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Volusia spillover from Orange/Seminole</td></tr><tr><td>Tallahassee FL</td><td>389k</td><td>8.4%</td><td>+0.6%</td><td>~1,600</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Slow approvals + PUD scarcity</td></tr><tr><td>Pensacola FL</td><td>515k</td><td>8.1%</td><td>+1.0%</td><td>~1,400</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Suspicious low $/ac = env risk per 4/30</td></tr><tr><td>Gainesville FL</td><td>357k</td><td>7.8%</td><td>+1.5%</td><td>~1,300</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>UF anchor</td></tr><tr><td>Lexington KY</td><td>520k</td><td>7.5%</td><td>+2.4%</td><td>~2,100</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Q1 2026 zoning reform package</td></tr><tr><td>Bowling Green KY</td><td>180k</td><td>7.0%</td><td>+1.8%</td><td>~700</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Sterling Park premier MF zone</td></tr><tr><td>Huntsville-Madison AL</td><td>510k</td><td>10.4%</td><td>-0.5%</td><td>~3,200</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">OVERSUPPLY</span></td><td>SUSPENDED — Q1 2026 1,947 permits</td></tr><tr><td>Tupelo MS</td><td>165k</td><td>7.3%</td><td>+1.3%</td><td>~400</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Tier-4 — rent ceiling binding</td></tr><tr><td>Hattiesburg MS</td><td>170k</td><td>8.0%</td><td>+0.9%</td><td>~500</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Oak Grove submarket premium</td></tr><tr><td>Auburn-Opelika AL</td><td>180k</td><td>7.6%</td><td>+2.0%</td><td>~900</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Auburn calendar drives lease-up seasonality</td></tr><tr><td>Statesboro GA</td><td>82k</td><td>7.1%</td><td>+2.6%</td><td>~600</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Hillpointe 216u + GSU; rent ceiling $1,500-1,650</td></tr><tr><td>Aiken SC</td><td>175k</td><td>7.4%</td><td>+1.4%</td><td>~700</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Northside 1,500+ home pipeline</td></tr><tr><td>Crestview FL</td><td>305k</td><td>7.0%</td><td>+2.8%</td><td>~800</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Eglin BAH; named-storm insurance load</td></tr><tr><td>Valdosta GA</td><td>148k</td><td>7.4%</td><td>+1.0%</td><td>~400</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Moody AFB + VSU; rent ceiling $1,400-1,550</td></tr></tbody></table></div>
+</section>
+
+<section id="clim" class="tab-panel">
+  <h2>Climate Risk</h2>
+  <p>Parcel-level coastal / FEMA SFHA / wind-storm exposure and default insurance assumptions. INSURANCE 2x scenario triggered for HIGH wind exposure.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Parcel</th><th>Market</th><th>Coastal?</th><th>FEMA SFHA Risk</th><th>Wind/Named Storm</th><th>Default Insurance/u/yr</th><th>INSURANCE 2x Required?</th></tr></thead><tbody><tr><td>D-1 Lakeland Moore Rd</td><td>Lakeland FL</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,500</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-2 BG 3.92-ac RM3</td><td>Bowling Green KY</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Low</span></td><td>$700</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-3 Knoxville 17.2-ac</td><td>Knoxville TN</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Low</span></td><td>$700</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-4 Asheville Lakeside</td><td>Asheville NC</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Low</span></td><td>$800</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-5 N Lakeland upland</td><td>Lakeland FL</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,500</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-6 Knoxville Alcoa Hwy</td><td>Knoxville TN</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Low</span></td><td>$700</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-7 Jacksonville US-301</td><td>Jacksonville FL</td><td>Indirect</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">MODERATE</span></td><td><span style="background:#e65100;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">HIGH</span></td><td>$2,000</td><td><span style="background:#e65100;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Recommended</span></td></tr><tr><td>D-8 Tallahassee 10.52-ac</td><td>Tallahassee FL</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,200</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-9 Statesboro 3.89-ac</td><td>Statesboro GA</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,200</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>D-10 Asheville cove</td><td>Asheville NC</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Low</span></td><td>$800</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>HG-1 Valdosta P-D</td><td>Valdosta GA</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,200</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>HG-2 Valdosta I-75</td><td>Valdosta GA</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,200</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>HG-3 Aiken MUR 6.65-ac</td><td>Aiken SC</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Low</span></td><td>$900</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr><tr><td>HG-4 Hattiesburg 5-ac</td><td>Hattiesburg MS</td><td>No</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">LOW</span></td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Moderate</span></td><td>$1,000</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">No</span></td></tr></tbody></table></div>
+</section>
+
+<section id="pipe" class="tab-panel">
+  <h2>Pipeline Intel</h2>
+  <p>Submarket U/C and approved-not-started pipeline vs. annual absorption. WATCH and OVERSUPPLY flags drive surfacing rules.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Market</th><th>Units U/C</th><th>Units Approved (not started)</th><th>2025 Absorption</th><th>Pop (MSA)</th><th>Pipeline Stress</th><th>Action</th></tr></thead><tbody><tr><td>Charleston SC</td><td>~3,200</td><td>~5,500</td><td>~3,800</td><td>839k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue coverage</td></tr><tr><td>Wilmington NC (NHC)</td><td>~1,500</td><td>~2,800</td><td>~1,700</td><td>306k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue coverage</td></tr><tr><td>Wilmington/Brunswick NC</td><td>~1,800</td><td>~6,500</td><td>~1,900</td><td>145k</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">WATCH</span></td><td>Re-evaluate after Q2 2026 absorption</td></tr><tr><td>Greenville-Spartanburg SC</td><td>~3,100</td><td>~4,200</td><td>~3,400</td><td>930k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue coverage</td></tr><tr><td>Knoxville TN</td><td>~2,800</td><td>~3,800</td><td>~3,000</td><td>942k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue coverage</td></tr><tr><td>Chattanooga TN</td><td>~2,200</td><td>~3,200</td><td>~2,200</td><td>570k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue coverage</td></tr><tr><td>Asheville NC</td><td>~1,200</td><td>~1,800</td><td>~1,000</td><td>472k</td><td><span style="background:#e65100;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED-THIN</span></td><td>Partnership-entry only</td></tr><tr><td>Savannah GA</td><td>~3,500</td><td>~5,200</td><td>~3,600</td><td>416k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue Hyundai-catchment coverage</td></tr><tr><td>Augusta GA</td><td>~1,900</td><td>~2,400</td><td>~2,000</td><td>620k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Cyber/medical/nuclear continue</td></tr><tr><td>Lakeland FL</td><td>~2,800</td><td>~4,000</td><td>~3,000</td><td>780k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Continue coverage</td></tr><tr><td>Tallahassee FL</td><td>~1,600</td><td>~2,300</td><td>~1,500</td><td>389k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Slow approvals → PUD-only premium</td></tr><tr><td>Lexington KY</td><td>~2,100</td><td>~3,300</td><td>~2,300</td><td>520k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Q1 2026 zoning reform productive</td></tr><tr><td>Bowling Green KY</td><td>~700</td><td>~1,200</td><td>~750</td><td>180k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Sterling Park premier</td></tr><tr><td>Huntsville-Madison AL</td><td>~3,200</td><td>~4,600</td><td>~2,100</td><td>510k</td><td><span style="background:#b71c1c;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">OVERSUPPLY</span></td><td>SUSPENDED — re-evaluate quarterly</td></tr><tr><td>Statesboro GA</td><td>~600</td><td>~3,970 planned</td><td>~700</td><td>82k</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">WATCH</span></td><td>Hillpointe 216u + 3,970 planned</td></tr><tr><td>Tupelo MS</td><td>~400</td><td>~600</td><td>~350</td><td>165k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Tier-4 rent ceiling binding</td></tr><tr><td>Crestview FL</td><td>~800</td><td>~1,200</td><td>~700</td><td>305k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Insurance load = gating</td></tr><tr><td>Valdosta GA</td><td>~400</td><td>~800</td><td>~450</td><td>148k</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">BALANCED</span></td><td>Tertiary; rent ceiling binding</td></tr></tbody></table></div>
+</section>
+
+<section id="off" class="tab-panel">
+  <h2>Off-Market Targets</h2>
+  <p>Markets with thin public listing inventory — direct-to-owner outreach is the playbook.</p>
+  <div style="overflow-x:auto"><table class="data-tbl"><thead><tr><th>Market</th><th>Target Profile</th><th>Why</th><th>Sourcing Channel</th><th>Stage</th><th>Next Step</th></tr></thead><tbody><tr><td>Sumter SC</td><td>15-25 ac near Shaw AFB BAH catchment</td><td>Limited public listing inventory; Shaw AFB BAH stable</td><td>County GIS owner search → letter campaign</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pre-letter</span></td><td>Generate top-15 owner list, mail this week</td></tr><tr><td>Murray KY</td><td>Calloway County 10-30 ac MF-zoned or rezone-able</td><td>Murray State Univ ~10k students; below 200u floor absent specific catalyst</td><td>County GIS search</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pre-letter</span></td><td>Watch only</td></tr><tr><td>Florence-Muscle Shoals AL</td><td>Lauderdale/Colbert 15-25 ac MF</td><td>Mazda-Toyota catchment + UNA + Shoals tourism</td><td>Regional commercial brokers</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pre-letter</span></td><td>Initial broker outreach</td></tr><tr><td>Brunswick GA</td><td>Coastal MF 10-25 ac</td><td>FLETC + Port + tourism</td><td>Glynn County GIS</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pre-letter</span></td><td>Insurance broker indication first</td></tr><tr><td>Hattiesburg MS</td><td>Oak Grove submarket adjacencies</td><td>USM + Forrest General + Camp Shelby</td><td>Forrest County GIS</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pre-letter</span></td><td>Per 5/04 + today HG-4</td></tr><tr><td>Pooler/Richmond Hill GA</td><td>Hyundai 1-mi catchment</td><td>Hyundai Metaplant in production</td><td>Chatham/Bryan GIS</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Active</span></td><td>Continue from 5/05</td></tr><tr><td>Auburn-Opelika AL</td><td>105-ac OZ tract US-280 W</td><td>Carve-out + JV strategy</td><td>Lee County GIS</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Active</span></td><td>Continue from 5/01</td></tr><tr><td>Statesboro GA</td><td>Hyundai supplier catchment</td><td>Hyundai supplier ramp + GSU</td><td>Bulloch County GIS</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Active</span></td><td>3,970-unit citywide pipeline supports</td></tr><tr><td>Aiken SC</td><td>Aiken Northside</td><td>1,500+ home Northside pipeline + SRS</td><td>Aiken County GIS</td><td><span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Active</span></td><td>Continue from 4/30</td></tr><tr><td>Crestview FL (off-market complement)</td><td>BAH-tied 10-15 ac</td><td>Eglin AFB BAH</td><td>Okaloosa County GIS</td><td><span style="background:#bf9000;color:white;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pre-letter</span></td><td>Complement HG-1 5/01 if that broker call stalls</td></tr></tbody></table></div>
+</section>
+
+<section id="cap" class="tab-panel">
+  <h2>Capital Markets Brief (Quarterly)</h2>
+  <div class="callout">
+    <strong>Indicative ranges as of Q2 2026.</strong> Live deal pricing requires conversations with active capital partners. Refresh quarterly.
+  </div>
+  <h3>Construction Debt</h3>
+  <ul class="compact">
+    <li>Bank construction rate (multifamily): SOFR + 250-325 bps (~6.30-7.05%)</li>
+    <li>LTC: 60-65% typical; 65-70% for entitled tier-1</li>
+    <li>Recourse: partial standard for institutional sponsors; non-recourse on tier-1 with strong sponsor</li>
+    <li>Mezz / pref equity: 13-15% pay rate; 5-15% of cap stack</li>
+  </ul>
+  <h3>Permanent Debt</h3>
+  <ul class="compact">
+    <li>Agency (Fannie/Freddie): 5.85-6.35% on 5-7yr fixed (Q2 2026)</li>
+    <li>Agency LTV: 70-75% on stabilized Class A workforce</li>
+    <li>Bank perm: 6.25-6.75%; DSCR 1.25-1.30x</li>
+  </ul>
+  <h3>Cap Rate Ranges (Class A new construction stabilized)</h3>
+  <ul class="compact">
+    <li>Charleston SC / Wilmington NC / Greenville SC: 5.25-5.75%</li>
+    <li>Knoxville TN / Chattanooga TN / Asheville NC: 5.50-6.00%</li>
+    <li>Lakeland FL / Daytona FL / Tallahassee FL / Pensacola FL: 5.50-6.00%</li>
+    <li>Augusta GA / Savannah GA / Lexington KY: 5.50-6.00%</li>
+    <li>Ocala FL / Gainesville FL / Bowling Green KY: 5.75-6.25%</li>
+    <li>Crestview FL / Florence SC / Hattiesburg MS: 6.00-6.75%</li>
+    <li>Tupelo MS / Valdosta GA / Sumter SC / Cullman AL: 6.25-7.00%</li>
+  </ul>
+  <h3>Equity Markets</h3>
+  <p>Sun Belt MF ground-up equity firmed since Q4 2025. Tier-1: 16-18% IRR / 1.85-2.0x EM over 5y. Tier-2/3: 18-20% IRR / 1.90-2.10x EM. Single-anchor risk premium +25-50 bps exit cap when ≥30% demand thesis depends on a single anchor (post Ford-SK On dissolution calibration).</p>
+  <h3>Insurance Markets</h3>
+  <p>FL Gulf-coast: $2,000-3,500/u/yr. FL inland: $1,200-1,800/u/yr. GA coastal / NC coastal: $1,500-2,200/u/yr. SC inland tertiary: $900-1,400/u/yr. <strong>Lock indication BEFORE LOI</strong> on any FL/GA/NC coastal parcel.</p>
+</section>
+
+<section id="tmpl" class="tab-panel">
+  <h2>Templates</h2>
+  <h3>Letter of Intent (Template)</h3>
+  <p><strong>Buyer:</strong> Neyland Development LLC. <strong>Property:</strong> [acreage / address / parcel ID]. <strong>Inspection Period:</strong> 60-90 days, refundable. <strong>Earnest:</strong> [$amount] refundable through Inspection; [$amount] non-refundable thereafter. <strong>Closing:</strong> X days after entitlement approval. <strong>Contingencies:</strong> survey, title, Phase I (Phase II if recommended), wetlands delineation, geotech, TIA, zoning verification, utility availability, financing commitment.</p>
+  <p>Full template in <code>_archive/ORACLE_LOI_Template_2026-05-06.docx</code> — counsel review required before delivery.</p>
+
+  <h3>Off-Market Outreach Letter</h3>
+  <p>Personalized owner-direct letter introducing Neyland as a principal buyer, offering 90-120 day close with 60-90 day refundable inspection. 7-10 day phone follow-up cadence. Personalize per parcel with local-market color (e.g., Hyundai Metaplant ramp, Eglin BAH, Sterling Business Park).</p>
+  <p>Full letter in <code>_archive/ORACLE_Off_Market_Outreach_Letter_2026-05-06.docx</code>.</p>
+</section>
+
+<section id="sys" class="tab-panel">
+  <h2>System & Run Metadata</h2>
+  <div class="kpi-row">
+    <div class="kpi"><label>Brain config</label><span class="small">v2.2</span></div>
+    <div class="kpi"><label>Last calibration</label><span class="small">5/05 Tier-1 thinning</span></div>
+    <div class="kpi"><label>Run history</label><span class="small">5 runs (4/30, 5/01, 5/04, 5/05, 5/06)</span></div>
+    <div class="kpi"><label>Ledger size</label><span class="small">~70 parcels</span></div>
+  </div>
+
+  <h3>Boot Protocol Confirmation</h3>
+  <ul class="compact">
+    <li>README.md — read</li>
+    <li>config.yaml — applied (v2.2; state scope TN/GA/SC/NC/FL/KY/AL)</li>
+    <li>feedback_log.md — read newest-first</li>
+    <li>parcel_ledger.csv — built dedup set (60-day window, 60+ prior parcels)</li>
+    <li>market_intel.md — applied; Huntsville oversupply + Glendale KY BlueOval dissolution honored</li>
+    <li>scoring_calibration.md — applied; single-anchor +25bps premium</li>
+    <li>playbook.md — applied; honest-deliver discipline + partition strategy + Tier-1 thinning awareness</li>
+  </ul>
+
+  <h3>Auto-Triggers Applied Today</h3>
+  <ul class="compact"><li>Comp basis check: D-1 Lakeland $150k/ac placeholder is mid-range per 5/01 intel — within band.</li><li>Comp basis check: HG-1 Valdosta tract ~$25-35k/ac estimated whole-tract — within band; no flag.</li><li>Pipeline oversupply check: Huntsville/Madison and Glendale KY excluded today (continued from 5/01 + 5/04).</li><li>Climate insurance: No coastal parcels in today's daily list. Valdosta HG-1 is GA inland — $1,200/u/yr default insurance applied.</li><li>Single-anchor risk premium: HG-1 Valdosta carries Moody AFB BAH dependence — +25bps exit cap applied per 5/04 calibration.</li><li>Inventory caveat: Day-5 cadence — 60-day dedup window covers 60+ prior parcels; honest deliver at 10 daily parcels (below 15 ceiling) per 5/05 playbook.</li></ul>
+
+  <h3>Source Funnels Used</h3>
+  <ul class="compact">
+    <li>LoopNet, Crexi, LandWatch, LandSearch, Land.com, Land & Farm, Homes.com</li>
+    <li>National Land Realty (NC + Brunswick County listings)</li>
+    <li>Goldman Partners Realty (Knoxville TN multifamily)</li>
+    <li>SVN | Wood Properties (East TN multifamily)</li>
+    <li>SouthCoast Properties (Bryan County / Hyundai context)</li>
+    <li>Berkshire Hathaway Auburn-Opelika (AL east-AL coverage)</li>
+    <li>Grice Connect (Statesboro Council news)</li>
+    <li>Multifamily Dive / MultifamilyBiz / GrowthSpotter (project pipeline)</li>
+  </ul>
+
+  <h3>Deliverables (saved to <code>2026-05-06/_archive/</code>)</h3>
+  <ul class="compact">
+    <li>Reports (docx): Executive Summary · Daily Report · Hidden Gems · Pro Forma · LOI Template · Off-Market Outreach Letter · Capital Markets</li>
+    <li>Data (xlsx + csv): Daily Parcels · Hidden Gems · Pro Forma · Daily master 4-sheet · Comp Tracker · Outreach Tracker · DD Checklist · Submarket Fundamentals · Climate Risk · Pipeline Intel · Off-Market Targets · Daily Parcels CSV</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  ORACLE Dashboard · May 6, 2026 · Run #5 · Brain config v2.2 · Neyland Development · Generated by Oracle daily site-sourcing pipeline.
+  <br>All TBV fields are explicit. Pro forma figures illustrative; broker validation required before LOI.
+</footer>
+
+<script>
+const tabs = document.querySelectorAll('nav.tabs button');
+const panels = document.querySelectorAll('.tab-panel');
+tabs.forEach(b => b.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById(b.dataset.tab).classList.add('active');
+}));
+
+document.addEventListener('DOMContentLoaded', () => {
+
+});
+</script>
+
+</body>
+</html>

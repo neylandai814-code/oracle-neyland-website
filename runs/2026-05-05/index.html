@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Oracle Dashboard — 2026-05-05</title>
+<link href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" rel="stylesheet" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background: #fafafa; color: #222; line-height: 1.45; font-size: 13px; }
+  header.app-header { background: #1F3864; color: white; padding: 16px 24px; border-bottom: 4px solid #BF9000; }
+  header.app-header .brand { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+  header.app-header .meta { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+  nav.tabs { background: white; border-bottom: 1px solid #d0d0d0; display: flex; flex-wrap: wrap; padding: 0 16px; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  nav.tabs .tab { background: none; border: none; padding: 12px 14px; font-size: 12.5px; font-weight: 600; color: #555; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; font-family: inherit; }
+  nav.tabs .tab:hover { color: #1F3864; background: #f5f5f5; }
+  nav.tabs .tab.active { color: #1F3864; border-bottom-color: #BF9000; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  h2 { font-size: 22px; color: #1F3864; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #1F3864; }
+  h3 { font-size: 14px; color: #BF9000; margin: 24px 0 10px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  p.muted { color: #555; font-size: 12px; margin: 0 0 12px 0; }
+  p.muted.small { font-size: 11px; margin-top: 6px; }
+  .card-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 8px 0 16px 0; }
+  .kpi { background: white; border: 1px solid #e3e3e3; border-radius: 6px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .kpi-label { font-size: 10px; font-weight: 700; color: #777; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #1F3864; }
+  .kpi-sub { font-size: 11px; color: #777; margin-top: 4px; }
+  .callout { background: #FFEB9C; border-left: 4px solid #BF9000; padding: 14px 18px; border-radius: 4px; margin: 14px 0; font-size: 13px; }
+  .callout.amber { background: #FFEB9C; border-color: #BF9000; }
+  .callout.red { background: #FFC7CE; border-color: #C00000; }
+  .callout strong { color: #1F3864; }
+  .ref-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .ref-table th { background: #1F3864; color: white; padding: 8px 10px; text-align: left; font-size: 11px; font-weight: 600; }
+  .ref-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  .ref-table tr:last-child td { border-bottom: none; }
+  .money-table td:nth-child(2) { text-align: right; font-variant-numeric: tabular-nums; }
+  .chip { display: inline-block; padding: 3px 9px; border-radius: 3px; font-weight: 700; font-size: 11px; text-align: center; min-width: 36px; color: #1F3864; }
+  .chip.green { background: #C6EFCE; }
+  .chip.yellow { background: #FFEB9C; }
+  .chip.orange { background: #FFC7AA; }
+  .chip.red { background: #FFC7CE; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 11px; font-size: 10.5px; font-weight: 700; color: #1F3864; }
+  .pill.green { background: #C6EFCE; }
+  .pill.amber { background: #FFEB9C; }
+  .pill.orange { background: #FFC7AA; }
+  .pill.red { background: #FFC7CE; }
+  .pill.blue { background: #DDEBF7; }
+  .urgent-list { list-style: none; padding: 0; margin: 0; background: white; border: 1px solid #e3e3e3; border-radius: 6px; }
+  .urgent-list li { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; display: grid; grid-template-columns: 100px 1fr; gap: 12px; font-size: 12.5px; }
+  .urgent-list li:last-child { border-bottom: none; }
+  .timing { font-size: 10px; font-weight: 700; color: #BF9000; letter-spacing: 0.5px; text-transform: uppercase; align-self: center; }
+  .market-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+  .market-card { background: white; border: 1px solid #e3e3e3; border-radius: 6px; padding: 11px 13px; }
+  .market-card .market-name { font-size: 12.5px; font-weight: 700; color: #1F3864; margin-bottom: 4px; }
+  .market-card .market-thesis { font-size: 11.5px; color: #444; }
+  .grid-wrap { background: white; border-radius: 4px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 16px; }
+  .gridjs-wrapper { box-shadow: none !important; }
+  .gridjs-search-input { width: 240px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+  .bullet-gold { padding-left: 0; list-style: none; }
+  .bullet-gold li { padding: 4px 0 4px 18px; position: relative; font-size: 13px; }
+  .bullet-gold li:before { content: "•"; color: #BF9000; font-weight: 700; position: absolute; left: 4px; }
+  .numbered-list { padding-left: 22px; }
+  .numbered-list li { padding: 3px 0; font-size: 13px; }
+  .detail-list { display: grid; gap: 10px; }
+  .detail-card { background: white; border: 1px solid #e3e3e3; border-radius: 6px; overflow: hidden; }
+  .detail-head { background: #1F3864; color: white; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .detail-head .num { font-size: 18px; font-weight: 700; }
+  .detail-head .title { font-size: 13.5px; font-weight: 600; flex: 1; }
+  .detail-head .right-badge { padding: 2px 9px; border-radius: 11px; font-size: 10.5px; font-weight: 700; color: #1F3864; }
+  .detail-body { padding: 10px 14px; font-size: 12px; color: #333; }
+  .detail-body strong { color: #1F3864; }
+  .detail-body .row { display: grid; grid-template-columns: 130px 1fr; gap: 10px; padding: 3px 0; }
+  pre.template { background: #f7f7f7; border: 1px solid #e0e0e0; border-radius: 4px; padding: 14px 18px; font-family: "SF Mono", Consolas, monospace; font-size: 11.5px; white-space: pre-wrap; line-height: 1.55; color: #222; max-height: 600px; overflow: auto; }
+  .tab-mini { display: flex; gap: 4px; margin: 12px 0 16px 0; border-bottom: 1px solid #d0d0d0; }
+  .mini-btn { background: none; border: none; padding: 8px 14px; font-size: 12px; font-weight: 600; color: #555; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+  .mini-btn.active { color: #1F3864; border-bottom-color: #BF9000; }
+  .mini-panel { display: none; }
+  .mini-panel.active { display: block; }
+  code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-family: "SF Mono", Consolas, monospace; font-size: 11.5px; color: #1F3864; }
+  .footer-note { margin-top: 36px; padding: 16px 0; border-top: 1px solid #e3e3e3; font-size: 10.5px; color: #888; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">ORACLE  ·  Site-Sourcing Intelligence</div>
+  <div class="meta">Run date: <strong>May 5, 2026</strong>  ·  Neyland Development  ·  TN · GA · SC · NC · FL · KY · AL  ·  v2.2</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="daily">Daily Parcels</button>
+  <button class="tab" data-tab="gems">Hidden Gems</button>
+  <button class="tab" data-tab="proforma">Pro Forma</button>
+  <button class="tab" data-tab="exec">Exec Summary</button>
+  <button class="tab" data-tab="comps">Comp Tracker</button>
+  <button class="tab" data-tab="outreach">Outreach</button>
+  <button class="tab" data-tab="dd">DD Checklist</button>
+  <button class="tab" data-tab="submarket">Submarkets</button>
+  <button class="tab" data-tab="climate">Climate Risk</button>
+  <button class="tab" data-tab="pipeline">Pipeline</button>
+  <button class="tab" data-tab="offmarket">Off-Market</button>
+  <button class="tab" data-tab="capmkts">Capital Markets</button>
+  <button class="tab" data-tab="templates">Templates</button>
+  <button class="tab" data-tab="system">System</button>
+</nav>
+
+<main>
+
+<section id="overview" class="panel active">
+  <div class="card-row kpi-row">
+    <div class="kpi"><div class="kpi-label">Daily Parcels</div><div class="kpi-value">10</div><div class="kpi-sub">3 GREEN · 6 AMBER · 1 RED</div></div>
+    <div class="kpi"><div class="kpi-label">Hidden Gems</div><div class="kpi-value">10</div><div class="kpi-sub">4 Tier A · 6 Tier B (thesis)</div></div>
+    <div class="kpi"><div class="kpi-label">#1 Score</div><div class="kpi-value">88</div><div class="kpi-sub">Bryan Co GA 54.99-ac (Hyundai 1mi)</div></div>
+    <div class="kpi"><div class="kpi-label">Pro Forma YoC</div><div class="kpi-value">5.57%</div><div class="kpi-sub">PROCEED · single-anchor risk +25bps</div></div>
+  </div>
+
+  <div class="callout">
+    <strong>Today's gating event:</strong> Bryan County 54.99-ac (#1) sits 1 mi from Hyundai Metaplant — institutional pipeline is finally arriving in this corridor. Move on broker call BEFORE the listing is repackaged with an industrial buyer narrative. Partition strategy to a 30-ac MF carve-out is the playbook; pro forma BASE clears 5.57% YoC PROCEED with a +25bps single-anchor risk premium. <strong>Run this call this week.</strong>
+  </div>
+
+  <div class="callout amber">
+    <strong>Inventory note (honest):</strong> 60-day dedup window now covers 50+ prior parcels (4/30 + 5/01 + 5/01 supplement + 5/04). Today's fresh inventory in primary markets (Charleston, Wilmington NHC, Greenville-Spartanburg, Knoxville, Asheville) was thin — most "new" listings turned out to be re-listings of ledger parcels. <strong>Delivered 10 daily parcels honestly</strong> rather than padding to 15. Three are borderline yield (150-199 units) and explicitly flagged. Status update on Tallahassee 31.68-ac PUD (now priced) preserved in Status Updates section, not double-counted in daily.
+  </div>
+
+  <h3>Top 5 — Quick Reference</h3>
+  <table class="ref-table">
+    <thead><tr><th>Rank</th><th>Score</th><th>Opportunity</th><th>Status</th><th>Next Action</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><span class="chip green">88</span></td><td><strong>Bryan County GA — 54.99 ac near Hyundai Metaplant (1 mi)</strong> — primary Savannah/Pooler catchment; partition 30-ac MF carve-out</td><td><span class="pill green">GREEN</span></td><td>Listing-broker call this week + partition counsel</td></tr>
+      <tr><td>2</td><td><span class="chip green">85</span></td><td><strong>Lexington KY — Joyland Crossing 7.71 ac R-4 entitled 165 units</strong> @ $3.9M ($23,636/unit basis)</td><td><span class="pill green">GREEN</span></td><td>Keller Williams Commonwealth call (859) 721-2121</td></tr>
+      <tr><td>3</td><td><span class="chip green">80</span></td><td><strong>Savannah GA — Reserve at Savannah Harbor ±48 ac</strong> I-95 corridor / Gulfstream / Port adjacency</td><td><span class="pill green">GREEN</span></td><td>Crexi broker call + SAGIS pull</td></tr>
+      <tr><td>4</td><td><span class="chip yellow">76</span></td><td><strong>Chattanooga TN — 21.07 ac East Brainerd</strong> with pond — MF/residential positioned</td><td><span class="pill amber">AMBER</span></td><td>Pull Hamilton County zoning + slope analysis</td></tr>
+      <tr><td>5</td><td><span class="chip yellow">70</span></td><td><strong>Pooler GA — Port Wentworth ±11.87 ac C-1 Mixed-Use</strong></td><td><span class="pill amber">AMBER</span></td><td>Confirm MF allowance under C-1 + utility capacity</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Status Updates (60-day ledger)</h3>
+  <table class="ref-table">
+    <thead><tr><th>Date Added</th><th>Parcel</th><th>Update</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>4/30 → 5/04</td><td><strong>Tallahassee 31.68-ac PUD-14</strong></td><td>Priced at $1,200,000 ($37,879/ac, ~$2,710/unit basis if PUD vested) — exceptional</td><td>Already on action list (pulled from 5/04 update); URGENT broker call this week</td></tr>
+      <tr><td>5/01</td><td><strong>Crestview FL 14.6-ac DO 287u (HG-1)</strong></td><td>BASE pro forma 5.09% PROCEED CONDITIONAL; INSURANCE 2x kills it (4.24%)</td><td>Insurance broker indication is the gating call before LOI</td></tr>
+      <tr><td>5/04</td><td><strong>Elizabethtown KY 76-ac (HG-3)</strong></td><td>BlueOval SK Ford-SK On JV dissolved; thesis impaired</td><td>Status remains WATCHING; do NOT pursue without re-validating workforce ramp</td></tr>
+      <tr><td>5/01</td><td><strong>Bowling Green Sterling Park 19.69-ac RM-4 (KY-1)</strong></td><td>Verify whether 392u listing matches prior 456u listing — same parcel?</td><td>Listing-broker call to reconcile unit count</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Urgent Actions — This Week</h3>
+  <ul class="urgent-list">
+    <li><span class="timing">Today</span><span><strong>Bryan County 54.99-ac (#1).</strong> Listing-broker call. Partition counsel on residual 25 ac. Workforce ramp re-validation (Hyundai Metaplant Q2 2026 production data).</span></li>
+    <li><span class="timing">Today</span><span><strong>Lexington Joyland Crossing (#2).</strong> Keller Williams Commonwealth call (859) 721-2121. Verify R-4 vesting + 165-unit DP transferability.</span></li>
+    <li><span class="timing">This week</span><span><strong>Tallahassee 31.68-ac PUD (status update).</strong> Pull PUD vesting/sunset from Tallahassee-Leon PLACE. $1.2M ask exceptional if PUD intact — move fast.</span></li>
+    <li><span class="timing">This week</span><span><strong>Savannah Harbor ±48-ac (#3).</strong> Crexi broker call + SAGIS plat / FEMA. Likely SFHA exposure given river/marsh proximity.</span></li>
+    <li><span class="timing">This week</span><span><strong>Crestview HG-1 (5/01).</strong> FL Panhandle insurance broker indication BEFORE LOI. INSURANCE 2x is the binary gate per pro forma.</span></li>
+    <li><span class="timing">Within 14d</span><span><strong>Statesboro 16.33-ac (HG-2 today).</strong> Desktop env triage (FEMA + NWI + GA EPD). $/ac of $21,432 triggers the "low-basis = likely env issue" flag — do NOT broker-call cold.</span></li>
+  </ul>
+
+  <h3>Markets to Watch</h3>
+  <div class="market-grid">
+    <div class="market-card"><div class="market-name">Bryan / Pooler / Richmond Hill, GA</div><div class="market-thesis">Hyundai Metaplant production live; ~8,500 direct jobs ramping; structural workforce demand outpacing supply.</div></div>
+    <div class="market-card"><div class="market-name">Lexington-Fayette, KY</div><div class="market-thesis">UK + Toyota Mfg + Lockheed; Q1 2026 zoning reform package adopted; entitled MF (R-4/R-5) trading $200-275k/ac.</div></div>
+    <div class="market-card"><div class="market-name">Chattanooga, TN</div><div class="market-thesis">East Brainerd / Hamilton County corridor: VW + supplier base + Erlanger demand; tertiary basis still attractive.</div></div>
+    <div class="market-card"><div class="market-name">Savannah / Chatham, GA</div><div class="market-thesis">Port + Hyundai + Gulfstream + Amazon = persistent workforce undersupply; entitled product trades premium.</div></div>
+    <div class="market-card"><div class="market-name">Daytona / Volusia, FL</div><div class="market-thesis">MFR-20 / MFR-40 zones rare; spillover from Orange/Seminole; insurance load punishing pro formas.</div></div>
+    <div class="market-card"><div class="market-name">Tallahassee, FL</div><div class="market-thesis">Approved-PUD scarcity = premium basis. Today's 31.68-ac priced at $2,710/unit basis is generational if PUD intact.</div></div>
+  </div>
+</section>
+
+<section id="daily" class="panel">
+  <h2>Daily Parcels — 10 candidates (sortable, filterable)</h2>
+  <p class="muted">States: TN · GA · SC · NC · FL · KY · AL. Score color: ≥80 green · 65–79 yellow · 50–64 orange · &lt;50 red. Honest deliver of 10 (below 15-ceiling); 60-day dedup window covered 50+ prior parcels.</p>
+  <div id="daily-grid" class="grid-wrap"></div>
+
+  <h3>Detailed Cards</h3>
+  <div id="daily-detail" class="detail-list"></div>
+</section>
+
+<section id="gems" class="panel">
+  <h2>Hidden Gems — Markets the institutional crowd skips</h2>
+  <p class="muted">Filters: low national-developer competition + identifiable structural demand driver + supply genuinely constrained.</p>
+
+  <h3>Tier A — Specific Parcels Identified (4)</h3>
+  <div id="gems-a-grid" class="grid-wrap"></div>
+
+  <h3>Tier B — Market Thesis (broker outreach this week)</h3>
+  <div id="gems-b-grid" class="grid-wrap"></div>
+
+  <h3>Honest Risk Notes</h3>
+  <table class="ref-table">
+    <thead><tr><th>Market</th><th>Real Risk</th></tr></thead>
+    <tbody>
+      <tr><td>Statesboro / Bulloch, GA</td><td>Hyundai catchment thesis depends on actual ramp pace; price flag at $21k/ac signals env issue — desktop triage required.</td></tr>
+      <tr><td>Florence, SC</td><td>Tertiary rent ceiling at ~$1,500-1,650/mo Class A — pro forma BORDERLINE on rent assumption sensitivity.</td></tr>
+      <tr><td>Dothan, AL</td><td>Slow growth; Wiregrass economy stable but not catalyst-driven.</td></tr>
+      <tr><td>Cullman, AL</td><td>I-65 corridor; B-2 zoning may require CUP for MF density — verify before LOI.</td></tr>
+      <tr><td>Auburn-Opelika, AL</td><td>Auburn U calendar-driven seasonality; Lee County master-plan-scale parcels usually require carve-out partner.</td></tr>
+      <tr><td>Aiken, SC</td><td>SRS contractor demand is project-cycle driven; high $/ac on small parcels (12.39-ac at $6.5M = $525k/ac) flagged.</td></tr>
+      <tr><td>Asheville, NC</td><td>Buncombe inventory absorbed by local developers (Crescent / Southeast Partners); institutional entry thin.</td></tr>
+      <tr><td>Conway / Myrtle Beach, SC</td><td>Coastal insurance load; smaller parcels; tourism rent profile mixes with workforce.</td></tr>
+      <tr><td>Hattiesburg, MS</td><td>USM enrollment trend flat-to-down per recent press; Camp Shelby + USM + Forrest General demand stack persistent but not catalyst-driven.</td></tr>
+      <tr><td>Murray, KY</td><td>Smaller MSA; off-market sourcing required; institutional MF competitor presence near zero.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="proforma" class="panel">
+  <h2>Pro Forma — Daily #1 (Bryan County GA 54.99-ac near Hyundai)</h2>
+  <p class="muted">Illustrative 280-unit base case on a 30-ac MF carve-out from the 54.99-ac tract (partition strategy; residual 25-ac to SF/BTR partner or sale). Inputs are market-typical estimates with placeholder land basis allocated by partition. <strong>Validate every assumption against actual broker comps and contractor pricing before LOI.</strong> Single-anchor risk premium of +25 bps applied per 5/04 calibration (Hyundai Metaplant primary demand driver).</p>
+
+  <h3>Headline Metrics — Bryan County (Daily #1)</h3>
+  <div class="card-row" id="pf-kpi-row"></div>
+
+  <div class="callout">
+    <strong>VERDICT (BASE) — Bryan County GA 54.99-ac:</strong> <span class="pill green">PROCEED</span> at 5.57% YoC. Spread positive but tight (+7 bps). Land-basis confirmation drives the verdict. Land at $5M (proportional carve-out share) lifts to ~5.85%; land at $7M drops to ~5.05% CONDITIONAL. <strong>Single-anchor risk premium (+25 bps to exit cap) baked in to reflect Hyundai-thesis dependence.</strong>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Sources & Uses (Bryan)</h3>
+      <table class="ref-table money-table" id="pf-uses"></table>
+    </div>
+    <div>
+      <h3>Stabilized Operating (Bryan, Yr 2)</h3>
+      <table class="ref-table money-table" id="pf-operating"></table>
+    </div>
+  </div>
+
+  <h3>Named Scenarios — Bryan County Daily #1</h3>
+  <table class="ref-table" id="pf-scenarios">
+    <thead><tr><th>Scenario</th><th>Description</th><th>TDC</th><th>YoC</th><th>Spread vs 5.50% Cap</th><th>Verdict</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p class="muted small">Verdict thresholds: ≥6.0% PROCEED comfortable · 5.5–6.0% PROCEED · 5.0–5.5% CONDITIONAL · 4.5–5.0% BORDERLINE · &lt;4.5% DOES NOT PENCIL</p>
+
+  <h3>Read-Through — Bryan County</h3>
+  <ul class="bullet-gold">
+    <li><strong>BASE</strong> at 5.57% PROCEED. Spread to 5.50% exit cap is +7 bps — meaningful for a development play, not robust.</li>
+    <li><strong>RECESSION</strong> drops to ~5.10% CONDITIONAL (acceptable downside given primary-market location + Hyundai workforce continuity).</li>
+    <li><strong>COST SPIKE</strong> at 5.16% CONDITIONAL — lock GMP early; consider design-build with cap.</li>
+    <li><strong>LEASE-UP DELAY</strong> at 5.41% CONDITIONAL — 280 units in a known catchment should lease 18-22mo, but plan for 24-28 in BASE.</li>
+    <li><strong>INSURANCE 2x</strong> at 5.02% CONDITIONAL/BORDERLINE — GA inland is less volatile than FL coastal but not immune; lock indication.</li>
+    <li><strong>UPSIDE</strong> at 6.02% PROCEED COMFORTABLE — clean basis story if rent comp study supports $2,125/u (vs $2,025 BASE).</li>
+  </ul>
+
+  <hr style="margin: 32px 0; border: 0; border-top: 1px solid #d0d0d0;">
+
+  <h2 style="margin-top:0">Pro Forma — Hidden Gem #1 (Statesboro GA 16.33-ac MF $350k)</h2>
+  <p class="muted">Illustrative 204-unit case on a 16.33-ac tract listed at $350,000 ($21,432/ac). Per Atlas directive, pro forma run on the day's #1 Hidden Gem.</p>
+
+  <div class="callout red">
+    <strong>BASIS FLAG — auto-trigger raised:</strong> $/ac of $21,432 is below the $25k threshold per <code>auto_flag_conditions</code> in config v2.2. Flag: "Likely environmental issue (wetlands/floodplain/contamination) — desktop env triage required before broker call." Pro forma is illustrative ONLY; do not LOI without (1) clean Phase I + NWI + FEMA desktop and (2) rent ceiling re-validation at or above $1,650/mo Class A new construction in Bulloch County.
+  </div>
+
+  <h3>Headline Metrics — Statesboro (HG-1)</h3>
+  <div class="card-row" id="pf2-kpi-row"></div>
+
+  <div class="callout amber">
+    <strong>VERDICT (BASE) — Statesboro 16.33-ac:</strong> <span class="pill amber">BORDERLINE</span> at 4.86% YoC. Most stress scenarios DO NOT PENCIL. The basis advantage is real ($1,716/unit land cost, exceptional) but the rent ceiling kills it on most realistic Bulloch County Class A rent assumptions. UPSIDE scenario at $1,654/mo barely clears CONDITIONAL (5.28%).
+  </div>
+
+  <h3>Named Scenarios — Statesboro Hidden Gem #1</h3>
+  <table class="ref-table" id="pf2-scenarios">
+    <thead><tr><th>Scenario</th><th>Description</th><th>TDC</th><th>YoC</th><th>Spread vs 6.50% Cap</th><th>Verdict</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p class="muted small">Hidden-gem markets use 6.50% exit cap (Tier-3 stable, per Capital Markets brief). Single-anchor risk premium +25bps applied to Hyundai-thesis sensitivity (Statesboro is Hyundai supplier catchment).</p>
+
+  <h3>Read-Through — Statesboro Hidden Gem</h3>
+  <ul class="bullet-gold">
+    <li><strong>BASE</strong> at 4.86% BORDERLINE. Even with the basis advantage, rent ceiling at $1,575/u is the binding constraint.</li>
+    <li><strong>RECESSION</strong> at 4.52% BORDERLINE/DOES NOT PENCIL — wider exit cap (7.25%) on top of flat rent.</li>
+    <li><strong>COST SPIKE</strong> at 4.47% DOES NOT PENCIL — basis advantage erodes against $20k/u hard-cost increase.</li>
+    <li><strong>LEASE-UP DELAY</strong> at 4.37% DOES NOT PENCIL — tertiary-market lease-up is typically slower than primary.</li>
+    <li><strong>INSURANCE 2x</strong> at 4.19% DOES NOT PENCIL — even GA inland insurance escalation kills the verdict.</li>
+    <li><strong>UPSIDE</strong> at 5.28% CONDITIONAL — only scenario that clears. Requires rent +5% AND land 20% lower (in addition to clean env DD).</li>
+    <li><strong>Honest call:</strong> This is the kind of basis-flagged tertiary parcel that LOOKS exceptional but the env risk is the entire deal. If env DD comes back clean, the next gate is rent comp validation (NMMC + GSU + Hyundai supplier workforce surveys).</li>
+  </ul>
+
+  <h3>Validation Sequence (before any LOI)</h3>
+  <ol class="numbered-list">
+    <li><strong>Bryan #1:</strong> Listing-broker call — asking price, partition cooperation, ALTA, Phase I status. Hyundai supplier workforce data (Bryan/Chatham/Effingham combined). Land basis allocation methodology counsel.</li>
+    <li><strong>Bryan #1:</strong> RealPage / CoStar Pooler/Richmond Hill 1mi & 3mi rent comps; last 24mo absorption (Hyundai catchment).</li>
+    <li><strong>Bryan #1:</strong> Two GC budgets (Class A garden 4-story 280u). Lock GMP early.</li>
+    <li><strong>Bryan #1:</strong> GA multifamily insurance broker — site-specific quote (inland, not coastal exposure).</li>
+    <li><strong>Bryan #1:</strong> Bryan County / Pooler / Richmond Hill utility will-serve confirmation; transportation impact study scoping.</li>
+    <li><strong>Statesboro HG-1:</strong> Desktop env triage FIRST — Phase I screen + NWI + FEMA + GA EPD historic-use search. Do NOT broker-call until env triage clean.</li>
+    <li><strong>Statesboro HG-1:</strong> Rent comp deep-dive — NMMC, GSU, Hyundai supplier workforce surveys.</li>
+  </ol>
+</section>
+
+<section id="exec" class="panel">
+  <h2>Executive Summary — May 5, 2026</h2>
+  <p>Today's run surfaced 10 candidate parcels in the primary daily list and 4 Tier-A Hidden Gem parcels across the seven-state focus zone (TN, GA, SC, NC, FL, KY, AL). Honest deliver was 10 daily parcels rather than padding to 15 — the 60-day dedup window now covers 50+ prior parcels and Tier-1 inventory is materially absorbed.</p>
+
+  <div class="callout">
+    <strong>Why this matters:</strong> Daily #1 (Bryan County 54.99-ac near Hyundai) and #2 (Lexington Joyland Crossing 165u entitled) are the two highest-quality fresh finds. Both are pursuable in 30-90 days; both have clear basis-confirmation gating events. Tier-A Hidden Gem #1 (Statesboro 16.33-ac at $21k/ac) carries auto-flagged env risk that must be triaged before any broker engagement. Pro forma BASE on Bryan #1 = 5.57% YoC PROCEED; pro forma BASE on Statesboro HG-1 = 4.86% BORDERLINE with most stress scenarios DO NOT PENCIL.
+  </div>
+
+  <h3>Decision-Ready Top 3</h3>
+  <table class="ref-table">
+    <thead><tr><th>#</th><th>Parcel</th><th>BASE Pro Forma</th><th>Gating Event</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Bryan County GA 54.99-ac (Hyundai 1mi)</strong></td><td>5.57% YoC PROCEED (single-anchor +25bps applied)</td><td>Listing-broker call + partition cooperation; Hyundai Q2 production data</td></tr>
+      <tr><td>2</td><td><strong>Lexington KY Joyland Crossing 7.71-ac R-4 165u</strong></td><td>BORDERLINE 165u (below 200 floor; flagged per config); entitled-product premium real</td><td>Keller Williams Commonwealth call; verify R-4 vesting</td></tr>
+      <tr><td>3</td><td><strong>Tallahassee 31.68-ac PUD-14 (status update from 4/30)</strong></td><td>$2,710/unit basis if PUD vested = generational</td><td>PUD vesting/sunset confirmation TLPLACE</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Methodology & Caveats</h3>
+  <p>This is a first-pass triage list, not a final entitlement memo. Per-parcel listing data (acreage, listed zoning class, listing URL) was cross-verified across two or more aggregators where possible. <strong>Owner names, parcel IDs (PINs), exact slope values, FEMA flood zone confirmations, VPD counts, and utility will-serve confirmations are flagged "TBV"</strong> — these require county GIS, assessor, DOT, and utility provider lookups during pre-feasibility. Owner phone numbers and PINs were not auto-fabricated.</p>
+
+  <p>Inventory caveat: only 10 parcels met the base criteria for the daily list today. The 60-day dedup window now covers 50+ prior parcels, and primary-market inventory is materially absorbed. Recommend layering broker outreach on top of public listing pulls. Per playbook 5/04, day-3+ cadence on a tight focus list expects 8-12 fresh parcels per run, not the 12-15 ceiling.</p>
+
+  <p>Brain version: <code>config v2.2</code> (KY added 5/01; pro_forma_on_top_hidden_gem behavior toggle 5/01). Markets excluded today by intel: Huntsville (Q1 2026 oversupply persists ~6.3 units U/C per 1k pop). KY Glendale parcels deprioritized (BlueOval SK partnership dissolution per 5/04 update).</p>
+</section>
+
+<section id="comps" class="panel">
+  <h2>Comparable Transactions Tracker</h2>
+  <p class="muted">Every new parcel auto-benchmarked against recent transactions. Confidence: H = verified public, M = press / broker-confirmed, L = estimated. <strong>POPULATE</strong> rows are placeholders for Atlas's team.</p>
+
+  <h3>Recent Land Sales</h3>
+  <div id="land-sales-grid" class="grid-wrap"></div>
+
+  <h3>Today's Basis-Check Outcomes</h3>
+  <table class="ref-table">
+    <thead><tr><th>Parcel</th><th>$/ac (today)</th><th>Local Comp Range</th><th>Within 25% Band?</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Bryan #1 — 54.99-ac (Hyundai catchment)</td><td>~$136k/ac (TBV)</td><td>$120-180k/ac (Bryan/Pooler MF)</td><td>YES (within band)</td><td>Use as land basis for pro forma; partition price-allocation counsel</td></tr>
+      <tr><td>Lexington #2 — 7.71-ac R-4 entitled 165u</td><td>$505,837/ac</td><td>$200-275k/ac (Lexington R-4/R-5)</td><td>NO — flagged 80%+ premium</td><td>Premium reflects entitled-product status; verify R-4 + 165u DP transferability before reconciling</td></tr>
+      <tr><td>Statesboro HG-1 — 16.33-ac MF</td><td>$21,432/ac</td><td>$50-90k/ac (Statesboro MF)</td><td>NO — flagged DEEP discount (env)</td><td>Auto-flag: desktop env triage required before broker call</td></tr>
+      <tr><td>Aiken HG (Tier-B) — 12.39-ac southside</td><td>~$525k/ac</td><td>$40-120k/ac (Aiken)</td><td>NO — flagged 4-13× premium</td><td>Verify entitled status; if not, pass</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How to Populate</h3>
+  <ul class="bullet-gold">
+    <li>After every broker call, ask: "What have you sold in this submarket in the last 12 months?"</li>
+    <li>After every CoStar pull, copy relevant transactions here.</li>
+    <li>When pro forma is run on a new parcel, basis-test: if $/acre is &gt;25% above local recent comps, FLAG IT.</li>
+  </ul>
+
+  <h3>Multifamily Property Sales</h3>
+  <p class="muted">Stabilized Class A/B trades — cap rate and $/unit benchmarks. Populate from CoStar / press releases.</p>
+  <table class="ref-table">
+    <thead><tr><th>Date</th><th>Market</th><th>Property</th><th>Year Built</th><th>Units</th><th>Sale Price</th><th>$/Unit</th><th>Cap Rate</th></tr></thead>
+    <tbody>
+      <tr><td colspan="8" class="muted">All POPULATE — pull from CoStar / press; key markets: Bryan/Pooler, Lexington, Chattanooga, Charleston, Tallahassee, Daytona, Lakeland.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Lease-Up Comps</h3>
+  <table class="ref-table">
+    <thead><tr><th>Market</th><th>Property</th><th>Units</th><th>Class</th><th>Lease-Up Pace</th><th>Achieved Rent</th><th>Concessions</th></tr></thead>
+    <tbody>
+      <tr><td colspan="7" class="muted">All POPULATE — Pooler/Richmond Hill, Lexington, Chattanooga, Statesboro new-construction lease-ups.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="outreach" class="panel">
+  <h2>Outreach Tracker</h2>
+  <p class="muted">Single source of truth for broker / owner contact. Update after every call.</p>
+
+  <h3>Active Outreach (this week's priorities)</h3>
+  <div id="active-outreach-grid" class="grid-wrap"></div>
+
+  <h3>Broker Database</h3>
+  <p class="muted">Running roster — track responsiveness, deal flow, hit rate.</p>
+  <div id="brokers-grid" class="grid-wrap"></div>
+
+  <h3>Communication Log</h3>
+  <table class="ref-table">
+    <thead><tr><th>Date</th><th>Parcel</th><th>Counterparty</th><th>Type</th><th>Outcome</th><th>Follow-up</th></tr></thead>
+    <tbody>
+      <tr><td colspan="6" class="muted">POPULATE after every contact</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="dd" class="panel">
+  <h2>Due Diligence Checklist</h2>
+  <p class="muted">60–90 day post-LOI plan. Customize per parcel. Critical items never to skip: Phase I, wetlands delineation, geotech, FL/coastal insurance broker quote, two GC budgets.</p>
+  <div id="dd-grid" class="grid-wrap"></div>
+</section>
+
+<section id="submarket" class="panel">
+  <h2>Submarket Fundamentals — 18 MSAs</h2>
+  <p class="muted">Free-data approximation: Census ACS, BLS LAUS, HUD permits. Quarterly-lagged. Subscription data (CoStar / RealPage) gives weekly refresh and tighter rent / vacancy estimates.</p>
+  <div id="submarket-grid" class="grid-wrap"></div>
+</section>
+
+<section id="climate" class="panel">
+  <h2>Climate &amp; Insurance Risk Scoring</h2>
+  <p class="muted">Per-parcel flood / wind / wildfire / heat scoring + insurance cost impact. Risk levels: LOW / MEDIUM / HIGH / EXTREME.</p>
+  <div id="climate-grid" class="grid-wrap"></div>
+
+  <h3>Insurance Cost Reference (Q2 2026)</h3>
+  <ul class="bullet-gold">
+    <li>Inland Sun Belt baseline: $850-1,000/unit/yr</li>
+    <li>FL inland: $1,300-1,700/unit/yr</li>
+    <li>FL coastal / GA coastal / NC coastal: $1,800-2,500/unit/yr</li>
+    <li>FL coastal in named-storm corridor: $2,400-3,200/unit/yr</li>
+    <li>KY/TN inland: $750-950/unit/yr (lowest in focus footprint)</li>
+  </ul>
+  <p class="muted small">Validate with site-specific multifamily insurance broker quote — do not use $/unit estimates for underwriting.</p>
+</section>
+
+<section id="pipeline" class="panel">
+  <h2>Pipeline &amp; Competitor Intel</h2>
+  <p class="muted">Recent deliveries / U/C / announced. Triggers oversupply flag if &gt;2,000 units in a &lt;250k MSA.</p>
+  <div id="pipeline-grid" class="grid-wrap"></div>
+</section>
+
+<section id="offmarket" class="panel">
+  <h2>Off-Market / Direct-to-Owner Targets</h2>
+  <p class="muted">For markets where listed inventory is thin. Workflow: GIS query → owner research → mailed letter (template in Templates tab) → phone follow-up 7-10 days later.</p>
+  <div id="offmarket-grid" class="grid-wrap"></div>
+
+  <h3>Expected Hit Rate</h3>
+  <ul class="bullet-gold">
+    <li>Mailed letter response rate: 5-10%</li>
+    <li>Phone follow-up to no-response: 20-30%</li>
+    <li>Of responses, 20-40% lead to genuine conversations</li>
+    <li>Of those, 10-20% lead to LOI</li>
+    <li><strong>Net: ~1-3% of letters mailed result in a deal touch</strong></li>
+  </ul>
+</section>
+
+<section id="capmkts" class="panel">
+  <h2>Capital Markets Context — Q2 2026 indicative</h2>
+  <p class="muted">Indicative ranges from broker / lender survey commentary. Live deal pricing requires conversations with active capital partners (Berkadia, JLL Debt, Walker &amp; Dunlop, life co reps). Refresh quarterly.</p>
+
+  <h3>Construction Debt</h3>
+  <table class="ref-table">
+    <thead><tr><th>Source</th><th>Pricing</th><th>Leverage</th><th>Term</th></tr></thead>
+    <tbody><tr><td>Bank construction loan</td><td>SOFR + 250–325 bps</td><td>60–65% LTC</td><td>3-yr term + 1×1 extensions</td></tr><tr><td>Agency forward (Fannie/Freddie)</td><td>SOFR + 200–250 bps</td><td>construction-permanent</td><td>take-out at funding</td></tr><tr><td>Debt fund / bridge</td><td>SOFR + 350–500 bps</td><td>65–70% LTC</td><td>more flexible covenants</td></tr><tr><td>Mezzanine</td><td>11–14% pay rate</td><td>fills 75–80% LTC</td><td>—</td></tr><tr><td>HUD 221(d)(4)</td><td>5.5–6.0% all-in fixed</td><td>85–90% LTC</td><td>long process (12–18 mo)</td></tr></tbody>
+  </table>
+
+  <h3>Permanent Debt</h3>
+  <table class="ref-table">
+    <thead><tr><th>Source</th><th>Pricing</th><th>Leverage</th><th>Term</th></tr></thead>
+    <tbody><tr><td>Agency 10-yr (Fannie/Freddie)</td><td>5.50–6.00% all-in</td><td>60–70% LTV</td><td>IO 1-2 yr available</td></tr><tr><td>Life company 10–20 yr</td><td>5.75–6.25% fixed</td><td>55–65% LTV</td><td>long-amort low-leverage</td></tr><tr><td>CMBS</td><td>6.00–6.75% all-in</td><td>60–70% LTV</td><td>more flexible interest-only</td></tr><tr><td>Bank balance sheet</td><td>6.25–7.00% all-in</td><td>55–65% LTV (5-7 yr)</td><td>—</td></tr></tbody>
+  </table>
+
+  <h3>Equity / Promote</h3>
+  <table class="ref-table">
+    <thead><tr><th>Term</th><th>Range</th></tr></thead>
+    <tbody><tr><td>LP target preferred return</td><td>8.0–9.0%</td></tr><tr><td>LP target net IRR (Class A development)</td><td>13–17%</td></tr><tr><td>LP target net IRR (value-add)</td><td>15–19%</td></tr><tr><td>LP equity multiple (5-yr)</td><td>1.6–2.0x</td></tr><tr><td>LP equity multiple (7-10 yr)</td><td>2.0–2.5x</td></tr><tr><td>GP promote: above 8% IRR</td><td>20%</td></tr><tr><td>GP promote: above 15% IRR</td><td>35%</td></tr><tr><td>GP promote: above 20% IRR</td><td>50%</td></tr><tr><td>Co-GP / sponsor capital</td><td>5–15% of equity</td></tr></tbody>
+  </table>
+
+  <h3>Cap Rate Reference — Sun Belt Class A Multifamily</h3>
+  <table class="ref-table">
+    <thead><tr><th>Market Tier</th><th>Cap Rate</th></tr></thead>
+    <tbody><tr><td>Prime markets (Atlanta, Charlotte, Nashville)</td><td>5.00–5.50%</td></tr><tr><td>Strong secondary (Tampa, Raleigh, Orlando, Charleston, Lexington)</td><td>5.25–5.75%</td></tr><tr><td>Tertiary growth (Greenville SC, Chattanooga, Jacksonville FL, Daytona, Savannah, Bryan/Pooler)</td><td>5.50–6.25%</td></tr><tr><td>Tertiary stable (Hickory, Tupelo, Hattiesburg, Aiken, Statesboro, Cullman)</td><td>6.00–7.00%</td></tr></tbody>
+  </table>
+
+  <h3>Implications for Today's Pro Formas</h3>
+  <ul class="bullet-gold">
+    <li><strong>Bryan #1:</strong> 5.50% exit cap is mid-range for tertiary growth Sun Belt. ±25bps moves the verdict materially. Single-anchor risk premium (+25bps) baked in via 5/04 calibration. Permanent debt 6.0% is in-line; construction loan 65% LTC is conservative.</li>
+    <li><strong>Statesboro HG-1:</strong> 6.50% exit cap appropriate for tertiary stable. Even at this cap, base case BORDERLINE — rent ceiling is the binding constraint, not the cap.</li>
+    <li><strong>Across the deck:</strong> LP target IRR 13-17% vs base-case lev IRR 7-9% — needs structural restructuring (lower LP pref, higher GP co-invest, longer hold) to clear LP economics on most of these deals.</li>
+  </ul>
+</section>
+
+<section id="templates" class="panel">
+  <h2>Templates</h2>
+  <p class="muted">Markup-ready. Replace all bracketed [VARIABLES] before sending. Counsel review recommended before any specific deal.</p>
+
+  <div class="tab-mini">
+    <button class="mini-btn active" data-mini="loi">LOI Template</button>
+    <button class="mini-btn" data-mini="letter">Off-Market Outreach Letter</button>
+  </div>
+
+  <div id="loi" class="mini-panel active">
+    <h3>Letter of Intent — Multifamily Development Land Acquisition</h3>
+    <pre class="template">[DATE]
+
+[OWNER NAME / ENTITY]
+[OWNER ADDRESS]
+[CITY, STATE, ZIP]
+
+Re: Letter of Intent — Purchase of Real Property
+[PROPERTY ADDRESS / PARCEL ID(s)]
+
+Dear [OWNER]:
+
+This Letter of Intent ("LOI") sets forth the principal terms upon which [BUYER ENTITY], a [STATE] limited liability company ("Purchaser"), proposes to purchase the real property described below from [SELLER ENTITY] ("Seller"). Except for the binding provisions in Section 11 (Confidentiality), Section 12 (Exclusivity), and Section 13 (Brokerage), this LOI is non-binding and creates no obligation on either party until a definitive Purchase and Sale Agreement ("PSA") is fully executed.
+
+1.  PROPERTY
+    Address / Parcel(s):  [ADDRESS] · Parcel ID(s) [PIN]
+    Acreage:              Approx. [ACRES] acres, more or less, per [SURVEY/TAX RECORD]
+    Zoning:               [CURRENT ZONING] — Purchaser intends to develop multifamily under [BY-RIGHT / WITH REZONING TO __]
+
+2.  PURCHASE PRICE
+    Purchaser shall pay Seller a total purchase price of $[PURCHASE PRICE] ("Purchase Price"), payable in cash at Closing, subject to customary prorations and adjustments.
+
+3.  EARNEST MONEY DEPOSIT
+    Within five (5) business days of the full execution of the PSA, Purchaser shall deposit $[INITIAL DEPOSIT] (the "Initial Deposit") into escrow with [TITLE COMPANY]. Refundable until expiration of the Inspection Period.
+
+4.  INSPECTION / DUE DILIGENCE PERIOD
+    Ninety (90) days. Investigations include: title and survey, Phase I (and Phase II if recommended), wetlands delineation, geotech, zoning verification, utility availability, traffic studies, market and rent comparables, schematic A&E.
+
+5.  ENTITLEMENT CONTINGENCY PERIOD
+    180 days post-Inspection for site plan approval, rezoning if required, conditional use permits, traffic concurrency, utility will-serve. Extendable [60/90] days with additional [EXTENSION DEPOSIT].
+
+6.  CLOSING
+    Within thirty (30) days following the later of: (a) expiration of the Entitlement Period, or (b) Purchaser's written notice that all entitlement contingencies have been satisfied.
+
+7.  TITLE AND SURVEY
+    Within fifteen (15) days of Effective Date, Purchaser obtains title commitment and ALTA/NSPS Survey at Purchaser's expense. Seller conveys by general warranty deed.
+
+8.  CLOSING COSTS AND PRORATIONS
+    Seller pays: state deed transfer taxes, owner's title insurance, broker commissions. Purchaser pays: lender's title insurance, ALTA, recording fees, environmental and engineering reports.
+
+9.  REPRESENTATIONS AND WARRANTIES
+    Customary, surviving Closing 1 year.
+
+10. ACCESS — Purchaser and consultants have full access during Inspection Period upon reasonable notice.
+
+11. CONFIDENTIALITY (BINDING) — neither party discloses the terms of this LOI.
+
+12. EXCLUSIVITY (BINDING) — Seller will not solicit, negotiate, or accept other offers for [60] days from execution of this LOI.
+
+13. BROKERAGE (BINDING) — [BROKER] represents [PARTY]; Seller pays a [X]% commission at Closing.
+
+14. EXPIRATION — This LOI expires if not accepted by [DATE].
+
+Please indicate acceptance by signing below. Counsel review of any specific deal is required before execution.
+
+Respectfully,
+[BUYER PRINCIPAL]                Accepted: ____________________
+[BUYER ENTITY]                   [SELLER PRINCIPAL]
+                                  Date: ____________________
+</pre>
+  </div>
+
+  <div id="letter" class="mini-panel">
+    <h3>Off-Market Direct-to-Owner Outreach Letter</h3>
+    <pre class="template">[DATE]
+
+[OWNER NAME]
+[OWNER ADDRESS]
+[CITY, STATE, ZIP]
+
+Re: Your property at [PROPERTY ADDRESS / PARCEL ID]
+
+Dear [OWNER]:
+
+I am writing to introduce Neyland Development. We are a Southeast-focused multifamily developer with active investment programs in Tennessee, Georgia, the Carolinas, Florida, Kentucky, and Alabama. We acquire and develop class-A multifamily communities in growth markets, with particular focus on parcels capable of supporting 200+ units.
+
+We have been tracking your property at [ADDRESS] and believe it has strong development potential. We would welcome the opportunity to discuss whether you have any interest in selling now, in the future, or simply having a conversation about its potential.
+
+What you can expect from us:
+  • Cash close — we do not require third-party financing contingencies
+  • Reasonable inspection / entitlement timelines (90/180 days)
+  • Direct conversation with a principal of the firm — no broker layer required
+  • Clean offers based on validated market data, not aspirational pricing
+
+If you would prefer a broker introduction, we are also happy to work through your representative.
+
+You can reach me directly at [PHONE] or [EMAIL]. I look forward to the conversation.
+
+Respectfully,
+
+[PRINCIPAL NAME]
+[TITLE]
+Neyland Development
+[PHONE]  ·  [EMAIL]
+
+P.S. — If this property is not for sale, no further mailings will follow. We are selective about who we contact.
+</pre>
+  </div>
+</section>
+
+<section id="system" class="panel">
+  <h2>System &amp; Methodology</h2>
+
+  <h3>Brain version</h3>
+  <p><code>config v2.2</code> · KY added 5/01 (Atlas state-scope expansion) · pro_forma_on_top_hidden_gem behavior toggle 5/01 · Honest-deliver-below-15 calibration learning 5/04 · BlueOval SK partnership-dissolution market intel update 5/04.</p>
+
+  <h3>Today's Inputs</h3>
+  <ul class="bullet-gold">
+    <li><strong>States in scope:</strong> TN, GA, SC, NC, FL, KY, AL (7 states)</li>
+    <li><strong>Primary markets:</strong> 18 (incl. Lexington-Fayette KY + Bowling Green KY added 5/01)</li>
+    <li><strong>Hidden gem markets:</strong> 24 (incl. KY: E-town/Glendale, Owensboro, Paducah, Richmond/Berea, Murray)</li>
+    <li><strong>Excluded today:</strong> Huntsville-Madison AL (Q1 2026 oversupply ~6.3 units U/C per 1k pop); Glendale KY (BlueOval SK Ford-SK On JV dissolved per 5/04 update)</li>
+    <li><strong>Dedup window:</strong> 60 days (50+ ledger parcels skipped today)</li>
+  </ul>
+
+  <h3>Scoring Rubric (from config.yaml v2.2)</h3>
+  <ul class="bullet-gold">
+    <li>Market Demand: 25% (vacancy, rent growth, pipeline pressure, population/job growth)</li>
+    <li>Regulatory/Policy: 20% (current zoning, pro-development planning, rezoning likelihood)</li>
+    <li>Physical Feasibility: 20% (size, slope, utilities, environmental)</li>
+    <li>Location/Access: 15% (VPD, proximity to retail/transit/employers)</li>
+    <li>Financial Attractiveness: 20% (price/acre vs implied unit yield, comps)</li>
+  </ul>
+
+  <h3>Auto-Triggers Applied Today</h3>
+  <ul class="bullet-gold">
+    <li><strong>Comp tracker basis check:</strong> Statesboro HG-1 ($21,432/ac) below local comp band → env-flag raised; Lexington Joyland ($505,837/ac) above local comp band → entitled-product premium acknowledged</li>
+    <li><strong>Pipeline oversupply check:</strong> Huntsville suspended; all today's parcels in markets within absorption tolerance</li>
+    <li><strong>Climate insurance adjustment:</strong> No coastal parcels in today's daily list (Bryan #1 is inland Bryan County, not coastal Glynn or Camden); FL Panhandle Crestview HG-1 (5/01) flagged for INSURANCE 2x scenario in pro forma archive</li>
+    <li><strong>Single-anchor risk:</strong> Bryan #1 (Hyundai), Statesboro HG-1 (Hyundai supplier catchment), and Bryan/Statesboro corridor exposure carry +25bps exit cap premium per 5/04 calibration</li>
+  </ul>
+
+  <h3>Tomorrow's Suggested Focus</h3>
+  <ul class="bullet-gold">
+    <li>Continued KY expansion validation — Lexington Joyland Crossing entitlement vesting + Bowling Green RM-4 unit-count reconciliation</li>
+    <li>Bryan / Pooler / Richmond Hill broker network deepening (Hyundai supplier housing demand)</li>
+    <li>Coastal Carolina / Brunswick-Wilmington PIPELINE re-evaluation post Q2 2026 absorption data</li>
+    <li>Off-market sourcing in Murray KY + Sumter SC (limited public listing inventory)</li>
+  </ul>
+
+  <h3>Citations &amp; Sources Used Today</h3>
+  <p class="muted">Live web cross-verification across LoopNet, Crexi, LandWatch, LandSearch, Land.com, Land &amp; Farm, Homes.com, Cushman &amp; Wakefield, Bluegrass Realty, KY Commercial Net, SouthCoast Properties, Brunswick GA Property Listings, Bulloch GIS, NeighborhoodScout, Steadily, Greenville Real Estate Hub, Berkshire Hathaway Auburn-Opelika.</p>
+
+  <p class="footer-note">Generated by Oracle automated pipeline · Neyland Development · 2026-05-05 · brain v2.2 · run_history meta saved to <code>_oracle_brain/run_history/2026-05-05_run_meta.md</code></p>
+</section>
+
+</main>
+
+<script>
+// Tab switching
+document.querySelectorAll('nav.tabs .tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav.tabs .tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('main .panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo(0,0);
+  });
+});
+
+// Mini-tab switching (templates)
+document.querySelectorAll('.mini-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mini-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.mini-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.mini).classList.add('active');
+  });
+});
+
+// ==================== DATA ====================
+const dailyParcels = [
+  { rank: 1, score: 88, market: "Bryan County, GA", parcel: "54.99-ac near Hyundai Metaplant (1mi)", acres: 54.99, zoning: "TBV (likely AG/Commercial; rezone-to-MF or partition)", price: "TBV (~$7.5M est)", url: "https://www.crexi.com/properties/GA/Bryan_County/Land", friction: 5, status: "GREEN", redFlags: "Single-anchor (Hyundai) +25bps risk premium; partition mechanics counsel; wetland delineation likely required", nextStep: "Listing-broker call this week + Hyundai Q2 production data validation" },
+  { rank: 2, score: 85, market: "Lexington-Fayette, KY", parcel: "Joyland Crossing 7.71-ac R-4 entitled 165u (2324 Paris Pike)", acres: 7.71, zoning: "R-4 (entitled 165 units)", price: "$3,900,000 ($505,837/ac · $23,636/unit)", url: "https://www.landsearch.com/properties/2324-paris-pike-lexington-ky-40505/4790233", friction: 2, status: "GREEN", redFlags: "BORDERLINE 165u (below 200 floor; flagged 150-199 acceptable per config v2.2); entitled-product premium real but transferability TBV", nextStep: "Keller Williams Commonwealth call (859) 721-2121; verify R-4 vesting + DP transferability" },
+  { rank: 3, score: 80, market: "Savannah, GA (Chatham)", parcel: "Reserve at Savannah Harbor ±48-ac I-95 corridor", acres: 48.0, zoning: "TBV", price: "TBV", url: "https://www.crexi.com/properties/GA/Savannah/Multifamily", friction: 5, status: "GREEN", redFlags: "Likely SFHA exposure given river/marsh proximity; verify FEMA + savannah harbor district overlay before LOI", nextStep: "Crexi broker call + SAGIS plat / FEMA desktop" },
+  { rank: 4, score: 76, market: "Chattanooga, TN (Hamilton)", parcel: "21.07-ac East Brainerd with pond — MF/residential", acres: 21.07, zoning: "TBV (likely R-1 / R-2; rezone path required)", price: "TBV", url: "https://www.crexi.com/properties/TN/Chattanooga/Multifamily", friction: 5, status: "AMBER", redFlags: "Pond on parcel = wetland/buffer setbacks reduce net usable; rolling terrain; rezone gate", nextStep: "Pull Hamilton County zoning + slope analysis + pond delineation" },
+  { rank: 5, score: 70, market: "Pooler / Port Wentworth, GA", parcel: "Port Wentworth ±11.87-ac C-1 Mixed-Use", acres: 11.87, zoning: "C-1 Neighborhood Commercial (verify MF allowance)", price: "TBV", url: "https://www.crexi.com/properties/GA/Savannah/Multifamily", friction: 5, status: "AMBER", redFlags: "BORDERLINE size for 200-unit; C-1 MF allowance via CUP TBV; basis discount unconfirmed", nextStep: "Confirm C-1 multifamily allowance + CUP path + utility capacity" },
+  { rank: 6, score: 67, market: "Daytona Beach, FL (Volusia)", parcel: "Brentwood Drive parcel — MFR-20", acres: "TBV", zoning: "MFR-20 (29 du/ac)", price: "TBV", url: "https://www.cimls.com/sale-listing/1181453/land-brentwood-drive-Daytona-Beach-FL", friction: 5, status: "AMBER", redFlags: "Acreage TBV; MFR-20 supports 20 du/ac so 200u requires 10+ ac net usable; FEMA SFHA verification required", nextStep: "CIMLS broker call to confirm size and asking price" },
+  { rank: 7, score: 65, market: "Tuscaloosa, AL (West AL)", parcel: "±9-ac MF-zoned frontage (35% rent growth submarket)", acres: 9.0, zoning: "MF (TBV exact class)", price: "TBV", url: "https://www.crexi.com/properties/AL/Tuscaloosa/Multifamily", friction: 5, status: "AMBER", redFlags: "BORDERLINE size (likely 100-150u yield); Tuscaloosa not in primary focus list (AL whitelist only); UA student-housing seasonality risk", nextStep: "Confirm acreage + density + asking price; verify whether 200u achievable on 9 ac" },
+  { rank: 8, score: 63, market: "Birmingham, AL (Trussville)", parcel: "Trussville Springs PUD 48.28-ac Cahaba River frontage", acres: 48.28, zoning: "PUD (component MF allowance TBV)", price: "TBV", url: "https://www.crexi.com/properties/AL/Birmingham/Multifamily", friction: 6, status: "AMBER", redFlags: "Birmingham not in primary focus list (AL whitelist only); PUD MF allocation specifics TBV; ±4,400 ft river frontage = significant SFHA exposure expected; expensive land", nextStep: "Confirm PUD MF cap + component allowance; FEMA + USACE for Cahaba River buffer" },
+  { rank: 9, score: 60, market: "Decatur, AL (Morgan)", parcel: "33-ac R5 patio home Spring Avenue", acres: 33.0, zoning: "R5 (patio home; rezone to MF likely)", price: "TBV", url: "https://www.homes.com/decatur-al/land-for-sale/", friction: 7, status: "AMBER", redFlags: "Decatur is Huntsville-MSA spillover — Huntsville Q1 2026 oversupply persists per 5/01 market intel; absorption risk; R5 rezone path required for MF density", nextStep: "Verify whether Decatur submarket pipeline shares Huntsville oversupply or stands separate; rezone consultation Decatur Planning" },
+  { rank: 10, score: 58, market: "Asheville, NC (Buncombe)", parcel: "Beaverdam ~30-ac forest tract (potential rezone)", acres: 30.0, zoning: "Residential / forest (rezone required; sloping terrain)", price: "~$970k (avg county basis)", url: "https://www.crexi.com/properties/NC/Asheville/Multifamily", friction: 8, status: "RED", redFlags: "Steep slope; tree-clearing constraints; Buncombe inventory absorbed by Crescent Hill / Hominy Creek / Coxe Ave LIHTC RFP — institutional MF lead-sourcing thin per 5/04 intel; rezone is the entire deal", nextStep: "Skip cold pursuit; monitor for partnership-entry opportunity" }
+];
+
+const dailyDetailFields = [
+  { key: "rank", label: "Rank" }, { key: "score", label: "Score" }, { key: "market", label: "Market" }, { key: "parcel", label: "Parcel" },
+  { key: "acres", label: "Acres" }, { key: "zoning", label: "Zoning" }, { key: "price", label: "Asking" }, { key: "friction", label: "Friction" },
+  { key: "status", label: "Status" }, { key: "redFlags", label: "Red Flags" }, { key: "nextStep", label: "Next Step" }
+];
+
+const gemsTierA = [
+  { rank: "HG-1", score: 75, market: "Statesboro, GA (Bulloch)", parcel: "16.33-ac MF $350,000 (Crexi)", acres: 16.33, zoning: "MF (TBV exact class; verify Bulloch UDO)", price: "$350,000 ($21,432/ac)", url: "https://www.crexi.com/properties/GA/Statesboro/Multifamily", friction: 7, status: "AMBER (env-flag)", redFlags: "AUTO-FLAG: $/ac < $25k → likely environmental issue (wetlands/floodplain/contamination). Desktop env triage required BEFORE broker call. Hyundai catchment thesis applies.", nextStep: "Phase I screen + NWI + FEMA + GA EPD search; do not broker-call cold" },
+  { rank: "HG-2", score: 73, market: "Florence, SC", parcel: "25-ac suburban residential rezone target near McLeod Health/I-95", acres: 25.0, zoning: "Suburban Residential (rezone-to-MF required)", price: "TBV", url: "https://www.homes.com/florence-county-sc/land-for-sale/", friction: 7, status: "AMBER", redFlags: "Rezone is the entire deal; tertiary rent ceiling at ~$1,500-1,650/mo Class A — basis must be cheap to clear pro forma; McLeod Health adjacency = workforce housing thesis", nextStep: "Florence City Planning pre-app encouragement letter + rent ceiling validation" },
+  { rank: "HG-3", score: 72, market: "Dothan, AL (Houston)", parcel: "17.6-ac Mixed-Use $760,000 ($43,182/ac)", acres: 17.6, zoning: "Dothan Mixed Use", price: "$760,000 ($43k/ac)", url: "https://www.land.com/Dothan-AL/all-land/", friction: 4, status: "AMBER", redFlags: "Mixed-Use zoning permits MF but density cap TBV; Dothan rent ceiling ~$1,400-1,550/mo Class A — basis discount must hold; Wiregrass economy stable but not catalyst-driven", nextStep: "Dothan City Planning verify Mixed-Use MF density allowance" },
+  { rank: "HG-4", score: 68, market: "Cullman, AL (Cullman)", parcel: "15.9-ac B-2 I-65 × Hwy 278, annexed", acres: 15.9, zoning: "B-2 (verify CUP for MF)", price: "TBV", url: "https://www.homes.com/cullman-county-al/land-for-sale/", friction: 6, status: "AMBER", redFlags: "B-2 zoning may require CUP for multifamily — verify before LOI per playbook 4/30; I-65 visibility = noise impact on premium MF rents", nextStep: "Cullman Planning CUP path verification on B-2 MF" }
+];
+
+const gemsTierB = [
+  { rank: "B-1", market: "Auburn-Opelika, AL", thesis: "21.3-ac unrestricted Salem (growth area) + ongoing 234.04-ac Lee County master-plan tract from 5/04 — carve-out partnerships continue to be the play; EAMC + Tiger Town + I-85 demand stack persists.", action: "Lee County land broker network outreach for off-market sub-100-ac MF carve-outs" },
+  { rank: "B-2", market: "Aiken, SC", thesis: "12.39-ac southside listed at $6.5M ($525k/ac) flags as basis premium — verify entitled status. SRS contractor demand persistent; 5/01 HG-2 (North Augusta 36.88-ac at $49k/ac) remains strongest active.", action: "Verify southside parcel entitlement; if not, pass and continue North Augusta 36.88-ac pursuit" },
+  { rank: "B-3", market: "Conway / Myrtle Beach, SC", thesis: "6.27-ac MF + Neighborhood Commercial within Conway city limits — small but in growth corridor. 5.96-ac shovel-ready Myrtle Beach noted. Tourism rent profile mixes with workforce.", action: "Conway listing broker scan + insurance ceiling check on coastal exposure" },
+  { rank: "B-4", market: "Hattiesburg, MS (Forrest)", thesis: "Continue 5/04 HG-3 (17.57-ac Oak Grove submarket) tracking. USM enrollment trend flat-to-down per recent press; Camp Shelby + USM + Forrest General persistent.", action: "USM enrollment validation; Oak Grove submarket rent comp pull" },
+  { rank: "B-5", market: "Murray, KY (Calloway)", thesis: "Smaller MSA (~40k), Murray State Univ + manufacturing; institutional MF competitor presence near zero — off-market sourcing required.", action: "Murray Calloway County GIS query + assessor owner research for 15-30 ac MF-suitable tracts" },
+  { rank: "B-6", market: "Asheville, NC (Buncombe)", thesis: "Buncombe inventory absorbed by Crescent Hill / Hominy Creek / Coxe Ave LIHTC RFP per 5/04 intel; institutional MF lead-sourcing remains thin. Beaverdam 30-ac forest tract noted in Daily but high friction.", action: "Partnership-entry conversations with active Buncombe developers; do not pursue cold" }
+];
+
+const proFormaInputsBryan = {
+  parcel: "Bryan County GA 54.99-ac (Hyundai 1mi) — 30-ac MF carve-out",
+  units: 280,
+  rentBase: 2025,
+  hardCostPerSF: 185,
+  unitSF: 925,
+  softPct: 0.18,
+  sitePerUnit: 30000,
+  landTotal: 4500000,
+  vacancy: 0.06,
+  concessions: 0.02,
+  opexPerUnit: 8200,
+  taxPerUnit: 3300,
+  insurancePerUnit: 1400,
+  exitCap: 0.0550,
+  singleAnchorPremium: 0.0025
+};
+
+function calcBryanScenario(rentMult, hardMult, vacancyAdd, opexInsMult, landMult, capAdd, leaseUpDelay) {
+  const i = proFormaInputsBryan;
+  const rent = i.rentBase * rentMult;
+  const hardPerUnit = (i.hardCostPerSF * hardMult) * i.unitSF;
+  const softPerUnit = hardPerUnit * i.softPct;
+  const sitePerUnit = i.sitePerUnit;
+  const landAlloc = (i.landTotal * landMult) / i.units;
+  const tdcPerUnit = landAlloc + hardPerUnit + softPerUnit + sitePerUnit + 20000;  // 20k contingency/financing
+  const tdcTotal = tdcPerUnit * i.units;
+  const gpi = rent * 12;
+  const vacancyTotal = i.vacancy + i.concessions + vacancyAdd;
+  const egi = gpi * (1 - vacancyTotal);
+  const opexTotal = (i.opexPerUnit + i.taxPerUnit + i.insurancePerUnit * opexInsMult);
+  const noi = egi - opexTotal;
+  let yoc = noi / tdcPerUnit;
+  if (leaseUpDelay) yoc = yoc * 0.97;  // small carry hit
+  return { tdc: tdcTotal, tdcPerUnit, noi, yoc, exitCap: i.exitCap + capAdd + i.singleAnchorPremium };
+}
+
+const bryanScenarios = [
+  { name: "BASE", desc: "Class A garden 280u; rent $2,025; insurance $1.4k; cap 5.50% +25bps anchor", calc: calcBryanScenario(1, 1, 0, 1, 1, 0, false) },
+  { name: "RECESSION", desc: "Rent flat 24mo; +75bps cap; +6mo lease-up", calc: calcBryanScenario(1, 1, 0.04, 1, 1, 0.0075, true) },
+  { name: "COST SPIKE", desc: "Hard cost +12%; rest unchanged", calc: calcBryanScenario(1, 1.12, 0, 1, 1, 0, false) },
+  { name: "LEASE-UP DELAY", desc: "+12mo carry; 7% stab vacancy", calc: calcBryanScenario(1, 1, 0.01, 1, 1, 0, true) },
+  { name: "INSURANCE 2x", desc: "Insurance from $1.4k → $2.8k/u/yr", calc: calcBryanScenario(1, 1, 0, 2, 1, 0, false) },
+  { name: "UPSIDE", desc: "Rent +5%; land 20% lower; cap unchanged", calc: calcBryanScenario(1.05, 1, 0, 1, 0.80, 0, false) }
+];
+
+function verdictFromYoC(yoc) {
+  if (yoc >= 0.060) return { v: "PROCEED Comfort", c: "green" };
+  if (yoc >= 0.055) return { v: "PROCEED", c: "green" };
+  if (yoc >= 0.050) return { v: "CONDITIONAL", c: "amber" };
+  if (yoc >= 0.045) return { v: "BORDERLINE", c: "orange" };
+  return { v: "DOES NOT PENCIL", c: "red" };
+}
+
+const proFormaInputsStatesboro = {
+  parcel: "Statesboro GA 16.33-ac MF $350k — 204u",
+  units: 204,
+  rentBase: 1575,
+  hardCostPerSF: 165,
+  unitSF: 925,
+  softPct: 0.18,
+  sitePerUnit: 28000,
+  landTotal: 350000,
+  vacancy: 0.06,
+  concessions: 0.02,
+  opexPerUnit: 7200,
+  taxPerUnit: 2800,
+  insurancePerUnit: 1400,
+  exitCap: 0.0650,
+  singleAnchorPremium: 0.0025
+};
+
+function calcStatesboroScenario(rentMult, hardMult, vacancyAdd, opexInsMult, landMult, capAdd, leaseUpDelay) {
+  const i = proFormaInputsStatesboro;
+  const rent = i.rentBase * rentMult;
+  const hardPerUnit = (i.hardCostPerSF * hardMult) * i.unitSF;
+  const softPerUnit = hardPerUnit * i.softPct;
+  const landAlloc = (i.landTotal * landMult) / i.units;
+  const tdcPerUnit = landAlloc + hardPerUnit + softPerUnit + i.sitePerUnit + 16000;  // contingency
+  const tdcTotal = tdcPerUnit * i.units;
+  const gpi = rent * 12;
+  const vacancyTotal = i.vacancy + i.concessions + vacancyAdd;
+  const egi = gpi * (1 - vacancyTotal);
+  const opexTotal = (i.opexPerUnit + i.taxPerUnit + i.insurancePerUnit * opexInsMult);
+  const noi = egi - opexTotal;
+  let yoc = noi / tdcPerUnit;
+  if (leaseUpDelay) yoc = yoc * 0.96;
+  return { tdc: tdcTotal, tdcPerUnit, noi, yoc, exitCap: i.exitCap + capAdd + i.singleAnchorPremium };
+}
+
+const statesboroScenarios = [
+  { name: "BASE", desc: "Tertiary Class A 204u; rent $1,575; cap 6.50% +25bps anchor", calc: calcStatesboroScenario(1, 1, 0, 1, 1, 0, false) },
+  { name: "RECESSION", desc: "Rent flat 24mo; +75bps cap; +6mo lease-up", calc: calcStatesboroScenario(1, 1, 0.04, 1, 1, 0.0075, true) },
+  { name: "COST SPIKE", desc: "Hard +12%", calc: calcStatesboroScenario(1, 1.12, 0, 1, 1, 0, false) },
+  { name: "LEASE-UP DELAY", desc: "+12mo carry; 7% stab vacancy", calc: calcStatesboroScenario(1, 1, 0.01, 1, 1, 0, true) },
+  { name: "INSURANCE 2x", desc: "Insurance from $1.4k → $2.8k/u/yr", calc: calcStatesboroScenario(1, 1, 0, 2, 1, 0, false) },
+  { name: "UPSIDE", desc: "Rent +5%; land 20% lower (basis still flagged)", calc: calcStatesboroScenario(1.05, 1, 0, 1, 0.80, 0, false) }
+];
+
+// ==================== RENDER GRIDS ====================
+
+function pillFor(status) {
+  const map = { GREEN: 'green', AMBER: 'amber', RED: 'red', "AMBER (env-flag)": 'amber' };
+  const c = map[status] || 'amber';
+  return `<span class="pill ${c}">${status}</span>`;
+}
+
+function chipFor(score) {
+  let c = 'red';
+  if (score >= 80) c = 'green';
+  else if (score >= 65) c = 'yellow';
+  else if (score >= 50) c = 'orange';
+  return `<span class="chip ${c}">${score}</span>`;
+}
+
+new gridjs.Grid({
+  columns: [
+    { name: "#", width: "50px" },
+    { name: "Score", width: "70px", formatter: (cell) => gridjs.html(chipFor(cell)) },
+    { name: "Market", width: "190px" },
+    { name: "Parcel", width: "320px" },
+    { name: "Acres", width: "65px" },
+    { name: "Zoning", width: "180px" },
+    { name: "Asking", width: "150px" },
+    { name: "F", width: "40px" },
+    { name: "Status", width: "100px", formatter: (cell) => gridjs.html(pillFor(cell)) },
+    { name: "Next Step", width: "270px" }
+  ],
+  data: dailyParcels.map(p => [p.rank, p.score, p.market, p.parcel, p.acres, p.zoning, p.price, p.friction, p.status, p.nextStep]),
+  search: true, sort: true, pagination: false, resizable: true
+}).render(document.getElementById("daily-grid"));
+
+// Daily detail cards
+const detailHTML = dailyParcels.map(p => `
+<div class="detail-card">
+  <div class="detail-head">
+    <div class="num">#${p.rank}</div>
+    <div class="title">${p.market} — ${p.parcel}</div>
+    <div class="right-badge ${p.score>=80?'green':p.score>=65?'yellow':p.score>=50?'orange':'red'}" style="background:${p.score>=80?'#C6EFCE':p.score>=65?'#FFEB9C':p.score>=50?'#FFC7AA':'#FFC7CE'}">Score ${p.score} / Friction ${p.friction}</div>
+  </div>
+  <div class="detail-body">
+    <div class="row"><strong>Acres</strong><span>${p.acres}</span></div>
+    <div class="row"><strong>Zoning</strong><span>${p.zoning}</span></div>
+    <div class="row"><strong>Asking</strong><span>${p.price}</span></div>
+    <div class="row"><strong>URL</strong><span><a href="${p.url}" target="_blank">${p.url}</a></span></div>
+    <div class="row"><strong>Status</strong><span>${pillFor(p.status)}</span></div>
+    <div class="row"><strong>Red Flags</strong><span>${p.redFlags}</span></div>
+    <div class="row"><strong>Next Step</strong><span>${p.nextStep}</span></div>
+  </div>
+</div>`).join("");
+document.getElementById("daily-detail").innerHTML = detailHTML;
+
+// Hidden Gems Tier A grid
+new gridjs.Grid({
+  columns: ["#", { name: "Score", formatter: (c) => gridjs.html(chipFor(c)) }, "Market", "Parcel", "Acres", "Zoning", "Asking", { name: "Status", formatter: (c) => gridjs.html(pillFor(c)) }, "Next Step"],
+  data: gemsTierA.map(g => [g.rank, g.score, g.market, g.parcel, g.acres, g.zoning, g.price, g.status, g.nextStep]),
+  sort: true, pagination: false
+}).render(document.getElementById("gems-a-grid"));
+
+// Hidden Gems Tier B grid
+new gridjs.Grid({
+  columns: ["#", "Market", "Thesis", "Action"],
+  data: gemsTierB.map(g => [g.rank, g.market, g.thesis, g.action]),
+  sort: true, pagination: false
+}).render(document.getElementById("gems-b-grid"));
+
+// PRO FORMA RENDERING — BRYAN
+const baseB = bryanScenarios[0].calc;
+const baseV = verdictFromYoC(baseB.yoc);
+document.getElementById("pf-kpi-row").innerHTML = `
+  <div class="kpi"><div class="kpi-label">Units</div><div class="kpi-value">280</div><div class="kpi-sub">30-ac MF carve-out</div></div>
+  <div class="kpi"><div class="kpi-label">Total TDC</div><div class="kpi-value">$${(baseB.tdc/1e6).toFixed(1)}M</div><div class="kpi-sub">$${Math.round(baseB.tdcPerUnit/1e3)}k/unit</div></div>
+  <div class="kpi"><div class="kpi-label">YoC (BASE)</div><div class="kpi-value">${(baseB.yoc*100).toFixed(2)}%</div><div class="kpi-sub">+25bps anchor risk applied</div></div>
+  <div class="kpi"><div class="kpi-label">Verdict (BASE)</div><div class="kpi-value" style="font-size:14px">${baseV.v}</div><div class="kpi-sub">vs 5.50% exit cap</div></div>
+`;
+
+const i = proFormaInputsBryan;
+document.getElementById("pf-uses").innerHTML = `
+  <thead><tr><th>Item</th><th>$/Unit</th><th>Total ($M)</th></tr></thead>
+  <tbody>
+    <tr><td>Land (30-ac carve-out)</td><td>$${Math.round(i.landTotal/i.units).toLocaleString()}</td><td>$${(i.landTotal/1e6).toFixed(2)}M</td></tr>
+    <tr><td>Hard Cost ($185/sf × 925sf)</td><td>$${(i.hardCostPerSF*i.unitSF).toLocaleString()}</td><td>$${((i.hardCostPerSF*i.unitSF*i.units)/1e6).toFixed(1)}M</td></tr>
+    <tr><td>Soft Cost (18% of hard)</td><td>$${Math.round(i.hardCostPerSF*i.unitSF*i.softPct).toLocaleString()}</td><td>$${((i.hardCostPerSF*i.unitSF*i.softPct*i.units)/1e6).toFixed(1)}M</td></tr>
+    <tr><td>Site / Development</td><td>$${i.sitePerUnit.toLocaleString()}</td><td>$${((i.sitePerUnit*i.units)/1e6).toFixed(1)}M</td></tr>
+    <tr><td>Contingency / Financing</td><td>$20,000</td><td>$${((20000*i.units)/1e6).toFixed(1)}M</td></tr>
+    <tr><td><strong>Total Dev Cost</strong></td><td><strong>$${Math.round(baseB.tdcPerUnit).toLocaleString()}</strong></td><td><strong>$${(baseB.tdc/1e6).toFixed(1)}M</strong></td></tr>
+  </tbody>`;
+
+const opexBase = i.opexPerUnit + i.taxPerUnit + i.insurancePerUnit;
+document.getElementById("pf-operating").innerHTML = `
+  <thead><tr><th>Item</th><th>$/Unit/Yr</th><th>Total Yr 1</th></tr></thead>
+  <tbody>
+    <tr><td>Gross Potential Income ($2,025/mo)</td><td>$${(i.rentBase*12).toLocaleString()}</td><td>$${((i.rentBase*12*i.units)/1e6).toFixed(2)}M</td></tr>
+    <tr><td>Less Vacancy + Concessions (8%)</td><td>($${Math.round(i.rentBase*12*0.08).toLocaleString()})</td><td>($${((i.rentBase*12*0.08*i.units)/1e6).toFixed(2)}M)</td></tr>
+    <tr><td>Effective Gross Income</td><td>$${Math.round(i.rentBase*12*0.92).toLocaleString()}</td><td>$${((i.rentBase*12*0.92*i.units)/1e6).toFixed(2)}M</td></tr>
+    <tr><td>Less OpEx (mgmt/payroll/R&M/util)</td><td>($${i.opexPerUnit.toLocaleString()})</td><td>($${((i.opexPerUnit*i.units)/1e6).toFixed(2)}M)</td></tr>
+    <tr><td>Less GA Property Tax</td><td>($${i.taxPerUnit.toLocaleString()})</td><td>($${((i.taxPerUnit*i.units)/1e6).toFixed(2)}M)</td></tr>
+    <tr><td>Less Insurance</td><td>($${i.insurancePerUnit.toLocaleString()})</td><td>($${((i.insurancePerUnit*i.units)/1e6).toFixed(2)}M)</td></tr>
+    <tr><td><strong>NOI</strong></td><td><strong>$${Math.round(baseB.noi).toLocaleString()}</strong></td><td><strong>$${((baseB.noi*i.units)/1e6).toFixed(2)}M</strong></td></tr>
+  </tbody>`;
+
+document.querySelector("#pf-scenarios tbody").innerHTML = bryanScenarios.map(s => {
+  const v = verdictFromYoC(s.calc.yoc);
+  const spread = ((s.calc.yoc - 0.0550) * 10000).toFixed(0);
+  return `<tr><td><strong>${s.name}</strong></td><td>${s.desc}</td><td>$${(s.calc.tdc/1e6).toFixed(1)}M</td><td>${(s.calc.yoc*100).toFixed(2)}%</td><td>${spread > 0 ? '+' : ''}${spread} bps</td><td><span class="pill ${v.c}">${v.v}</span></td></tr>`;
+}).join("");
+
+// PRO FORMA RENDERING — STATESBORO
+const baseS = statesboroScenarios[0].calc;
+const baseSV = verdictFromYoC(baseS.yoc);
+document.getElementById("pf2-kpi-row").innerHTML = `
+  <div class="kpi"><div class="kpi-label">Units</div><div class="kpi-value">204</div><div class="kpi-sub">16.33 ac × ~12.5 du/ac</div></div>
+  <div class="kpi"><div class="kpi-label">Total TDC</div><div class="kpi-value">$${(baseS.tdc/1e6).toFixed(1)}M</div><div class="kpi-sub">$${Math.round(baseS.tdcPerUnit/1e3)}k/unit · land $${Math.round(proFormaInputsStatesboro.landTotal/proFormaInputsStatesboro.units).toLocaleString()}/u</div></div>
+  <div class="kpi"><div class="kpi-label">YoC (BASE)</div><div class="kpi-value">${(baseS.yoc*100).toFixed(2)}%</div><div class="kpi-sub">+25bps anchor risk applied</div></div>
+  <div class="kpi"><div class="kpi-label">Verdict (BASE)</div><div class="kpi-value" style="font-size:14px">${baseSV.v}</div><div class="kpi-sub">vs 6.50% exit cap (Tier-3)</div></div>
+`;
+
+document.querySelector("#pf2-scenarios tbody").innerHTML = statesboroScenarios.map(s => {
+  const v = verdictFromYoC(s.calc.yoc);
+  const spread = ((s.calc.yoc - 0.0650) * 10000).toFixed(0);
+  return `<tr><td><strong>${s.name}</strong></td><td>${s.desc}</td><td>$${(s.calc.tdc/1e6).toFixed(1)}M</td><td>${(s.calc.yoc*100).toFixed(2)}%</td><td>${spread > 0 ? '+' : ''}${spread} bps</td><td><span class="pill ${v.c}">${v.v}</span></td></tr>`;
+}).join("");
+
+// LAND SALES tracker
+const landSales = [
+  ["2026-04 (est)", "Bowling Green KY", "Sterling Park 19.69-ac RM-4 entitled", "$5.6M", "$284k/ac", "$12.3k/unit (456u)", "M"],
+  ["2026-04 (est)", "Charleston SC", "33-ac entitled MF 240u", "$7.7M", "$233k/ac", "$32.1k/unit", "M"],
+  ["2026-05 (active)", "Lexington KY", "Joyland Crossing 7.71-ac R-4 entitled 165u", "$3.9M", "$505,837/ac", "$23.6k/unit", "H"],
+  ["2026-05 (active)", "Statesboro GA", "16.33-ac MF (env-flag)", "$0.35M", "$21,432/ac", "$1.7k/unit", "H"],
+  ["2026-04 (status)", "Tallahassee FL", "31.68-ac PUD-14 (443u)", "$1.2M", "$37,879/ac", "$2.7k/unit", "M"],
+  ["POPULATE", "Pooler GA / Bryan Co", "Recent MF land trade", "—", "—", "—", "L"],
+  ["POPULATE", "Chattanooga TN", "Recent MF land trade", "—", "—", "—", "L"]
+];
+new gridjs.Grid({
+  columns: ["Date", "Market", "Parcel", "Sale Price", "$/Acre", "$/Unit Implied", "Conf"],
+  data: landSales, sort: true, pagination: false
+}).render(document.getElementById("land-sales-grid"));
+
+// OUTREACH ACTIVE
+const activeOutreach = [
+  ["1", "Bryan Co 54.99-ac (Hyundai)", "Crexi listing broker", "Call this week", "Listing-broker call + partition cooperation", "5/06"],
+  ["2", "Lexington Joyland Crossing", "Keller Williams Commonwealth", "Call this week", "(859) 721-2121 — R-4 vesting + 165u DP transferability", "5/06"],
+  ["3", "Tallahassee 31.68-ac PUD ($1.2M)", "Crexi broker", "URGENT", "PUD vesting/sunset confirmation TLPLACE", "5/06"],
+  ["4", "Savannah Harbor ±48-ac", "Crexi broker", "This week", "Crexi broker call + SAGIS plat / FEMA", "5/08"],
+  ["5", "Crestview HG-1 (5/01)", "Existing relationship", "URGENT", "FL Panhandle insurance broker indication BEFORE LOI", "5/06"],
+  ["6", "Statesboro HG-1 (env-flag)", "INTERNAL", "After env DD", "Phase I screen + NWI + FEMA + GA EPD search BEFORE broker call", "5/12"]
+];
+new gridjs.Grid({
+  columns: ["#", "Parcel", "Counterparty", "Priority", "Action", "Target Date"],
+  data: activeOutreach, sort: true, pagination: false
+}).render(document.getElementById("active-outreach-grid"));
+
+// BROKERS
+const brokers = [
+  ["Keller Williams Commonwealth", "Lexington KY", "(859) 721-2121", "Joyland Crossing seller side", "TBD", "TBD"],
+  ["Crexi (multiple)", "Multi-state", "via crexi.com listings", "Active dealflow across SE", "Mixed", "Track per parcel"],
+  ["RE/MAX (Stephen Stucy)", "Bowling Green KY", "via MLS RA20233019", "Sterling Business Park sell side", "Confirmed responsive 5/01", "TBD"],
+  ["Meybohm Commercial", "North Augusta SC / CSRA", "via meybohm.com", "5/01 HG-2 36.88-ac listing", "TBD", "TBD"],
+  ["National Land Realty", "Hickory NC / Catawba", "via nationalland.com", "Active in I-40 corridor", "TBD", "TBD"],
+  ["Cushman & Wakefield Augusta", "Augusta GA / CSRA", "Multifamily Advisory Group", "Stabilized MF sales", "Track for trades", "TBD"],
+  ["POPULATE", "Bryan/Pooler GA", "—", "—", "—", "—"],
+  ["POPULATE", "Chattanooga TN", "—", "—", "—", "—"]
+];
+new gridjs.Grid({
+  columns: ["Broker", "Coverage", "Contact", "Active Parcels", "Responsiveness", "Last Touch"],
+  data: brokers, sort: true, pagination: false
+}).render(document.getElementById("brokers-grid"));
+
+// DD CHECKLIST
+const ddItems = [
+  ["Title", "ALTA/NSPS Land Title Survey", "Days 1-15", "Title company", "—", "Pending"],
+  ["Title", "Title commitment + exception review", "Days 1-15", "Title company", "—", "Pending"],
+  ["Environmental", "Phase I ESA", "Days 15-45", "Environmental consultant", "$3-5k", "Pending"],
+  ["Environmental", "Wetlands delineation (NWI + USACE)", "Days 15-60", "Wetlands consultant", "$5-15k", "Pending"],
+  ["Environmental", "Phase II ESA (if Phase I rec'd)", "Days 45-75", "Environmental consultant", "$15-50k", "Conditional"],
+  ["Geotechnical", "Soil borings + slope analysis", "Days 30-60", "Geotech firm", "$10-25k", "Pending"],
+  ["Zoning / Land Use", "Pre-app meeting w/ planning", "Days 1-15", "City/County Planning", "—", "Pending"],
+  ["Zoning / Land Use", "Zoning verification letter", "Days 15-45", "City/County Planning", "—", "Pending"],
+  ["Zoning / Land Use", "Site plan / rezoning submission", "Days 30-90+", "Civil eng + counsel", "$50-150k", "Pending"],
+  ["Utilities", "Will-serve letters (water/sewer/electric)", "Days 30-60", "Utility providers", "—", "Pending"],
+  ["Utilities", "Tap fee schedule + capacity confirmation", "Days 30-60", "Utility providers", "—", "Pending"],
+  ["Traffic / DOT", "Traffic impact study (if required)", "Days 30-90", "Traffic engineer", "$15-40k", "Pending"],
+  ["Market", "RealPage / CoStar comp pull (1mi & 3mi)", "Days 1-15", "In-house / consultant", "—", "Pending"],
+  ["Market", "Two GC budgets (Class A garden 4-story)", "Days 30-75", "GC partners", "—", "Pending"],
+  ["Insurance", "Site-specific MF insurance broker quote", "Days 30-60", "Insurance broker", "—", "Pending"],
+  ["Tax", "Property appraiser projected assessment + millage", "Days 30-60", "County PA office", "—", "Pending"],
+  ["FEMA / Flood", "FEMA flood zone confirmation + LOMA path if needed", "Days 1-30", "Civil engineer", "—", "Pending"],
+  ["Architectural", "Schematic A&E (concept site plan)", "Days 30-60", "Architect", "$25-75k", "Pending"]
+];
+new gridjs.Grid({
+  columns: ["Category", "Item", "Timing", "Owner", "Est. Cost", "Status"],
+  data: ddItems, sort: true, pagination: false, search: true
+}).render(document.getElementById("dd-grid"));
+
+// SUBMARKET FUNDAMENTALS
+const submarkets = [
+  ["Bryan Co / Pooler / Richmond Hill, GA", "Savannah MSA ~415k", "~6.8%", "+3.5% YoY", "Hyundai Metaplant + Port", "Strong/Tight", "1,800+ U/C", "BALANCED"],
+  ["Lexington-Fayette, KY", "~520k", "~7.5%", "+2.4% YoY", "UK + Toyota + Lockheed", "Stable", "1,500+ U/C", "BALANCED"],
+  ["Bowling Green, KY", "~180k", "~7.0%", "+1.8% YoY", "WKU + Corvette + FOL", "Tight", "800+ U/C", "BALANCED"],
+  ["Chattanooga, TN", "~570k", "~7.2%", "+2.1% YoY", "VW + Erlanger + Volkswagen suppliers", "Stable", "2,200+ U/C", "WATCH"],
+  ["Knoxville, TN", "~900k", "~6.5%", "+2.6% YoY", "Oak Ridge + UT + healthcare", "Tight", "2,500+ U/C", "BALANCED"],
+  ["Asheville, NC", "~470k", "~6.2%", "+1.5% YoY", "Tourism + Mission Health + Buncombe", "Tight", "Limited (1,200 U/C)", "BALANCED"],
+  ["Wilmington, NC (NHC)", "~430k", "~7.0%", "+2.2% YoY", "Coast + healthcare + tech", "Stable", "2,800+ U/C", "WATCH"],
+  ["Brunswick County, NC", "~150k", "~6.8%", "+2.5% YoY", "Wilmington spillover", "Stable", "5,000+ approved", "WATCH"],
+  ["Charleston, SC", "~830k", "~6.0%", "+2.8% YoY", "Boeing + MUSC + port", "Tight", "3,500+ U/C", "BALANCED"],
+  ["Greenville-Spartanburg, SC", "~920k", "~7.5%", "+2.0% YoY", "BMW + Michelin + suppliers", "Stable", "2,800+ U/C", "BALANCED"],
+  ["Columbia, SC", "~840k", "~7.2%", "+1.9% YoY", "USC + state govt + Fort Jackson", "Stable", "1,800+ U/C", "BALANCED"],
+  ["Augusta, GA", "~620k", "~7.3%", "+2.3% YoY", "Fort Eisenhower + MCG + Vogtle", "Stable", "1,400+ U/C", "BALANCED"],
+  ["Savannah, GA (Chatham)", "~415k", "~6.5%", "+3.1% YoY", "Port + Hyundai + Gulfstream", "Strong", "2,000+ U/C", "BALANCED"],
+  ["Daytona Beach, FL", "~575k", "~7.5%", "+2.0% YoY", "Spillover from Orange/Seminole", "Stable", "1,700+ U/C", "BALANCED"],
+  ["Tallahassee, FL", "~395k", "~7.0%", "+1.7% YoY", "FSU + state govt + healthcare", "Stable", "1,200+ U/C", "BALANCED"],
+  ["Lakeland, FL (Polk)", "~785k", "~6.8%", "+2.7% YoY", "I-4 corridor + Publix HQ", "Tight", "2,400+ U/C", "BALANCED"],
+  ["Ocala, FL (Marion)", "~395k", "~7.4%", "+2.1% YoY", "WEC + healthcare + Florida Crossroads", "Stable", "1,100+ U/C", "BALANCED"],
+  ["Gainesville, FL (Alachua)", "~290k", "~7.0%", "+1.8% YoY", "UF + Shands + Santa Fe", "Tight", "1,300+ U/C", "BALANCED"],
+  ["Pensacola, FL (Escambia)", "~510k", "~7.5%", "+1.9% YoY", "NAS + tourism + healthcare", "Stable", "1,500+ U/C", "BALANCED"],
+  ["Huntsville-Madison, AL", "~510k", "~10.4%", "Flat-to-down", "Redstone + Space Command", "OVERSUPPLIED", "3,200+ U/C", "EXCLUDE"],
+  ["Statesboro, GA (Bulloch)", "~85k", "~7.5%", "+2.5% YoY", "GSU + Hyundai supplier catchment", "Stable/Growing", "Limited", "BALANCED"],
+  ["Tupelo, MS (Lee)", "~85k", "~7.0%", "+1.5% YoY", "Toyota MS + NMMC", "Stable", "Limited", "BALANCED"],
+  ["Auburn-Opelika, AL", "~175k", "~6.5%", "+2.1% YoY", "Auburn U + EAMC + Tiger Town", "Tight (seasonal)", "1,400+ U/C", "WATCH"]
+];
+new gridjs.Grid({
+  columns: ["Market", "MSA Pop", "Vacancy", "Rent Growth YoY", "Demand Drivers", "Supply", "Pipeline", "Pipeline Verdict"],
+  data: submarkets, sort: true, pagination: false, search: true
+}).render(document.getElementById("submarket-grid"));
+
+// CLIMATE
+const climateData = [
+  ["Bryan Co 54.99-ac (#1)", "Bryan/Pooler GA", "MEDIUM", "MEDIUM (Atlantic hurricane)", "LOW", "MEDIUM", "$1,400/u (inland GA)", "Site-specific quote required; verify wetlands % first"],
+  ["Lexington Joyland (#2)", "Lexington KY", "LOW", "LOW", "LOW", "LOW", "$850/u (KY inland)", "No coastal exposure"],
+  ["Savannah Harbor (#3)", "Chatham GA", "HIGH", "HIGH (named storm corridor)", "LOW", "HIGH", "$2,200/u (GA coastal)", "Verify SFHA % before underwriting; INSURANCE 2x scenario mandatory"],
+  ["Chattanooga (#4)", "Hamilton TN", "MEDIUM (Tennessee River)", "LOW", "LOW", "MEDIUM", "$900/u (TN inland)", "Site-specific quote; flood elevation"],
+  ["Pooler/Port Wentworth (#5)", "Chatham GA", "MEDIUM", "HIGH", "LOW", "HIGH", "$2,100/u (GA coastal)", "Hurricane corridor; INSURANCE 2x scenario applies"],
+  ["Daytona Brentwood (#6)", "Volusia FL", "MEDIUM", "HIGH (Atlantic)", "LOW", "EXTREME", "$1,800/u (FL inland)", "Volusia coastal; verify flood zone; INSURANCE 2x mandatory"],
+  ["Tuscaloosa (#7)", "Tuscaloosa AL", "LOW", "MEDIUM (tornado alley)", "LOW", "MEDIUM", "$950/u (AL inland)", "Wind/tornado coverage premium"],
+  ["Birmingham Trussville (#8)", "Jefferson AL", "MEDIUM (Cahaba)", "MEDIUM (tornado)", "LOW", "MEDIUM", "$1,000/u (AL inland)", "Cahaba River buffer; FEMA mandatory"],
+  ["Decatur (#9)", "Morgan AL", "MEDIUM (Tennessee River)", "MEDIUM", "LOW", "MEDIUM", "$950/u (AL inland)", "Tennessee River proximity"],
+  ["Asheville Beaverdam (#10)", "Buncombe NC", "MEDIUM (mountain creek)", "LOW", "LOW (limited mountain)", "MEDIUM", "$1,000/u (NC mtn)", "Slope + creek setbacks"],
+  ["Statesboro 16.33-ac (HG-1)", "Bulloch GA", "TBV (env-flag)", "MEDIUM", "LOW", "MEDIUM", "$1,300/u (GA inland)", "ENV-FLAG triggers full Phase I + NWI before any pro forma reliance"],
+  ["Florence 25-ac (HG-2)", "Florence SC", "MEDIUM (Pee Dee)", "MEDIUM", "LOW", "MEDIUM", "$1,200/u (SC inland)", "Pee Dee flood verification"],
+  ["Dothan 17.6-ac (HG-3)", "Houston AL", "LOW", "MEDIUM (Wiregrass)", "LOW", "MEDIUM", "$1,000/u (AL inland)", "Standard inland exposure"],
+  ["Cullman 15.9-ac (HG-4)", "Cullman AL", "LOW", "MEDIUM (tornado)", "LOW", "MEDIUM", "$950/u (AL inland)", "I-65 corridor; verify floodplain"]
+];
+new gridjs.Grid({
+  columns: ["Parcel", "Submarket", "Flood Risk", "Wind/Hurricane", "Wildfire", "Heat", "Insurance Est.", "Notes"],
+  data: climateData, sort: true, pagination: false, search: true
+}).render(document.getElementById("climate-grid"));
+
+// PIPELINE
+const pipeline = [
+  ["Bryan Co / Pooler GA", "Hyundai Metaplant ramp + suppliers", "1,800+ U/C", "STRUCTURAL UNDERSUPPLY", "Continue surfacing parcels"],
+  ["Wilmington NC (Brunswick)", "Brunswick approved 5,000+ homes Mar 2026 (Project Indigo, Canopy, Town/Turkey Creek)", "5,000+ approved + 2,800 U/C", "WATCH — re-eval Q2 2026 absorption", "Sunset Harbor adjacency to entitled CD reduces pioneering risk"],
+  ["Buncombe NC (Asheville)", "Crescent Hill 252u + Hominy Creek 216u + Coxe Ave LIHTC RFP 200u", "1,200 U/C (limited)", "BALANCED but local-developer absorbed", "Partnership-entry only"],
+  ["Huntsville-Madison AL", "Q1 2026 1,947 unit permits ~$532M starts", "3,200+ U/C against 510k MSA = 6.3/1k pop", "OVERSUPPLIED", "EXCLUDE from focus list until absorption catches up"],
+  ["Charleston SC", "Active Class A pipeline; Boeing/MUSC absorbing", "3,500+ U/C", "BALANCED", "Continue selectively"],
+  ["Greenville-Spartanburg SC", "Hillpointe + others active", "2,800+ U/C", "BALANCED", "Continue selectively"],
+  ["Lexington KY", "Q1 zoning reform + pipeline normalizing", "1,500+ U/C", "BALANCED", "Joyland Crossing entitled = strong entry"],
+  ["Bowling Green KY", "Sterling Park + Hillpointe", "800+ U/C", "BALANCED", "Sterling Park 19.69-ac entitled is local norm"],
+  ["Statesboro GA (Bulloch)", "Lovett Rd 216u (Hillpointe) developing", "Limited additional", "FIRST-MOVER ADVANTAGE on most parcels", "Confirm local pipeline before LOI"],
+  ["Crestview FL (Okaloosa)", "Sweetwater Commons cottages + retail context", "Limited", "BALANCED — DO listing rare", "Move on 5/01 HG-1 if insurance clears"],
+  ["Tupelo MS (Lee)", "Limited", "Limited", "FIRST-MOVER ADVANTAGE", "Continue 5/04 HG-1 24.5-ac tracking"]
+];
+new gridjs.Grid({
+  columns: ["Submarket", "Recent / Active", "U/C", "Verdict", "Implication"],
+  data: pipeline, sort: true, pagination: false, search: true
+}).render(document.getElementById("pipeline-grid"));
+
+// OFF-MARKET
+const offMarket = [
+  ["Sumter SC (Shaw AFB)", "Limited public listing inventory", "GIS query 15-25 ac MF-suitable; assessor owner research", "BAH-anchored demand", "5/04 HG-4 thesis"],
+  ["Murray KY (Calloway)", "Smaller MSA; near-zero competitor presence", "GIS query 15-30 ac; Murray State + manufacturing tracts", "Off-market sourcing playbook", "Mailed letter campaign"],
+  ["Brunswick GA (Glynn)", "315-ac + 463-ac large tracts cited; long-tail availability", "Direct owner outreach on Fletcher-Allen Tract + adjacent", "Coastal demand + insurance load", "Continue tracking"],
+  ["Auburn-Opelika AL", "234.04-ac master-plan-scale tract from 5/04 + 21.3-ac Salem", "Carve-out partnership outreach", "EAMC + Tiger Town stack", "Lee County land broker network"],
+  ["Hattiesburg MS (Forrest)", "Oak Grove submarket from 5/04 HG-3", "Local broker outreach", "USM + Forrest General + Camp Shelby", "Confirm USM enrollment trend"],
+  ["Pooler/Richmond Hill GA", "Hyundai supplier housing wedge", "Direct owner outreach near Hyundai 1mi catchment", "STRUCTURAL DEMAND CATALYST", "Layer on top of public listings"]
+];
+new gridjs.Grid({
+  columns: ["Market", "Why Off-Market", "Approach", "Demand Thesis", "Status"],
+  data: offMarket, sort: true, pagination: false
+}).render(document.getElementById("offmarket-grid"));
+
+</script>
+
+</body>
+</html>

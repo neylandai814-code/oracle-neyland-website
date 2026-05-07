@@ -1,0 +1,9 @@
+{
+  "name": "oracle-neyland-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Oracle daily multifamily site-sourcing dashboard for Neyland Development. Pre-built locally; Vercel just serves the static files.",
+  "dependencies": {
+    "vercel": "^53.2.0"
+  }
+}

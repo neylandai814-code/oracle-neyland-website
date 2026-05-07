@@ -1,0 +1,9 @@
+.vercel
+.DS_Store
+node_modules
+.env
+.env.local
+*.log
+__pycache__
+.vercel-token
+.git-credentials

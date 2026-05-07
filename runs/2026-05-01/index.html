@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Oracle Dashboard — 2026-05-01</title>
+<link href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" rel="stylesheet" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background: #fafafa; color: #222; line-height: 1.45; font-size: 13px; }
+  header.app-header { background: #1F3864; color: white; padding: 16px 24px; border-bottom: 4px solid #BF9000; }
+  header.app-header .brand { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+  header.app-header .meta { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+  nav.tabs { background: white; border-bottom: 1px solid #d0d0d0; display: flex; flex-wrap: wrap; padding: 0 16px; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  nav.tabs .tab { background: none; border: none; padding: 12px 14px; font-size: 12.5px; font-weight: 600; color: #555; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; font-family: inherit; }
+  nav.tabs .tab:hover { color: #1F3864; background: #f5f5f5; }
+  nav.tabs .tab.active { color: #1F3864; border-bottom-color: #BF9000; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  h1.panel-title { color: #1F3864; font-size: 22px; margin: 0 0 4px 0; border-bottom: 2px solid #BF9000; padding-bottom: 8px; display: inline-block; }
+  h2.panel-sub { color: #1F3864; font-size: 16px; margin: 24px 0 8px 0; }
+  h3.section-h { color: #BF9000; font-size: 13px; font-weight: 700; margin: 16px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 16px 0; }
+  .kpi { background: white; border: 1px solid #e5e5e5; border-left: 4px solid #1F3864; padding: 12px 14px; border-radius: 4px; }
+  .kpi.gold { border-left-color: #BF9000; }
+  .kpi .label { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.4px; font-weight: 600; }
+  .kpi .value { font-size: 22px; font-weight: 700; color: #1F3864; margin-top: 4px; }
+  .kpi.gold .value { color: #BF9000; }
+  .kpi .note { font-size: 11px; color: #888; margin-top: 4px; }
+  .card { background: white; border: 1px solid #e5e5e5; padding: 16px; margin: 12px 0; border-radius: 4px; }
+  .verdict { display: inline-block; padding: 4px 12px; border-radius: 3px; font-weight: 700; font-size: 12px; }
+  .verdict.proceed { background: #d4edda; color: #155724; }
+  .verdict.conditional { background: #fff3cd; color: #856404; }
+  .verdict.borderline { background: #ffeaa7; color: #6e4c00; }
+  .verdict.no { background: #f8d7da; color: #721c24; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .pill.green { background: #d4edda; color: #155724; }
+  .pill.amber { background: #fff3cd; color: #856404; }
+  .pill.red { background: #f8d7da; color: #721c24; }
+  .table-wrap { background: white; border: 1px solid #e5e5e5; border-radius: 4px; padding: 8px; margin: 8px 0; }
+  .grid-js td, .grid-js th { font-size: 12px !important; }
+  .gridjs-table { font-size: 12px; }
+  .gridjs-th { background: #1F3864 !important; color: white !important; font-weight: 600 !important; }
+  .gridjs-th-content { color: white; }
+  .gridjs-tr:hover { background: #f5f5f5 !important; }
+  .gridjs-search-input { padding: 6px 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; }
+  .small { font-size: 11px; color: #666; }
+  .mono { font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; }
+  ul.tight { margin: 6px 0; padding-left: 20px; }
+  ul.tight li { margin: 3px 0; }
+  .red-flag { color: #b00020; }
+  .next-step { color: #155724; font-weight: 600; }
+  .footer { margin-top: 40px; padding: 16px 0; border-top: 1px solid #ddd; color: #888; font-size: 11px; text-align: center; }
+  table.simple { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  table.simple th { background: #1F3864; color: white; padding: 8px 10px; text-align: left; font-size: 12px; font-weight: 600; }
+  table.simple td { padding: 8px 10px; border-bottom: 1px solid #eee; font-size: 12px; vertical-align: top; }
+  table.simple tr:hover { background: #f7f7f7; }
+  .verdict-row { background: #f0f4f8; padding: 12px 16px; border-left: 4px solid #BF9000; margin: 12px 0; }
+  .grid-link { color: #1F3864; text-decoration: none; }
+  .grid-link:hover { text-decoration: underline; }
+  details { margin: 8px 0; background: white; border: 1px solid #eee; border-radius: 4px; padding: 8px 12px; }
+  details summary { cursor: pointer; font-weight: 600; color: #1F3864; }
+  details[open] summary { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">ORACLE — Site Sourcing Dashboard</div>
+  <div class="meta">Run date: May 1, 2026 · Neyland Development · 15-tab unified view · Self-contained · <span style="color:#FFE082">SUPPLEMENT applied: KY scope + HG-1 pro forma</span></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="daily">Daily Parcels</button>
+  <button class="tab" data-tab="hg">Hidden Gems</button>
+  <button class="tab" data-tab="pf">Pro Forma</button>
+  <button class="tab" data-tab="exec">Exec Summary</button>
+  <button class="tab" data-tab="comp">Comp Tracker</button>
+  <button class="tab" data-tab="out">Outreach</button>
+  <button class="tab" data-tab="dd">DD Checklist</button>
+  <button class="tab" data-tab="sub">Submarkets</button>
+  <button class="tab" data-tab="climate">Climate Risk</button>
+  <button class="tab" data-tab="pipe">Pipeline</button>
+  <button class="tab" data-tab="off">Off-Market</button>
+  <button class="tab" data-tab="cap">Capital Markets</button>
+  <button class="tab" data-tab="tmpl">Templates</button>
+  <button class="tab" data-tab="sys">System</button>
+</nav>
+
+<main>
+
+<!-- OVERVIEW -->
+<section class="panel active" id="overview">
+  <h1 class="panel-title">Overview</h1>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">Daily Parcels</div><div class="value">14</div><div class="note">11 SE + 3 KY (target 10–15)</div></div>
+    <div class="kpi gold"><div class="label">Hidden Gems (Tier-A)</div><div class="value">5</div><div class="note">4 SE + 1 KY (+ 6 Tier-B theses)</div></div>
+    <div class="kpi"><div class="label">Top Daily Score</div><div class="value">87</div><div class="note">Charleston SC entitled 240u</div></div>
+    <div class="kpi gold"><div class="label">Top Hidden Gem</div><div class="value">91</div><div class="note">Crestview FL DO 287u</div></div>
+    <div class="kpi"><div class="label">Charleston #1 BASE YoC</div><div class="value">5.40%</div><div class="note">PROCEED (CONDITIONAL)</div></div>
+    <div class="kpi gold"><div class="label">Crestview HG-1 BASE YoC</div><div class="value">5.09%</div><div class="note">PROCEED (CONDITIONAL)</div></div>
+  </div>
+
+  <div class="card" style="background:#fff8e1; border-left:4px solid #BF9000">
+    <strong>SUPPLEMENT — Atlas directive (2026-05-01):</strong> (1) State scope expanded to TN, GA, SC, NC, FL, KY, AL — KY added to focus markets (config v2.2). 3 KY daily parcels surfaced (Bowling Green RM-4 456u entitled = best of new entries) + 1 KY hidden gem (Elizabethtown / BlueOval SK catchment). (2) Pro forma run on #1 Hidden Gem (Crestview FL 14.6-ac DO 287u) — BASE YoC 5.09%, PROCEED (CONDITIONAL). INSURANCE 2x scenario fails (4.24% — DOES NOT PENCIL); insurance indication is gating.
+  </div>
+
+  <h2 class="panel-sub">Today at a glance</h2>
+  <div class="card">
+    <strong>Top opportunity:</strong> HG-1 Crestview FL — 14.6 acres with Development Order in hand for 287 units, adjacent to a brand-new Walmart Neighborhood Market. BAH-tied demand (Eglin AFB). DO de-risks 18-24 months of FL entitlement timeline. <strong class="next-step">URGENT broker call this week.</strong>
+  </div>
+  <div class="card">
+    <strong>Top Tier-1 daily:</strong> Rank 1 Charleston SC — 33-acre site with existing 240-unit entitlement, $7.7M ($32k/unit). Pro forma BASE YoC 5.40%, clears 5.0% kill threshold by 40bps. Verdict: PROCEED (CONDITIONAL) pending entitlement vesting confirmation + rent comp validation.
+  </div>
+  <div class="card">
+    <strong>Inventory caveat:</strong> 11 daily parcels surfaced (target 10-15). SE Sun Belt + FL/Carolinas inventory currently constrained for 200+ unit-capable sites at attractive basis. Many strong sites are off-market or under LOI to local merchant builders. See Off-Market tab for direct-to-owner pursuits.
+  </div>
+  <div class="card">
+    <strong>Auto-triggers fired:</strong> (1) Comp basis check flagged Rank 5 Ocala 22-ac at upper-bound $/ac. (2) Pipeline oversupply flagged Huntsville MSA YES — no Huntsville parcels in today's report. (3) Climate insurance applied $2k/unit/yr default to 5 coastal/high-flood parcels.
+  </div>
+
+  <h2 class="panel-sub">Top 5 Daily Parcels (post-supplement)</h2>
+  <table class="simple">
+    <tr><th>Rank</th><th>Score</th><th>Market</th><th>Locator</th><th>Status</th><th>Asking</th></tr>
+    <tr><td>1</td><td>87</td><td>Charleston, SC</td><td>33-ac entitled MF site (240 units)</td><td><span class="pill green">GREEN</span></td><td>$7,700,000</td></tr>
+    <tr><td>2 (NEW · KY)</td><td>85</td><td>Bowling Green, KY (Warren Co.)</td><td>Sterling Business Park 19.69-ac RM-4 (entitled 456 units)</td><td><span class="pill green">GREEN</span></td><td>$5,600,000</td></tr>
+    <tr><td>3</td><td>84</td><td>Wilmington, NC (Leland)</td><td>18-ac Mallory Creek Land &amp; Timber</td><td><span class="pill green">GREEN</span></td><td>TBV</td></tr>
+    <tr><td>4</td><td>81</td><td>Lakeland, FL</td><td>Bridgewater Multifamily Land 32.96-ac</td><td><span class="pill green">GREEN</span></td><td>TBV</td></tr>
+    <tr><td>5</td><td>78</td><td>Wilmington, NC (Leland)</td><td>19.68-ac Brunswick site plan approval (180 units)</td><td><span class="pill green">GREEN</span></td><td>TBV</td></tr>
+  </table>
+  <p class="small">Bowling Green RM-4 with 456-unit entitlement is the strongest new entry (lower-friction than Charleston entitlement vesting which still requires verification). 14 daily parcels total today including KY supplement.</p>
+
+  <h2 class="panel-sub">Top 5 Tier-A Hidden Gems (post-supplement)</h2>
+  <table class="simple">
+    <tr><th>Rank</th><th>Score</th><th>Market</th><th>Locator</th><th>Status</th><th>Asking</th></tr>
+    <tr><td>HG-1</td><td>91</td><td>Crestview, FL (Okaloosa County)</td><td>14.6-ac w/ Development Order — 287 units</td><td><span class="pill green">GREEN</span></td><td>TBV — broker call</td></tr>
+    <tr><td>HG-2</td><td>83</td><td>North Augusta, SC (Aiken County)</td><td>36.88-ac MF site adjoining Sweetwater Commons</td><td><span class="pill green">GREEN</span></td><td>$1,807,120 ($49,000/ac listed)</td></tr>
+    <tr><td>HG-3 (NEW · KY)</td><td>82</td><td>Elizabethtown / Glendale, KY (Hardin Co.)</td><td>76-ac at 1832 New Glendale Rd — BlueOval SK catchment</td><td><span class="pill green">GREEN</span></td><td>$4,000,000 ($52,632/ac)</td></tr>
+    <tr><td>HG-4</td><td>79</td><td>Hickory, NC (Catawba County)</td><td>25.51-ac at I-40 exit 121 (3-parcel)</td><td><span class="pill amber">AMBER</span></td><td>TBV</td></tr>
+    <tr><td>HG-5</td><td>75</td><td>Tupelo, MS (Lee County)</td><td>14.7-ac N. Veterans Blvd × Hamm St</td><td><span class="pill amber">AMBER</span></td><td>TBV</td></tr>
+  </table>
+</section>
+
+<!-- DAILY PARCELS -->
+<section class="panel" id="daily">
+  <h1 class="panel-title">Daily Parcels</h1>
+  <p class="small">Sortable / searchable. 14 parcels (11 SE + 3 KY supplement). Click column headers to sort. KY-1 Bowling Green RM-4 entitled 456u re-ranked overall #2.</p>
+  <div class="table-wrap" id="grid-daily"></div>
+
+  <h2 class="panel-sub">Per-Parcel Detail</h2>
+  <details><summary>Rank 1 — Charleston, SC — Score 87 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> 33-ac entitled MF site (240 units)</div>
+  <div><strong>Address:</strong> Charleston metro — exact street TBV (Crexi listing)</div>
+  <div><strong>Acres:</strong> 33.0 | <strong>Zoning:</strong> Entitled MF (240 units) | <strong>Asking:</strong> $7,700,000 ($233,333/ac) | <strong>Yield:</strong> 240 units (7.3 du/ac) | <strong>Friction:</strong> 2/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/SC/Charleston/Multifamily" target="_blank">https://www.crexi.com/properties/SC/Charleston/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 22/25 | Reg 18/20 | Feas 17/20 | Loc 13/15 | Fin 17/20</div>
+  <h3 class="section-h">Thesis</h3><div>Entitled 240-unit site in a top-tier SE market. Basis ($32k/unit) is reasonable. Entitlement de-risks 18-24mo of typical Charleston entitlement timeline.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Exact street/parcel ID is TBV — confirm via Crexi broker</li><li class="red-flag">Confirm 240-unit entitlement is current (not expired/sunset)</li><li class="red-flag">Charleston SFHA exposure — pull FEMA on parcel before LOI</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Pull Crexi listing detail; broker call; verify entitlement vesting; FEMA desktop</div>
+  </details><details><summary>Rank 2 — Wilmington, NC (Leland) — Score 84 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> 18-ac Mallory Creek Land &amp; Timber</div>
+  <div><strong>Address:</strong> Mallory Creek vicinity, Leland (Brunswick County), NC</div>
+  <div><strong>Acres:</strong> 18.0 | <strong>Zoning:</strong> Brunswick County (verify by-right MF density) | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 288 units (16.0 du/ac) | <strong>Friction:</strong> 4/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/NC/Wilmington/Multifamily" target="_blank">https://www.crexi.com/properties/NC/Wilmington/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 21/25 | Reg 16/20 | Feas 17/20 | Loc 13/15 | Fin 17/20</div>
+  <h3 class="section-h">Thesis</h3><div>Class A garden-style site with conceptual 288-unit plan. Wilmington MSA absorption strong. Brunswick County more development-friendly than New Hanover.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Asking price not in public listing summary — confirm w/ broker</li><li class="red-flag">Conceptual 288-unit plan only — entitlement not yet secured</li><li class="red-flag">Brunswick County stormwater requirements aggressive</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Broker call to confirm price &amp; current zoning; pre-app meeting on stormwater capacity</div>
+  </details><details><summary>Rank 3 — Lakeland, FL — Score 81 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> Bridgewater Multifamily Land 32.96-ac</div>
+  <div><strong>Address:</strong> North Lakeland (per LandFlip listing)</div>
+  <div><strong>Acres:</strong> 32.96 | <strong>Zoning:</strong> MF (verify density cap — Lakeland &#x27;&lt;10 du/ac&#x27; pattern is a risk) | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 250 units (7.6 du/ac) | <strong>Friction:</strong> 4/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.landflip.com/land-for-sale/florida/polk-county/development-keyword" target="_blank">https://www.landflip.com/land-for-sale/florida/polk-county/development-keyword</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 21/25 | Reg 15/20 | Feas 18/20 | Loc 13/15 | Fin 17/20</div>
+  <h3 class="section-h">Thesis</h3><div>Class A garden site, large enough for amenities and clubhouse. North Lakeland is the metro&#x27;s growth quadrant.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Lakeland zoning pattern often caps at &lt;10 du/ac — confirm density allowance</li><li class="red-flag">If &lt;10 du/ac, yield drops to ~250 units max but pencils with right basis</li><li class="red-flag">I-4 corridor traffic — site access TBV</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Confirm density cap with City of Lakeland Planning; comp the basis vs. recent N. Lakeland MF land</div>
+  </details><details><summary>Rank 4 — Wilmington, NC (Leland) — Score 78 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> 19.68-ac Brunswick site plan approval (180 units)</div>
+  <div><strong>Address:</strong> Leland, NC (Brunswick County) — exact street TBV</div>
+  <div><strong>Acres:</strong> 19.68 | <strong>Zoning:</strong> Site plan approved — 180 units | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 180 units (9.1 du/ac) | <strong>Friction:</strong> 3/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/NC/Wilmington/Multifamily" target="_blank">https://www.crexi.com/properties/NC/Wilmington/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 21/25 | Reg 17/20 | Feas 16/20 | Loc 12/15 | Fin 12/20</div>
+  <h3 class="section-h">Thesis</h3><div>Borderline 180-unit deal but site plan approval is meaningful entitlement de-risking. Ideal if assemblage with adjacent land achievable to push to 240+.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">BORDERLINE: 180 units below 200-unit floor (config allows borderline 150-199)</li><li class="red-flag">Site plan approval expiry/sunset — verify</li><li class="red-flag">Asking price not public — broker call required</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Confirm site plan vesting; broker price discovery; assess 200-unit upzone via add&#x27;l acreage</div>
+  </details><details><summary>Rank 5 — Ocala, FL (Marion County) — Score 76 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 22-ac MF land</div>
+  <div><strong>Address:</strong> Marion County, FL — exact location TBV</div>
+  <div><strong>Acres:</strong> 22.0 | <strong>Zoning:</strong> MF (verify density) | <strong>Asking:</strong> $5,000,000 ($227,273/ac) | <strong>Yield:</strong> 264 units (12.0 du/ac) | <strong>Friction:</strong> 4/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/FL/Ocala/Multifamily" target="_blank">https://www.crexi.com/properties/FL/Ocala/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 19/25 | Reg 16/20 | Feas 17/20 | Loc 12/15 | Fin 12/20</div>
+  <h3 class="section-h">Thesis</h3><div>Ocala/Villages spillover demand strong. 12 du/ac yield gets to 264 units which clears the 200 floor. Basis is the deciding variable.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">$/acre is in upper range for Marion County — basis check vs. comps required</li><li class="red-flag">I-75 corridor congestion / DOT permitting risk if access cut</li><li class="red-flag">Confirm utility availability (Ocala/Marion Utilities)</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Comp $/acre vs. last 12mo Marion MF land sales; FDOT access permit triage</div>
+  </details><details><summary>Rank 6 — Greenville-Spartanburg, SC — Score 74 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 19.82-ac Roebuck/Walnut Grove site</div>
+  <div><strong>Address:</strong> Roebuck/Walnut Grove area — ~20 min from downtown Spartanburg</div>
+  <div><strong>Acres:</strong> 19.82 | <strong>Zoning:</strong> TBV (regional R-M20 noted; verify per-parcel) | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 240 units (12.1 du/ac) | <strong>Friction:</strong> 5/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.greenvillerealestatehub.com/spartanburg-county-sc/spartanburg-county-sc-real-estate-listings/spartanburg-county-land-for-sale/" target="_blank">https://www.greenvillerealestatehub.com/spartanburg-county-sc/spartanburg-county-sc-real-estate-listings/spartanburg-county-land-for-sale/</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 20/25 | Reg 14/20 | Feas 17/20 | Loc 12/15 | Fin 11/20</div>
+  <h3 class="section-h">Thesis</h3><div>Eastside Spartanburg is the metro&#x27;s affordable growth corridor. BMW/Plant supplier catchment + Cowpens proximity supports workforce demand.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Zoning per-parcel TBV — could require rezoning</li><li class="red-flag">Public water available but sewer connection cost TBV</li><li class="red-flag">Eastside Spartanburg less institutional MF comp depth than Greenville proper</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Spartanburg County Planning pre-app on density allowance; sewer extension cost estimate</div>
+  </details><details><summary>Rank 7 — Gainesville, FL (Alachua County) — Score 72 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 24.11-ac SW 62nd Avenue</div>
+  <div><strong>Address:</strong> SW 62nd Avenue, SW Gainesville</div>
+  <div><strong>Acres:</strong> 24.11 | <strong>Zoning:</strong> Low Density Residential (1-4 du/ac) — RZ required | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 240 units (10.0 du/ac) | <strong>Friction:</strong> 7/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.homes.com/alachua-county-fl/land-for-sale/" target="_blank">https://www.homes.com/alachua-county-fl/land-for-sale/</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 20/25 | Reg 11/20 | Feas 17/20 | Loc 13/15 | Fin 11/20</div>
+  <h3 class="section-h">Thesis</h3><div>SW Gainesville corridor has UF spillover demand. Low Density designation is a wall — pursue only with explicit pre-app encouragement.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">FRICTION 7 — current LDR 1-4 du/ac. Comp plan amendment + rezone is the entire deal.</li><li class="red-flag">Alachua County process is lengthy; budget 12-18mo entitlement</li><li class="red-flag">Confirm UF / Innovation Square spillover supports SW corridor MF</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Pre-app w/ Alachua County Growth Management; do NOT LOI without comp plan amendment likelihood call</div>
+  </details><details><summary>Rank 8 — Tallahassee, FL (Leon County) — Score 70 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 13.49-ac approved 55,000 SF</div>
+  <div><strong>Address:</strong> Leon County — exact street TBV</div>
+  <div><strong>Acres:</strong> 13.49 | <strong>Zoning:</strong> Approved for 55,000 SF (likely commercial — verify MF allowance) | <strong>Asking:</strong> $2,500,000 ($185,323/ac) | <strong>Yield:</strong> 200 units (14.8 du/ac) | <strong>Friction:</strong> 6/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/FL/Tallahassee/Multifamily" target="_blank">https://www.crexi.com/properties/FL/Tallahassee/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 18/25 | Reg 14/20 | Feas 16/20 | Loc 12/15 | Fin 10/20</div>
+  <h3 class="section-h">Thesis</h3><div>Existing infrastructure + storm water at site materially de-risks. Conversion of approval scope is the remaining hurdle.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">55,000 SF approval may be commercial; confirm MF allowed under approval</li><li class="red-flag">Stormwater facility + infrastructure already in place is a positive</li><li class="red-flag">Tallahassee approval climate slow — leverage existing entitlement</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Verify approval scope (commercial vs. MF); city pre-app on conversion to MF entitlement</div>
+  </details><details><summary>Rank 9 — Pensacola, FL (Escambia County) — Score 67 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 22.5-ac TBV parcel</div>
+  <div><strong>Address:</strong> Escambia County — exact location TBV (LandWatch search)</div>
+  <div><strong>Acres:</strong> 22.5 | <strong>Zoning:</strong> TBV | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 200 units (8.9 du/ac) | <strong>Friction:</strong> 6/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.landwatch.com/florida-land-for-sale/pensacola" target="_blank">https://www.landwatch.com/florida-land-for-sale/pensacola</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 17/25 | Reg 13/20 | Feas 14/20 | Loc 11/15 | Fin 12/20</div>
+  <h3 class="section-h">Thesis</h3><div>Pensacola has structural workforce housing demand from Navy + healthcare clusters. Risk is environmental encumbrance — triage first.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Per market_intel: Pensacola low-$/acre listings frequently signal floodplain/wetland encumbrance</li><li class="red-flag">Run desktop FEMA + NWI before any broker call</li><li class="red-flag">Verify NAS Pensacola BAH catchment proximity</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Desktop FEMA + NWI on parcel coordinates; if clean, broker call</div>
+  </details><details><summary>Rank 10 — Daytona Beach, FL (Volusia County) — Score 65 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 32114 ZIP MFR-20 parcel (29 du/ac allowed)</div>
+  <div><strong>Address:</strong> 32114 area, Daytona Beach (exact street TBV)</div>
+  <div><strong>Acres:</strong> 8.5 | <strong>Zoning:</strong> MFR-20 (29 du/ac) | <strong>Asking:</strong> TBV (TBV) | <strong>Yield:</strong> 200 units (23.5 du/ac) | <strong>Friction:</strong> 5/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/FL/Volusia_County/Multifamily" target="_blank">https://www.crexi.com/properties/FL/Volusia_County/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 19/25 | Reg 17/20 | Feas 13/20 | Loc 10/15 | Fin 6/20</div>
+  <h3 class="section-h">Thesis</h3><div>MFR-20 (29 du/ac) is the highest-density zoning in Daytona core. Site dimensions are key — needs to be deep enough for parking ratio.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">BORDERLINE size (8.5 ac) — yield to 200 needs full 23 du/ac per zoning</li><li class="red-flag">FEMA SFHA exposure typical of Daytona core — verify before LOI</li><li class="red-flag">Site too small for typical garden-style amenity package</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Confirm exact street; FEMA pull; assess wrap-style 4-story design feasibility</div>
+  </details><details><summary>Rank 11 — Ocala, FL (Marion County) — Score 62 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 13.11-ac MF land</div>
+  <div><strong>Address:</strong> Ocala — exact location TBV (Crexi listing)</div>
+  <div><strong>Acres:</strong> 13.11 | <strong>Zoning:</strong> MF (TBV density) | <strong>Asking:</strong> $1,572,000 ($119,908/ac) | <strong>Yield:</strong> 156 units (12.0 du/ac) | <strong>Friction:</strong> 4/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/FL/Ocala/Multifamily" target="_blank">https://www.crexi.com/properties/FL/Ocala/Multifamily</a></div>
+  <h3 class="section-h">Score breakdown</h3>
+  <div class="mono">Demand 18/25 | Reg 14/20 | Feas 14/20 | Loc 10/15 | Fin 6/20</div>
+  <h3 class="section-h">Thesis</h3><div>Smaller Ocala play. Lower basis but borderline yield. Watch as a JV / smaller-pocket fund opportunity.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">BORDERLINE: 156 units max — below 200 floor</li><li class="red-flag">Smaller deal economics may not pencil for institutional GC pricing</li><li class="red-flag">Lower $/acre than Rank 5 — opportunity if entitlement clean</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Comp $/acre vs. recent Marion sales; assess if 14 du/ac rezone gets above 180 units</div>
+  </details>
+</section>
+
+<!-- HIDDEN GEMS -->
+<section class="panel" id="hg">
+  <h1 class="panel-title">Hidden Gems</h1>
+  <p class="small">5 Tier-A specific parcels (4 SE + 1 KY supplement) + 6 Tier-B market theses.</p>
+  <h2 class="panel-sub">Tier-A Specific Parcels</h2>
+  <div class="table-wrap" id="grid-hg"></div>
+
+  <h2 class="panel-sub">Tier-A Per-Parcel Detail</h2>
+  <details><summary>HG-1 — Crestview, FL (Okaloosa County) — Score 91 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> 14.6-ac w/ Development Order — 287 units</div>
+  <div><strong>Address:</strong> Crestview, FL — adjacent to new Walmart Neighborhood Market</div>
+  <div><strong>Acres:</strong> 14.6 | <strong>Zoning:</strong> Development Order issued — 287 units | <strong>Asking:</strong> TBV — broker call | <strong>Yield:</strong> 287 units (19.7 du/ac) | <strong>Friction:</strong> 2/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/FL/Okaloosa_County/Multifamily" target="_blank">https://www.crexi.com/properties/FL/Okaloosa_County/Multifamily</a></div>
+  <h3 class="section-h">Thesis</h3><div>BEST-IN-SHOW. Development Order in hand is rare in FL. Crestview is the affordability outlet for Eglin AFB / BAH-tied demand. Adjacent Walmart Neighborhood Market is location validation.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Confirm Development Order vesting &amp; expiration</li><li class="red-flag">Verify 287-unit count survives current site engineering</li><li class="red-flag">Eglin AFB BAH dependency — confirm BAH stability</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Broker call IMMEDIATELY; verify DO expiration; pull Okaloosa County conditions of approval</div>
+  </details><details><summary>HG-2 — North Augusta, SC (Aiken County) — Score 83 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> 36.88-ac MF site adjoining Sweetwater Commons</div>
+  <div><strong>Address:</strong> North Augusta, SC — adjacent to Sweetwater Commons (250 luxury cottages) + Sweetwater Square Walmart</div>
+  <div><strong>Acres:</strong> 36.88 | <strong>Zoning:</strong> MF (Meybohm Commercial listing) | <strong>Asking:</strong> $1,807,120 ($49,000/ac listed) | <strong>Yield:</strong> 400 units (10.8 du/ac) | <strong>Friction:</strong> 3/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.crexi.com/properties/SC/Aiken/Multifamily" target="_blank">https://www.crexi.com/properties/SC/Aiken/Multifamily</a></div>
+  <h3 class="section-h">Thesis</h3><div>Adjacent Sweetwater Commons (250 luxury cottages) + Walmart-anchored retail = de-risked location. Basis of $49k/ac is strong if no env issues. Cross-Augusta River cyber/medical demand pull.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">$/ac low for SE — verify wetlands/SFHA</li><li class="red-flag">North Augusta annexation status — confirm in-city</li><li class="red-flag">Aiken/Augusta blended catchment — verify primary commute pull</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Meybohm broker call; pull Aiken County GIS for wetlands/floodplain; rent comps from Sweetwater Commons cottages</div>
+  </details><details><summary>HG-3 (NEW · KY) — Elizabethtown / Glendale, KY (Hardin County) — Score 82 — <span class="pill green">GREEN</span></summary>
+  <div><strong>Locator:</strong> 76-ac tract at 1832 New Glendale Rd</div>
+  <div><strong>Address:</strong> 1832 New Glendale Rd, Elizabethtown, KY 42701 — between Elizabethtown and Glendale, near new East Hardin Middle School</div>
+  <div><strong>Acres:</strong> 76.0 | <strong>Zoning:</strong> TBV (rezone needed; carve-out MF play) | <strong>Asking:</strong> $4,000,000 ($52,632/ac) | <strong>Yield:</strong> ~300 units on 25-30 ac MF carve-out at ~12 du/ac | <strong>Friction:</strong> 5/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.landsearch.com/properties/1832-new-glendale-rd-elizabethtown-ky-42701/3624325" target="_blank">LandSearch — 1832 New Glendale Rd</a> · cross-verified <a class="grid-link" href="https://www.land.com/Hardin-County-KY/all-land/" target="_blank">Land.com Hardin County</a></div>
+  <h3 class="section-h">Thesis</h3><div>BlueOval SK Battery Park — $6B Ford-SK joint venture under construction in Glendale, projected 5,000+ direct jobs at full ramp — is creating structural workforce housing demand across Hardin County. Ft. Knox is also in catchment. 76-ac tract is too large for pure MF, but ideal for partition: 25-30 ac MF carve-out (~300 units at 12 du/ac) + 45-50 ac SF/mixed-use to a partner developer. Sewer is "within 1/2 mile" per listing; basis $52,632/ac at full tract is exceptional value if rezone clears.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Rezone required — current zoning TBV (LDR likely)</li><li class="red-flag">76 ac too large for pure MF — partition strategy required</li><li class="red-flag">Sewer extension cost from "within 1/2 mile" — could be $0.5-2M depending on capacity</li><li class="red-flag">BlueOval SK ramp timing — verify housing demand acceleration aligns with delivery 2028-29</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Hardin County Planning pre-app on MF rezone for 25-30 ac carve-out; broker call; SF/mixed-use partner outreach for joint take-down</div>
+  </details><details><summary>HG-4 — Hickory, NC (Catawba County) — Score 79 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 25.51-ac at I-40 exit 121 (3-parcel)</div>
+  <div><strong>Address:</strong> I-40 East-bound side, just west of Hickory NC at exit 121</div>
+  <div><strong>Acres:</strong> 25.51 | <strong>Zoning:</strong> TBV (rezone needed) | <strong>Asking:</strong> TBV | <strong>Yield:</strong> 250 units (9.8 du/ac) | <strong>Friction:</strong> 6/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://nationalland.com/land-for-sale/north-carolina/catawba/multifamily-development" target="_blank">https://nationalland.com/land-for-sale/north-carolina/catawba/multifamily-development</a></div>
+  <h3 class="section-h">Thesis</h3><div>Lowest-basis NC market with bona fide jobs story (fiber, EV components). I-40 visibility is meaningful for absorption. Rezone is the gate.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Rezoning required — Catawba County process is workable but not by-right</li><li class="red-flag">I-40 frontage = noise + DOT setback impact on usable acres</li><li class="red-flag">3-parcel assemblage — confirm seller can deliver title together</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Catawba County pre-app; confirm assemblage intact; DOT noise study cost estimate</div>
+  </details><details><summary>HG-5 — Tupelo, MS (Lee County) — Score 75 — <span class="pill amber">AMBER</span></summary>
+  <div><strong>Locator:</strong> 14.7-ac N. Veterans Blvd × Hamm St</div>
+  <div><strong>Address:</strong> N. Veterans Blvd × Hamm Street, Tupelo, MS</div>
+  <div><strong>Acres:</strong> 14.7 | <strong>Zoning:</strong> MUCC (~7.7 ac) + MDR (~7 ac) | <strong>Asking:</strong> TBV | <strong>Yield:</strong> 200 units (13.6 du/ac) | <strong>Friction:</strong> 5/10</div>
+  <div><strong>Listing:</strong> <a class="grid-link" href="https://www.loopnet.com/search/multifamily-properties/tupelo-ms/for-sale/" target="_blank">https://www.loopnet.com/search/multifamily-properties/tupelo-ms/for-sale/</a></div>
+  <h3 class="section-h">Thesis</h3><div>Toyota MS plant + North Mississippi Medical Center anchor real demand. No institutional pipeline tracks Tupelo — first-mover advantage available. Site has visibility on a 23k VPD road.</div>
+  <h3 class="section-h">Red flags</h3><ul class="tight"><li class="red-flag">Mixed-zoning split (MUCC + MDR) — confirm MF allowed across full assemblage</li><li class="red-flag">VPD on N. Veterans Blvd ~23,044 (per Tupelo commercial listing data)</li><li class="red-flag">Tupelo MSA small (~170k pop) — supply/demand sensitive</li></ul>
+  <h3 class="section-h">Next step</h3><div class="next-step">Confirm MF density allowance across both zones; broker call; comp Toyota MS supplier housing pipeline</div>
+  </details>
+
+  <h2 class="panel-sub">Tier-B Market Theses</h2>
+  <div class="card"><strong>Auburn-Opelika, AL</strong><div style="margin-top:6px">105-ac Opportunity Zone gateway corridor (US-280 W) with Tiger Town / I-85 / EAMC adjacency available per local broker network. Auburn U calendar drives MF lease-up seasonality (strong Aug-Oct). Opelika trades 25-30% below Auburn proper.</div><div class="next-step" style="margin-top:6px">Next step: Outreach to Summit Commercial / Berkshire Hathaway commercial brokers in Auburn-Opelika for off-market shop on the OZ tract.</div></div><div class="card"><strong>Hattiesburg, MS</strong><div style="margin-top:6px">USM (~14k students) + Forrest General Hospital + Camp Shelby drive demand depth. Belltown Multifamily Development opportunity at $15M referenced on Crexi — verify whether site or operating asset.</div><div class="next-step" style="margin-top:6px">Next step: Crexi search for &#x27;Belltown Hattiesburg&#x27; detail; reach out to USM off-campus housing brokers.</div></div><div class="card"><strong>Florence-Muscle Shoals, AL (The Shoals)</strong><div style="margin-top:6px">17.37-ac commercial land in Muscle Shoals city limits with $1M tax incentive package available. Singing River Bridge connects to Florence. Toyota-Mazda Huntsville plant within 75mi commute = workforce spillover.</div><div class="next-step" style="margin-top:6px">Next step: City of Muscle Shoals Economic Development Office to confirm tax incentive structure transfers to MF use.</div></div><div class="card"><strong>Brunswick, GA (Glynn County)</strong><div style="margin-top:6px">Coastal market with Port of Brunswick auto/RoRo expansion + Brunswick Cellulose + tourism. Limited MF supply in workforce price band. Climate risk requires INSURANCE 2x scenario by default.</div><div class="next-step" style="margin-top:6px">Next step: Glynn County Planning to identify MF-zoned parcels &gt;10 ac; environmental triage protocol mandatory pre-LOI.</div></div><div class="card"><strong>Dothan, AL (Houston County)</strong><div style="margin-top:6px">Wiregrass regional hub — Southeast Alabama Medical Center + Ft. Novosel (Army aviation) within 30mi. 4-state catchment for retail + healthcare. Workforce MF gap.</div><div class="next-step" style="margin-top:6px">Next step: Houston County GIS sweep for MF/B-2 parcels &gt;15 ac near Ross Clark Circle; scout local broker relationships.</div></div><div class="card"><strong>Valdosta, GA (Lowndes County)</strong><div style="margin-top:6px">VSU + Moody AFB + I-75/I-10 logistics catchment. Tallahassee spillover demand on the FL line. Limited Class B+ rental product in 130-160k MSA.</div><div class="next-step" style="margin-top:6px">Next step: Lowndes County Planning rezone history; identify 200+ unit by-right MF zoning districts; broker scout (Coldwell Banker Premier).</div></div>
+</section>
+
+<!-- PRO FORMA -->
+<section class="panel" id="pf">
+  <h1 class="panel-title">Pro Forma — Rank 1 (Charleston SC, 33-ac entitled 240u)</h1>
+  <div class="verdict-row">
+    <strong>BASE VERDICT:</strong> <span class="verdict conditional">PROCEED (CONDITIONAL)</span>
+    <span style="margin-left:24px"><strong>BASE YoC:</strong> 5.40% · <strong>Lev. IRR:</strong> 8.52% · <strong>EM:</strong> 1.65x</span>
+  </div>
+
+  <h2 class="panel-sub">Base Case Build</h2>
+  <table class="simple">
+    <tr><th>Line Item</th><th>Value</th><th>Note</th></tr>
+    <tr><td>Total Units</td><td>240</td><td>Existing entitlement</td></tr>
+    <tr><td>Avg Unit Size</td><td>950 sf</td><td>VALIDATE — finalize unit mix</td></tr>
+    <tr><td>Blended Rent</td><td>$1.95/sf/mo ($1,853/unit/mo)</td><td>VALIDATE — RealPage Q1 2026</td></tr>
+    <tr><td>Hard Cost</td><td>$200,000/unit</td><td>VALIDATE — 2 GC budgets</td></tr>
+    <tr><td>Soft Cost</td><td>12% of hard</td><td>Industry standard</td></tr>
+    <tr><td>Land Basis</td><td>$7,700,000 ($32k/unit)</td><td>Asking price — TBV via broker</td></tr>
+    <tr><td>Financing + Closing</td><td>$3,000,000 estimate</td><td></td></tr>
+    <tr><td><strong>Total Development Cost</strong></td><td><strong>~$64.5M ($268.6k/unit)</strong></td><td>Sum</td></tr>
+    <tr><td>Stabilized NOI (Y2)</td><td>~$3.48M</td><td>EGI - OpEx</td></tr>
+    <tr><td><strong>Yield on Cost</strong></td><td><strong>5.40%</strong></td><td>NOI / TDC</td></tr>
+    <tr><td>Stabilized Value (5.50% cap)</td><td>~$63.3M</td><td>NOI / cap</td></tr>
+    <tr><td>Development Spread</td><td>-10 bps</td><td>YoC - exit cap</td></tr>
+  </table>
+
+  <h2 class="panel-sub">Scenario Analysis</h2>
+  <div class="table-wrap" id="grid-scenarios"></div>
+
+  <h2 class="panel-sub">Scenario Notes</h2>
+  <div class="card"><strong>BASE</strong> — <span class="verdict conditional">PROCEED (CONDITIONAL)</span><div style="margin-top:6px">Clears 5.0% min; 10bps below 5.5% comfort. Entitlement de-risks 18-24mo of typical Charleston entitlement.</div></div><div class="card"><strong>RECESSION</strong> — <span class="verdict borderline">BORDERLINE</span><div style="margin-top:6px">Rent flat 24mo + exit cap +75bps to 6.25% + lease-up +6mo crushes value.</div></div><div class="card"><strong>COST SPIKE</strong> — <span class="verdict borderline">BORDERLINE</span><div style="margin-top:6px">Hard cost +12% pushes TDC to $70.7M. Falls below 5.0% YoC kill threshold by 8bps.</div></div><div class="card"><strong>LEASE-UP DELAY</strong> — <span class="verdict conditional">CONDITIONAL</span><div style="margin-top:6px">+12mo carry, 7% stab vacancy. Equity multiple compresses but stays workable.</div></div><div class="card"><strong>INSURANCE 2x</strong> — <span class="verdict conditional">CONDITIONAL</span><div style="margin-top:6px">Charleston SC is not coastal-hazard for default insurance bump but stress-tested anyway.</div></div><div class="card"><strong>UPSIDE</strong> — <span class="verdict proceed">PROCEED</span><div style="margin-top:6px">Rent +5% (Charleston rent growth has supported this) + land 20% lower at $6.16M.</div></div>
+
+  <h2 class="panel-sub">Validation Sequence (must complete before LOI)</h2>
+  <ol class="tight">
+    <li>Broker call — confirm 240-unit entitlement vesting & sunset</li>
+    <li>RealPage / CoStar Charleston Q1 2026 rent comps</li>
+    <li>Two GC budgets on 240-unit garden plan</li>
+    <li>Insurance indication (named storm + GL + WC)</li>
+    <li>SC property tax appraiser estimate</li>
+    <li>FEMA / wetlands desktop</li>
+    <li>Geotech borings</li>
+  </ol>
+
+  <p class="small">Honesty caveat: All numbers are illustrative under stated assumptions. Land basis is the asking price observed in the listing summary and must be confirmed via broker call. Rent and hard cost assumptions are marked VALIDATE.</p>
+
+  <h1 class="panel-title" style="margin-top:32px">Pro Forma — Hidden Gem #1 (Crestview FL, 14.6-ac DO 287 units)</h1>
+  <p class="small">Added 2026-05-01 per Atlas directive. Source archive: <span class="mono">_archive/ORACLE_HG_Pro_Forma_2026-05-01.xlsx</span> · <span class="mono">_archive/ORACLE_HG_Pro_Forma_2026-05-01.docx</span></p>
+
+  <div class="verdict-row">
+    <strong>BASE VERDICT:</strong> <span class="verdict conditional">PROCEED (CONDITIONAL)</span>
+    <span style="margin-left:24px"><strong>BASE YoC:</strong> 5.09% · <strong>Stab Value:</strong> $55.4M · <strong>Spread:</strong> (116) bps · <strong>Lev. IRR:</strong> 7.50%</span>
+  </div>
+
+  <h2 class="panel-sub">Base Case Build</h2>
+  <table class="simple">
+    <tr><th>Line Item</th><th>Value</th><th>Note</th></tr>
+    <tr><td>Total Units</td><td>287</td><td>Per Development Order</td></tr>
+    <tr><td>Avg Unit Size</td><td>950 sf</td><td>VALIDATE — finalize unit mix</td></tr>
+    <tr><td>Blended Rent</td><td>$1,950/u/mo (~$2.05/sf/mo)</td><td>VALIDATE — RealPage Q2 2026 + Eglin BAH catchment</td></tr>
+    <tr><td>Hard Cost</td><td>$170,000/unit</td><td>VALIDATE — 2 GC budgets (Crestview labor/materials lower than Charleston)</td></tr>
+    <tr><td>Soft Cost</td><td>12% of hard + 5% contingency on hard+soft</td><td>Industry standard</td></tr>
+    <tr><td>Land Basis (placeholder)</td><td>$25,000/unit ($7.175M / $491k/ac)</td><td>TBV via broker — DO premium typical $25-35k/unit</td></tr>
+    <tr><td>OpEx</td><td>$10,950/unit/yr</td><td>FL tax $4k + insurance $2k + R&M/payroll/admin $4.95k</td></tr>
+    <tr><td>Financing + Closing</td><td>$3,500,000</td><td></td></tr>
+    <tr><td><strong>Total Development Cost</strong></td><td><strong>$68,052,040 ($237.1k/unit)</strong></td><td>Sum</td></tr>
+    <tr><td>Stabilized NOI (Y2)</td><td>$3,462,081</td><td>EGI $6.605M − OpEx $3.143M</td></tr>
+    <tr><td><strong>Yield on Cost</strong></td><td><strong>5.09%</strong></td><td>NOI / TDC</td></tr>
+    <tr><td>Exit cap rate (Hidden Gem mkt)</td><td>6.25%</td><td>Crestview tertiary FL Panhandle range 6.00-6.75%</td></tr>
+    <tr><td>Stabilized Value</td><td>$55,393,296</td><td>NOI / cap</td></tr>
+    <tr><td>Development Spread</td><td>(116) bps</td><td>Negative — typical for hidden-gem markets; basis is the lever</td></tr>
+  </table>
+
+  <h2 class="panel-sub">Scenario Analysis (HG-1)</h2>
+  <table class="simple">
+    <tr><th>Scenario</th><th>YoC</th><th>Stab Value</th><th>Spread</th><th>Lev. IRR</th><th>Verdict</th></tr>
+    <tr><td>BASE</td><td>5.09%</td><td>$55.4M</td><td>(116) bps</td><td>7.50%</td><td><span class="verdict conditional">CONDITIONAL</span></td></tr>
+    <tr><td>RECESSION</td><td>5.09%</td><td>$49.5M</td><td>(191) bps</td><td>4.20%</td><td><span class="verdict borderline">BORDERLINE</span></td></tr>
+    <tr><td>COST SPIKE (hard +12%)</td><td>4.68%</td><td>$55.4M</td><td>(157) bps</td><td>6.10%</td><td><span class="verdict borderline">BORDERLINE</span></td></tr>
+    <tr><td>LEASE-UP DELAY (+12mo, 7% vac)</td><td>4.91%</td><td>$53.5M</td><td>(134) bps</td><td>5.40%</td><td><span class="verdict borderline">BORDERLINE</span></td></tr>
+    <tr><td>INSURANCE 2x ($2k → $4k/u)</td><td>4.24%</td><td>$46.2M</td><td>(201) bps</td><td>5.10%</td><td><span class="verdict no">DOES NOT PENCIL</span></td></tr>
+    <tr><td>UPSIDE (rent +5%, land −20%)</td><td>5.70%</td><td>$60.8M</td><td>(55) bps</td><td>9.15%</td><td><span class="verdict proceed">PROCEED</span></td></tr>
+  </table>
+
+  <div class="card" style="border-left:4px solid #C00000">
+    <strong>INSURANCE 2x is the kill scenario.</strong> FL Panhandle named-storm exposure must be quantified BEFORE LOI. Insurance broker indication is gating.
+  </div>
+
+  <h2 class="panel-sub">Land-Basis Sensitivity (HG-1)</h2>
+  <p class="small">$28,000/unit is the recommended ceiling. Per playbook: a $2M swing in land changes YoC ~60 bps.</p>
+  <table class="simple">
+    <tr><th>Land $/unit</th><th>Total Land $</th><th>Land $/ac</th><th>YoC</th><th>Verdict</th></tr>
+    <tr><td>$15,000</td><td>$4,305,000</td><td>$294,863</td><td>5.31%</td><td>CONDITIONAL</td></tr>
+    <tr><td>$20,000</td><td>$5,740,000</td><td>$393,151</td><td>5.20%</td><td>CONDITIONAL</td></tr>
+    <tr><td>$25,000 (BASE)</td><td>$7,175,000</td><td>$491,438</td><td>5.09%</td><td>CONDITIONAL</td></tr>
+    <tr style="background:#fff3cd"><td><strong>$28,000 (CEILING)</strong></td><td><strong>$8,036,000</strong></td><td><strong>$550,411</strong></td><td><strong>5.02%</strong></td><td><strong>CONDITIONAL</strong></td></tr>
+    <tr><td>$30,000</td><td>$8,610,000</td><td>$589,726</td><td>4.98%</td><td>BORDERLINE</td></tr>
+    <tr><td>$35,000</td><td>$10,045,000</td><td>$688,014</td><td>4.88%</td><td>BORDERLINE</td></tr>
+    <tr><td>$40,000</td><td>$11,480,000</td><td>$786,301</td><td>4.78%</td><td>BORDERLINE</td></tr>
+  </table>
+
+  <h2 class="panel-sub">Validation Sequence (HG-1, must complete before LOI)</h2>
+  <ol class="tight">
+    <li><strong>Crexi listing broker call</strong> — confirm DO vesting, expiration, conditions of approval (CRITICAL)</li>
+    <li>Okaloosa County Planning — pull DO file + COA list (TIA, water/sewer)</li>
+    <li>Broker price discovery — set basis ceiling at $28k/unit</li>
+    <li>RealPage / CoStar Crestview-FWB Class A rent comps Q1 2026</li>
+    <li>Eglin AFB BAH stability + commute time validation</li>
+    <li>Two GC budgets on 287u garden plan</li>
+    <li><strong>Insurance indication</strong> — INSURANCE 2x is the kill scenario</li>
+    <li>FL property tax appraiser estimate</li>
+    <li>FEMA / wetlands desktop</li>
+    <li>Geotech borings + civil yield reconfirm</li>
+    <li>HUD 221(d)(4) and bank construction term sheets</li>
+  </ol>
+
+  <p class="small">All figures illustrative under stated assumptions. Rent and hard cost marked VALIDATE. FL property tax + insurance loads are punishing — never use generic OpEx ratios in FL underwriting. Land basis is a modeled placeholder; broker call for actual asking is gating.</p>
+</section>
+
+<!-- EXEC SUMMARY -->
+<section class="panel" id="exec">
+  <h1 class="panel-title">Executive Summary</h1>
+  <div class="card">
+    <h2 class="panel-sub">Top-line</h2>
+    <ul class="tight">
+      <li><strong>14 daily parcels</strong> surfaced (target 10-15) — 11 SE + 3 KY (Atlas state-scope expansion).</li>
+      <li><strong>5 Tier-A Hidden Gem parcels</strong> + 6 Tier-B market theses (4 SE + 1 KY).</li>
+      <li><strong>Brain dedup</strong>: all 16 parcels from 4/30 ledger excluded.</li>
+      <li><strong>Pro forma run #1</strong>: Rank 1 Charleston entitled 240u → <span class="verdict conditional">PROCEED (CONDITIONAL)</span>, 5.40% YoC.</li>
+      <li><strong>Pro forma run #2 (NEW today)</strong>: HG-1 Crestview FL DO 287u → <span class="verdict conditional">PROCEED (CONDITIONAL)</span>, 5.09% YoC. INSURANCE 2x scenario fails (4.24% — DOES NOT PENCIL).</li>
+      <li><strong>NEW today</strong>: KY-1 Bowling Green Sterling Business Park 19.69-ac RM-4 with 456-unit entitlement, $5.6M ($12,281/unit) — best-of-new daily entry, score 85.</li>
+    </ul>
+  </div>
+
+  <h2 class="panel-sub">Top 5 Daily Parcels (post-supplement)</h2>
+  <table class="simple">
+    <tr><th>#</th><th>Score</th><th>Market</th><th>Locator</th><th>Friction</th><th>Status</th></tr>
+    <tr><td>1</td><td>87</td><td>Charleston, SC</td><td>33-ac entitled MF site (240 units)</td><td>2/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>2 · KY</td><td>85</td><td>Bowling Green, KY (Warren Co.)</td><td>Sterling Business Park 19.69-ac RM-4 (456-unit approval)</td><td>2/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>3</td><td>84</td><td>Wilmington, NC (Leland)</td><td>18-ac Mallory Creek Land &amp; Timber</td><td>4/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>4</td><td>81</td><td>Lakeland, FL</td><td>Bridgewater Multifamily Land 32.96-ac</td><td>4/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>5</td><td>78</td><td>Wilmington, NC (Leland)</td><td>19.68-ac Brunswick site plan approval (180 units)</td><td>3/10</td><td><span class="pill green">GREEN</span></td></tr>
+  </table>
+
+  <h2 class="panel-sub">Top 5 Tier-A Hidden Gems (post-supplement)</h2>
+  <table class="simple">
+    <tr><th>#</th><th>Score</th><th>Market</th><th>Locator</th><th>Friction</th><th>Status</th></tr>
+    <tr><td>HG-1</td><td>91</td><td>Crestview, FL (Okaloosa County)</td><td>14.6-ac w/ Development Order — 287 units</td><td>2/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>HG-2</td><td>83</td><td>North Augusta, SC (Aiken County)</td><td>36.88-ac MF site adjoining Sweetwater Commons</td><td>3/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>HG-3 · KY</td><td>82</td><td>Elizabethtown / Glendale, KY (Hardin Co.)</td><td>76-ac BlueOval SK catchment</td><td>5/10</td><td><span class="pill green">GREEN</span></td></tr>
+    <tr><td>HG-4</td><td>79</td><td>Hickory, NC (Catawba County)</td><td>25.51-ac at I-40 exit 121 (3-parcel)</td><td>6/10</td><td><span class="pill amber">AMBER</span></td></tr>
+    <tr><td>HG-5</td><td>75</td><td>Tupelo, MS (Lee County)</td><td>14.7-ac N. Veterans Blvd × Hamm St</td><td>5/10</td><td><span class="pill amber">AMBER</span></td></tr>
+  </table>
+
+  <h2 class="panel-sub">Urgent Actions This Week</h2>
+  <ol class="tight">
+    <li><strong>HG-1 Crestview, FL</strong> — Crexi broker call IMMEDIATELY on 14.6-ac DO 287u. Confirm DO vesting + ask price. ALSO lock insurance broker indication (INSURANCE 2x scenario fails the deal).</li>
+    <li><strong>KY-1 Bowling Green</strong> — RE/MAX (Stephen Stucy) call on Sterling Business Park 19.69-ac RM-4 w/ 456-unit approval. Verify RM-4 vesting; pull Sterling covenants. Best new-entry today.</li>
+    <li><strong>Rank 1 Charleston</strong> — Crexi broker call on 33-ac entitled 240u. Confirm entitlement vesting; pull listing detail.</li>
+    <li><strong>HG-2 N. Augusta</strong> — Meybohm Commercial outreach on 36.88-ac at $49k/ac. Wetlands/SFHA confirmation.</li>
+    <li><strong>HG-3 (KY) Elizabethtown</strong> — Hardin County Planning pre-app on MF rezone for 25-30 ac carve-out from 76-ac BlueOval SK catchment tract.</li>
+    <li><strong>Brunswick County brokers</strong> — Rank 3 (Mallory Creek 18-ac) and Rank 5 (19.68-ac w/ site plan approval).</li>
+    <li><strong>DO NOT</strong> call Pensacola Rank 11 listing until desktop FEMA + NWI triage complete (per playbook).</li>
+  </ol>
+</section>
+
+<!-- COMP TRACKER -->
+<section class="panel" id="comp">
+  <h1 class="panel-title">Comp Tracker</h1>
+  <p class="small">Land sale benchmarks by market. Per playbook, basis check applied to every new parcel.</p>
+  <div class="table-wrap" id="grid-comp"></div>
+
+  <h2 class="panel-sub">Today's Basis Check Flags</h2>
+  <table class="simple">
+    <tr><th>Rank</th><th>Market</th><th>Asking $/Ac</th><th>Local Comps</th><th>Flag</th></tr>
+    <tr><td>1</td><td>Charleston, SC</td><td>$233k/ac</td><td>$200-280k/ac (entitled)</td><td>OK — within entitled range</td></tr>
+    <tr><td>5</td><td>Ocala, FL</td><td>$227k/ac</td><td>$120-230k/ac</td><td><span class="pill amber">FLAG — at upper bound</span></td></tr>
+    <tr><td>8</td><td>Tallahassee, FL</td><td>$185k/ac</td><td>$30-90k/ac (Tallahassee approved)</td><td><span class="pill red">FLAG — verify approval scope</span></td></tr>
+    <tr><td>11</td><td>Ocala, FL</td><td>$120k/ac</td><td>$120-230k/ac</td><td>OK — bottom of range</td></tr>
+  </table>
+</section>
+
+<!-- OUTREACH -->
+<section class="panel" id="out">
+  <h1 class="panel-title">Outreach</h1>
+  <p class="small">Active broker / owner outreach queue, prioritized.</p>
+  <div class="table-wrap" id="grid-out"></div>
+</section>
+
+<!-- DD CHECKLIST -->
+<section class="panel" id="dd">
+  <h1 class="panel-title">DD Checklist</h1>
+  <p class="small">60-90 day post-LOI due diligence sequence with cost estimates. Apply per pursued parcel.</p>
+  <div class="table-wrap" id="grid-dd"></div>
+  <div class="card">
+    <strong>Cost summary:</strong> Typical full-cycle DD spend $80-200k per pursued site (excludes counsel time on PSA negotiation). ~30% sunk by Week 4 (env + survey commitments). ~70% sunk by Week 10 (civil + GC pricing + insurance).
+  </div>
+</section>
+
+<!-- SUBMARKETS -->
+<section class="panel" id="sub">
+  <h1 class="panel-title">Submarket Fundamentals</h1>
+  <p class="small">Quarterly snapshot. Refresh weekly when material updates exist.</p>
+  <div class="table-wrap" id="grid-sub"></div>
+</section>
+
+<!-- CLIMATE -->
+<section class="panel" id="climate">
+  <h1 class="panel-title">Climate Risk</h1>
+  <p class="small">Per-parcel flood / wind / wildfire / heat scoring + insurance cost impact. Coastal FL/SC/NC/GA parcels carry $2,000/unit/yr default insurance and require INSURANCE 2x scenario in pro forma.</p>
+  <div class="table-wrap" id="grid-climate"></div>
+</section>
+
+<!-- PIPELINE -->
+<section class="panel" id="pipe">
+  <h1 class="panel-title">Pipeline Intel</h1>
+  <p class="small">Submarket-level units U/C + announced. Oversupply flag when ratio &gt;6 per 1k MSA pop AND MSA &lt;1M.</p>
+  <div class="table-wrap" id="grid-pipe"></div>
+  <div class="card">
+    <strong>Today's oversupply flags:</strong> Huntsville (6.3 per 1k, ~3,200 U/C) — discount rent assumption 5%; no Huntsville parcels surfaced today. Watch list: Wilmington (6.4), Savannah (6.7 — Hyundai absorption offset), Ocala (4.6).
+  </div>
+</section>
+
+<!-- OFF-MARKET -->
+<section class="panel" id="off">
+  <h1 class="panel-title">Off-Market Targets</h1>
+  <p class="small">Direct-to-owner pursuits. Use ORACLE_Off_Market_Outreach_Letter template (Templates tab).</p>
+  <div class="table-wrap" id="grid-off"></div>
+</section>
+
+<!-- CAPITAL MARKETS -->
+<section class="panel" id="cap">
+  <h1 class="panel-title">Capital Markets Context (Q2 2026 indicative)</h1>
+  <div class="card">
+    <h3 class="section-h">Construction Debt</h3>
+    <ul class="tight">
+      <li>Bank: SOFR + 200-275 bps, 60-65% LTC, full recourse during construction</li>
+      <li>Debt funds: SOFR + 350-450 bps, up to 75% LTC, lighter recourse</li>
+      <li>HUD 221(d)(4): all-in fixed ~5.50-6.25%, 40yr, 85% LTC</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 class="section-h">Permanent Debt</h3>
+    <ul class="tight">
+      <li>Agency 5yr ~5.40-5.75%, 7yr ~5.55-5.90%, 10yr ~5.65-6.00%</li>
+      <li>Life co 7-10yr ~5.50-6.00%, LTV 55-65%</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 class="section-h">Equity</h3>
+    <ul class="tight">
+      <li>Institutional LP target: 14-17% IRR / 1.6-1.9x EM net</li>
+      <li>Family office / HNW: 12-15% IRR / 1.5-1.8x EM acceptable</li>
+      <li>Promote: typically 20-30% over 8% pref</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 class="section-h">Cap Rate Indicative Ranges (Class A garden, stabilized)</h3>
+    <ul class="tight">
+      <li>Charleston / Wilmington / Greenville-Spartanburg: 5.25-5.75%</li>
+      <li>Knoxville / Chattanooga / Asheville: 5.25-5.75%</li>
+      <li>Huntsville (oversupplied): 5.50-6.25%</li>
+      <li>Tallahassee / Pensacola / Daytona / Lakeland / Ocala: 5.50-6.00%</li>
+      <li>Hidden Gem markets (Tupelo / Hattiesburg / Hickory / Crestview / Aiken): 6.00-6.75%</li>
+    </ul>
+  </div>
+</section>
+
+<!-- TEMPLATES -->
+<section class="panel" id="tmpl">
+  <h1 class="panel-title">Templates</h1>
+  <div class="card">
+    <h2 class="panel-sub">LOI Template</h2>
+    <p>Multifamily land acquisition LOI with 14 sections covering parties, property, price, EM deposit, inspection period, entitlements period, closing, financing contingency, title & survey, environmental, reps & warranties, confidentiality, brokerage, and exclusivity / standstill.</p>
+    <p>File: <span class="mono">_archive/ORACLE_LOI_Template_2026-05-01.docx</span></p>
+    <p class="small"><strong>Use:</strong> BOILERPLATE — counsel review and state-specific modifications required for any specific deal.</p>
+  </div>
+  <div class="card">
+    <h2 class="panel-sub">Off-Market Outreach Letter</h2>
+    <p>Direct-to-owner letter campaign template with mail-merge field guide. Includes opt-out language for compliance. Send certified mail.</p>
+    <p>File: <span class="mono">_archive/ORACLE_Off_Market_Outreach_Letter_2026-05-01.docx</span></p>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section class="panel" id="sys">
+  <h1 class="panel-title">System</h1>
+  <div class="card">
+    <h2 class="panel-sub">Run Metadata</h2>
+    <ul class="tight">
+      <li><strong>Run date:</strong> May 1, 2026 · <strong>Supplement applied:</strong> mid-day Atlas directive</li>
+      <li><strong>Operator:</strong> Atlas / Neyland</li>
+      <li><strong>Oracle config version:</strong> 2.2 (bumped from 2.1 to add KY focus markets)</li>
+      <li><strong>Brain version:</strong> 1.0</li>
+      <li><strong>Markets covered:</strong> 21 (18 SE primary + 3 KY supplement: Lexington, Bowling Green, Elizabethtown)</li>
+      <li><strong>Parcels surfaced:</strong> 14 daily (11 SE + 3 KY) + 5 Tier-A HG (4 SE + 1 KY) + 6 Tier-B theses</li>
+      <li><strong>Brain dedup:</strong> 16 parcels from 4/30 excluded</li>
+      <li><strong>Sources:</strong> LoopNet, Crexi, LandWatch, LandSearch, Land.com, Land &amp; Farm, Homes.com, RE/MAX, Zillow, Zoneomics (LFUCG zoning), local press, brokerage market commentary</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2 class="panel-sub">Auto-triggers Applied</h2>
+    <ul class="tight">
+      <li>Comp basis check: Rank 5 (Ocala) flagged at upper bound; Rank 8 (Tallahassee) flagged above local approved-PUD range.</li>
+      <li>Pipeline oversupply: Huntsville MSA flagged YES — no Huntsville parcels in today's report.</li>
+      <li>Climate insurance: Charleston, Wilmington, Pensacola, Daytona, Crestview parcels carry $2,000/unit/yr default insurance.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2 class="panel-sub">Files in this run</h2>
+    <p><strong>Dashboard (this file):</strong> <span class="mono">2026-05-01/ORACLE_Dashboard_2026-05-01.html</span> (refreshed by 2026-05-01 supplement)</p>
+    <p><strong>Archive folder:</strong> <span class="mono">2026-05-01/_archive/</span> (18 source files + 2 supplement files)</p>
+    <p><strong>Supplement files added today:</strong></p>
+    <ul class="tight">
+      <li><span class="mono">_archive/ORACLE_HG_Pro_Forma_2026-05-01.xlsx</span> — Crestview FL HG-1 pro forma (formula-driven; 7 sheets including land-basis sensitivity and validation sequence)</li>
+      <li><span class="mono">_archive/ORACLE_HG_Pro_Forma_2026-05-01.docx</span> — Crestview FL HG-1 narrative pro forma</li>
+      <li><span class="mono">_archive/ORACLE_KY_Supplement_2026-05-01.xlsx</span> — Kentucky daily parcels (3) + hidden gem (1) + market intel</li>
+    </ul>
+    <p class="small">Source files preserved in _archive for editing, broker sharing, and counsel review.</p>
+  </div>
+  <div class="card">
+    <h2 class="panel-sub">Atlas Directive Applied (2026-05-01 supplement)</h2>
+    <ul class="tight">
+      <li><strong>State scope:</strong> TN, GA, SC, NC, FL, KY, AL — KY added; MS retained for hidden-gem coverage</li>
+      <li><strong>Pro forma:</strong> #1 Hidden Gem (Crestview FL DO 287u) added — BASE 5.09% YoC PROCEED (CONDITIONAL)</li>
+      <li><strong>Config v2.2:</strong> Added <span class="mono">focus_states_whitelist</span>, Lexington/Bowling Green to primary markets, Elizabethtown/Owensboro/Paducah/Richmond/Murray to hidden gems, <span class="mono">pro_forma_on_top_hidden_gem: true</span> behavior toggle</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2 class="panel-sub">Honesty Notice</h2>
+    <p>TBV = To Be Verified. Per Oracle behavior config, owner names, parcel IDs (PINs), phone numbers, and asking prices are <strong>never fabricated</strong>. Where these fields are TBV, broker call or assessor lookup is required to confirm.</p>
+    <p>Inventory caveat: 11 parcels meet today's base criteria. Per playbook, we do not pad to hit 15. Inventory in the SE Sun Belt and FL/Carolinas is currently constrained for 200+ unit-capable sites at attractive basis.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="footer">
+  ORACLE Dashboard · Generated May 1, 2026 · Neyland Development
+</div>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('nav.tabs .tab');
+  const panels = document.querySelectorAll('section.panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    window.scrollTo(0, 0);
+  }));
+
+  // Grid.js initialization
+  function makeGrid(elemId, columns, data, search=true) {
+    if (!document.getElementById(elemId)) return;
+    new gridjs.Grid({
+      columns: columns,
+      data: data,
+      search: search,
+      sort: true,
+      pagination: { enabled: true, limit: 25 },
+      style: { table: { 'font-size': '12px' } }
+    }).render(document.getElementById(elemId));
+  }
+
+  const dailyData = [["1", "87", "GREEN", "Charleston, SC", "33-ac entitled MF site (240 units)", "33.00", "Entitled MF (240 units)", "$7,700,000", "240", "2/10", "Pull Crexi listing detail; broker call; verify entitlement vesting; FEMA desktop"], ["KY-1 (#2)", "85", "GREEN", "Bowling Green, KY (Warren Co.)", "Sterling Business Park 19.69-ac Lot 7 RM-4 (456-unit approval)", "19.69", "RM-4 (entitled 456 units)", "$5,600,000", "456", "2/10", "Brokerage call (Stephen Stucy / RE/MAX); verify RM-4 vesting; pull Sterling covenants"], ["3", "84", "GREEN", "Wilmington, NC (Leland)", "18-ac Mallory Creek Land & Timber", "18.00", "Brunswick County (verify by-right MF density)", "TBV", "288", "4/10", "Broker call to confirm price & current zoning; pre-app meeting on stormwater capacity"], ["4", "81", "GREEN", "Lakeland, FL", "Bridgewater Multifamily Land 32.96-ac", "32.96", "MF (verify density cap \u2014 Lakeland '<10 du/ac' pattern is a risk)", "TBV", "250", "4/10", "Confirm density cap with City of Lakeland Planning; comp the basis vs. recent N. Lakeland MF land"], ["5", "78", "GREEN", "Wilmington, NC (Leland)", "19.68-ac Brunswick site plan approval (180 units)", "19.68", "Site plan approved \u2014 180 units", "TBV", "180", "3/10", "Confirm site plan vesting; broker price discovery; assess 200-unit upzone via add'l acreage"], ["KY-2 (#6)", "78", "GREEN", "Lexington-Fayette, KY", "15.32-ac Lexington land tract", "15.32", "TBV (LFUCG R-4/R-5 medium/high density possible)", "$3,336,696", "200", "5/10", "Crexi broker call to confirm address & zoning; verify R-4/R-5 density"], ["7", "76", "AMBER", "Ocala, FL (Marion County)", "22-ac MF land", "22.00", "MF (verify density)", "$5,000,000", "264", "4/10", "Comp $/acre vs. last 12mo Marion MF land sales; FDOT access permit triage"], ["8", "74", "AMBER", "Greenville-Spartanburg, SC", "19.82-ac Roebuck/Walnut Grove site", "19.82", "TBV (regional R-M20 noted; verify per-parcel)", "TBV", "240", "5/10", "Spartanburg County Planning pre-app on density allowance; sewer extension cost estimate"], ["9", "72", "AMBER", "Gainesville, FL (Alachua County)", "24.11-ac SW 62nd Avenue", "24.11", "Low Density Residential (1-4 du/ac) \u2014 RZ required", "TBV", "240", "7/10", "Pre-app w/ Alachua County Growth Management; do NOT LOI without comp plan amendment likelihood call"], ["10", "70", "AMBER", "Tallahassee, FL (Leon County)", "13.49-ac approved 55,000 SF", "13.49", "Approved for 55,000 SF (likely commercial \u2014 verify MF allowance)", "$2,500,000", "200", "6/10", "Verify approval scope (commercial vs. MF); city pre-app on conversion to MF entitlement"], ["11", "67", "AMBER", "Pensacola, FL (Escambia County)", "22.5-ac TBV parcel", "22.50", "TBV", "TBV", "200", "6/10", "Desktop FEMA + NWI on parcel coordinates; if clean, broker call"], ["12", "65", "AMBER", "Daytona Beach, FL (Volusia County)", "32114 ZIP MFR-20 parcel (29 du/ac allowed)", "8.50", "MFR-20 (29 du/ac)", "TBV", "200", "5/10", "Confirm exact street; FEMA pull; assess wrap-style 4-story design feasibility"], ["13", "64", "AMBER", "Owensboro, KY (Daviess Co.)", "16.98-ac commercial lot Owensboro", "16.98", "Commercial (verify MF allowance)", "TBV", "150 (borderline)", "6/10", "Pre-app w/ City of Owensboro Planning on MF density"], ["14", "62", "AMBER", "Ocala, FL (Marion County)", "13.11-ac MF land", "13.11", "MF (TBV density)", "$1,572,000", "156", "4/10", "Comp $/acre vs. recent Marion sales; assess if 14 du/ac rezone gets above 180 units"]];
+  makeGrid('grid-daily', ['Rank','Score','Status','Market','Locator','Acres','Zoning','Asking','Units','Friction','Next Step'], dailyData);
+
+  const hgData = [["HG-1", "91", "GREEN", "Crestview, FL (Okaloosa County)", "14.6-ac w/ Development Order \u2014 287 units", "14.60", "Development Order issued \u2014 287 units", "TBV \u2014 broker call", "287", "2/10", "Broker call IMMEDIATELY; verify DO expiration; pull Okaloosa County conditions of approval"], ["HG-2", "83", "GREEN", "North Augusta, SC (Aiken County)", "36.88-ac MF site adjoining Sweetwater Commons", "36.88", "MF (Meybohm Commercial listing)", "$1,807,120 ($49,000/ac listed)", "400", "3/10", "Meybohm broker call; pull Aiken County GIS for wetlands/floodplain; rent comps from Sweetwater Commons cottages"], ["HG-3 (NEW \u00b7 KY)", "82", "GREEN", "Elizabethtown / Glendale, KY (Hardin Co.)", "76-ac at 1832 New Glendale Rd \u2014 BlueOval SK catchment", "76.00", "TBV (rezone needed; carve-out)", "$4,000,000 ($52,632/ac)", "300 (carve-out)", "5/10", "Hardin County Planning pre-app on MF rezone for 25-30 ac carve-out; broker call; SF/mixed-use partner"], ["HG-4", "79", "AMBER", "Hickory, NC (Catawba County)", "25.51-ac at I-40 exit 121 (3-parcel)", "25.51", "TBV (rezone needed)", "TBV", "250", "6/10", "Catawba County pre-app; confirm assemblage intact; DOT noise study cost estimate"], ["HG-5", "75", "AMBER", "Tupelo, MS (Lee County)", "14.7-ac N. Veterans Blvd \u00d7 Hamm St", "14.70", "MUCC (~7.7 ac) + MDR (~7 ac)", "TBV", "200", "5/10", "Confirm MF density allowance across both zones; broker call; comp Toyota MS supplier housing pipeline"]];
+  makeGrid('grid-hg', ['Rank','Score','Status','Market','Locator','Acres','Zoning','Asking','Units','Friction','Next Step'], hgData);
+
+  const compData = [["Bowling Green, KY", "Land \u2014 entitled MF (RM-4)", "10-25 ac", "$150-300k/ac", "2026-Q1", "Land.com / RE/MAX (RA20233019)"], ["Lexington-Fayette, KY", "Land \u2014 MF zoned (R-4/R-5)", "10-25 ac", "$150-275k/ac", "2026-Q1", "Crexi (TBV)"], ["Elizabethtown / Hardin Co., KY", "Land \u2014 large tract (rezone)", "30-100 ac", "$30-80k/ac", "2026-Q1", "LandSearch (TBV)"], ["Charleston, SC", "Land \u2014 entitled MF", "20-40 ac", "$200-280k/ac", "2025-Q4", "Crexi/CoStar (TBV)"], ["Charleston, SC", "Land \u2014 un-entitled", "15-30 ac", "$120-180k/ac", "2025-Q4", "Crexi/CoStar (TBV)"], ["Wilmington, NC", "Land \u2014 Brunswick County MF", "15-25 ac", "$80-150k/ac", "2025-Q4", "Crexi/Commercial Exchange (TBV)"], ["Wilmington, NC", "Land \u2014 New Hanover", "10-20 ac", "$200-350k/ac", "2025-Q4", "Crexi (TBV)"], ["Ocala, FL", "Land \u2014 MF zoned", "15-25 ac", "$120-230k/ac", "2026-Q1", "Crexi (TBV)"], ["Lakeland, FL", "Land \u2014 MF zoned", "20-35 ac", "$130-220k/ac", "2025-Q4", "LandFlip (TBV)"], ["Greenville-Spartanburg, SC", "Land \u2014 RM20", "15-25 ac", "$80-160k/ac", "2025-Q4", "Metcalf Land (TBV)"], ["Gainesville, FL", "Land \u2014 MF/LDR", "20-30 ac", "$60-180k/ac", "2025-Q4", "Homes.com / local broker (TBV)"], ["Tallahassee, FL", "Land \u2014 Approved PUD", "10-30 ac", "$30-90k/ac", "2025-Q4", "Crexi (TBV)"], ["Pensacola, FL", "Land \u2014 MF", "15-25 ac", "$15-100k/ac (wide range, env risk)", "2025-Q4", "LandWatch (TBV)"], ["Daytona Beach, FL", "Land \u2014 MFR-20/40", "5-15 ac", "$200-400k/ac", "2025-Q4", "Crexi (TBV)"], ["North Augusta, SC", "Land \u2014 MF", "20-40 ac", "$40-120k/ac", "2025-Q4", "Meybohm Commercial (TBV)"], ["Hickory, NC", "Land \u2014 MF/Comm rezone", "15-30 ac", "$50-130k/ac", "2025-Q4", "National Land Realty (TBV)"], ["Crestview, FL", "Land \u2014 MF entitled", "10-20 ac", "$150-280k/ac", "2025-Q4", "Crexi (TBV)"], ["Tupelo, MS", "Land \u2014 MUCC/MDR", "10-20 ac", "$40-110k/ac", "2025-Q4", "LoopNet/local (TBV)"], ["Owensboro, KY", "Land \u2014 Commercial / MF", "10-20 ac", "$50-110k/ac", "2026-Q1", "Crexi/LoopNet (TBV)"]];
+  makeGrid('grid-comp', ['Market','Type','Size','Trade Range','Date','Source'], compData);
+
+  const outData = [["URGENT", "HG-1 Crestview 14.6-ac DO 287u", "Crexi Okaloosa listing broker (TBV name)", "Crexi message + phone", "Confirm DO vesting; ask price; gauge competing interest; lock insurance indication", "2026-05-04"], ["URGENT", "KY-1 Bowling Green Sterling Business Park 19.69-ac RM-4 456u", "Stephen Stucy / RE/MAX (Sterling listing)", "Phone (RA20233019)", "Verify RM-4 vesting; confirm 456-unit approval current; pull Sterling covenants", "2026-05-04"], ["HIGH", "Rank 1 Charleston 33-ac 240u", "Crexi listing broker (TBV name)", "Crexi + phone", "Confirm entitlement vesting; access listing detail", "2026-05-04"], ["HIGH", "Rank 3 Leland 18-ac Mallory Creek", "Brunswick County land brokers (TBV)", "Phone + email", "Price discovery; pre-app appetite for stormwater", "2026-05-06"], ["HIGH", "HG-2 N. Augusta 36.88-ac", "Meybohm Commercial (TBV agent)", "Phone", "Wetlands/SFHA status; recent comps; basis flexibility", "2026-05-06"], ["HIGH", "HG-3 (KY) Elizabethtown 76-ac BlueOval SK", "LandSearch listing broker (TBV)", "Phone + email", "Hardin County rezone appetite; sewer extension cost; SF/MF carve-out partner", "2026-05-06"], ["MED", "KY-2 Lexington 15.32-ac", "Crexi listing broker (TBV)", "Crexi message", "Confirm address + zoning (R-4/R-5); basis vs. Lexington comps", "2026-05-08"], ["MED", "Rank 4 Lakeland Bridgewater 32.96-ac", "LandFlip listing / local Polk broker (TBV)", "Listing inquiry", "Confirm density cap; basis", "2026-05-08"], ["MED", "Rank 7 Ocala 22-ac", "Crexi listing broker (TBV)", "Crexi message", "Confirm utility availability; FDOT access plan", "2026-05-08"], ["MED", "HG-4 Hickory 25.51-ac", "National Land Realty (TBV)", "Phone", "Assemblage status; rezone history; basis", "2026-05-08"], ["LOW", "Rank 11 Pensacola 22.5-ac", "LandWatch listing (TBV)", "Email after FEMA triage", "DO NOT call until env triage complete", "2026-05-15"]];
+  makeGrid('grid-out', ['Priority','Parcel','Contact','Channel','Purpose','Deadline'], outData);
+
+  const ddData = [["Week 1-2 (post-LOI)", "Title commitment ordered", "Counsel", "$3-5k", "Pending"], ["Week 1-2", "ALTA Survey (boundary + topo)", "Surveyor", "$10-25k", "Pending"], ["Week 1-2", "Phase I ESA", "Env consultant", "$3-6k", "Pending"], ["Week 2-4", "Geotech borings", "Geotech firm", "$8-20k", "Pending"], ["Week 2-4", "Wetlands delineation", "Env consultant", "$5-12k", "Pending"], ["Week 2-4", "Utility availability letter (water/sewer/gas/elec)", "Civil engineer", "$2-5k", "Pending"], ["Week 3-6", "Civil concept site plan + density yield study", "Civil engineer", "$15-40k", "Pending"], ["Week 3-6", "TIA / traffic study (if required)", "Traffic engineer", "$15-50k", "Pending"], ["Week 4-8", "FEMA / floodplain mapping confirmation", "Civil engineer", "$1-3k", "Pending"], ["Week 4-8", "Property tax appraiser estimate (FL/SC)", "Tax counsel", "$2-5k", "Pending"], ["Week 4-8", "Insurance indication (named storm + WC)", "Insurance broker", "$0", "Pending"], ["Week 6-10", "GC pricing \u2014 2 budgets", "GCs", "$0", "Pending"], ["Week 6-10", "Rent comp validation (RealPage/CoStar pull)", "Mkt research", "$1-3k", "Pending"], ["Week 8-12", "Pre-application meeting w/ planning dept", "Civil + counsel", "$0-3k", "Pending"], ["Week 8-12", "Lender term sheets (2 minimum)", "Cap markets", "$0", "Pending"], ["Week 10-14", "Final pro forma + IC memo", "Acquisitions", "$0", "Pending"]];
+  makeGrid('grid-dd', ['Phase','Task','Owner','Cost Est.','Status'], ddData);
+
+  const subData = [["Charleston, SC", "830k", "7.2%", "+2.8%", "~3,400", "~2,900", "+1.9%", "Boeing/Volvo + port + tourism"], ["Wilmington, NC", "295k", "8.1%", "+1.4%", "~1,900", "~1,400", "+1.3%", "Healthcare + UNC-W + port"], ["Greenville-Spartanburg, SC", "950k", "8.6%", "+1.2%", "~4,100", "~2,800", "+1.7%", "BMW + Michelin + advanced mfg"], ["Charlotte/Hickory hinge", "365k (Hickory)", "7.9%", "+2.1%", "~600", "~720", "+1.4%", "Fiber optics + EV components"], ["Knoxville, TN", "920k", "7.4%", "+2.4%", "~3,200", "~2,600", "+1.5%", "Univ TN + ORNL + healthcare"], ["Chattanooga, TN", "575k", "8.0%", "+1.8%", "~2,400", "~1,900", "+1.5%", "VW + Amazon + healthcare"], ["Asheville, NC", "475k", "5.9%", "+3.2%", "~900", "~830", "+1.1%", "Tourism + Mission Health"], ["Huntsville, AL", "510k", "10.4%", "-0.8%", "~3,200", "~2,100", "+2.3%", "Defense/aerospace (oversupply now)"], ["Augusta, GA", "615k", "8.4%", "+1.6%", "~2,000", "~1,500", "+1.3%", "Cyber/medical + Plant Vogtle"], ["Savannah, GA", "415k", "9.1%", "+1.0%", "~2,800", "~2,100", "+2.7%", "Hyundai Metaplant + port"], ["Columbia, SC", "850k", "8.7%", "+1.5%", "~2,400", "~1,900", "+1.2%", "USC + state govt + Ft. Jackson"], ["Lakeland, FL", "775k", "8.9%", "+1.3%", "~3,100", "~2,400", "+2.0%", "I-4 Amazon/distribution"], ["Ocala, FL", "395k", "8.3%", "+1.9%", "~1,800", "~1,500", "+1.8%", "FedEx/Amazon distribution + Villages spillover"], ["Daytona Beach, FL", "565k", "8.6%", "+1.7%", "~1,700", "~1,300", "+1.5%", "I-4 corridor + tourism + Embry-Riddle"], ["Tallahassee, FL", "395k", "8.5%", "+1.1%", "~1,500", "~1,200", "+0.9%", "FSU/FAMU + state govt"], ["Pensacola, FL", "510k", "9.3%", "+0.8%", "~1,700", "~1,250", "+1.4%", "NAS Pensacola + healthcare + tourism"], ["Gainesville, FL", "345k", "5.4%", "+2.6%", "~1,400", "~1,300", "+1.0%", "UF + UF Health"], ["Crestview/FWB, FL", "315k", "7.8%", "+1.5%", "~900", "~810", "+1.6%", "Eglin AFB + tourism + retirement"], ["Lexington-Fayette, KY", "520k", "7.5%", "+2.4%", "~1,800", "~1,400", "+1.6%", "UK + Toyota Mfg + UK Healthcare"], ["Bowling Green, KY", "180k", "7.0%", "+1.8%", "~650", "~520", "+1.4%", "WKU + GM Corvette + Fruit of the Loom"], ["Elizabethtown / Hardin Co., KY", "155k", "6.8%", "+1.5%", "~350", "~290", "+2.6%", "BlueOval SK ($6B Ford battery) + Ft. Knox"], ["Owensboro, KY", "120k", "7.5%", "+1.0%", "~200", "~170", "+0.8%", "Manufacturing + healthcare"]];
+  makeGrid('grid-sub', ['Market','MSA Pop','Vacancy','Rent Growth YoY','U/C Units','TTM Absorption','Job Growth','Key Driver'], subData);
+
+  const climateData = [["1", "Charleston, SC", "33-ac entitled MF site (240 units)", "HIGH", "HIGH", "LOW", "MED", "$2,000", "YES"], ["2", "Wilmington, NC (Leland)", "18-ac Mallory Creek Land & Timber", "HIGH", "HIGH", "LOW", "MED", "$2,000", "YES"], ["3", "Lakeland, FL", "Bridgewater Multifamily Land 32.96-ac", "MED", "MED", "LOW", "HIGH", "$1,500", "NO"], ["4", "Wilmington, NC (Leland)", "19.68-ac Brunswick site plan approval (180 units)", "HIGH", "HIGH", "LOW", "MED", "$2,000", "YES"], ["5", "Ocala, FL (Marion County)", "22-ac MF land", "MED", "MED", "LOW", "HIGH", "$1,500", "NO"], ["6", "Greenville-Spartanburg, SC", "19.82-ac Roebuck/Walnut Grove site", "LOW", "LOW", "LOW", "MED", "$1,100", "NO"], ["7", "Gainesville, FL (Alachua County)", "24.11-ac SW 62nd Avenue", "MED", "LOW", "LOW", "HIGH", "$1,500", "NO"], ["8", "Tallahassee, FL (Leon County)", "13.49-ac approved 55,000 SF", "MED", "MED", "LOW", "HIGH", "$1,500", "NO"], ["9", "Pensacola, FL (Escambia County)", "22.5-ac TBV parcel", "HIGH", "HIGH", "LOW", "HIGH", "$2,000", "YES"], ["10", "Daytona Beach, FL (Volusia County)", "32114 ZIP MFR-20 parcel (29 du/ac allowed)", "HIGH", "HIGH", "LOW", "HIGH", "$2,000", "YES"], ["11", "Ocala, FL (Marion County)", "13.11-ac MF land", "MED", "MED", "LOW", "HIGH", "$1,500", "NO"], ["HG-1", "Crestview, FL (Okaloosa County)", "14.6-ac w/ Development Order \u2014 287 units", "HIGH", "HIGH", "LOW", "HIGH", "$2,000", "YES"], ["HG-2", "North Augusta, SC (Aiken County)", "36.88-ac MF site adjoining Sweetwater Commons", "MED", "LOW", "LOW", "HIGH", "$1,500", "NO"], ["HG-3 (KY)", "Elizabethtown / Glendale, KY (Hardin Co.)", "76-ac at 1832 New Glendale Rd", "LOW", "LOW", "LOW", "MED", "$1,100", "NO"], ["HG-4", "Hickory, NC (Catawba County)", "25.51-ac at I-40 exit 121 (3-parcel)", "LOW", "LOW", "LOW", "MED", "$1,100", "NO"], ["HG-5", "Tupelo, MS (Lee County)", "14.7-ac N. Veterans Blvd \u00d7 Hamm St", "LOW", "LOW", "LOW", "HIGH", "$1,100", "NO"], ["KY-1", "Bowling Green, KY (Warren County)", "Sterling Business Park 19.69-ac RM-4 (456 units)", "LOW", "LOW", "LOW", "MED", "$1,100", "NO"], ["KY-2", "Lexington-Fayette, KY", "15.32-ac Lexington land tract", "LOW", "LOW", "LOW", "MED", "$1,100", "NO"], ["KY-3", "Owensboro, KY (Daviess County)", "16.98-ac commercial lot", "LOW", "LOW", "LOW", "MED", "$1,100", "NO"]];
+  makeGrid('grid-climate', ['Rank','Market','Locator','Flood','Wind','Wildfire','Heat','Insurance $/u/y','2x Required'], climateData);
+
+  const pipeData = [["Charleston MSA", "3,400", "1,800", "830k", "4.1 per 1k pop", "NO"], ["Wilmington MSA", "1,900", "1,200", "295k", "6.4 per 1k pop", "WATCH"], ["Greenville-Spartanburg", "4,100", "2,400", "950k", "4.3 per 1k pop", "NO"], ["Knoxville MSA", "3,200", "1,600", "920k", "3.5 per 1k pop", "NO"], ["Chattanooga MSA", "2,400", "1,300", "575k", "4.2 per 1k pop", "NO"], ["Huntsville MSA", "3,200", "1,400", "510k", "6.3 per 1k pop", "YES \u2014 discount rent 5%"], ["Augusta MSA", "2,000", "900", "615k", "3.3 per 1k pop", "NO"], ["Savannah MSA", "2,800", "2,100", "415k", "6.7 per 1k pop", "WATCH (Hyundai absorption offset)"], ["Columbia MSA", "2,400", "1,200", "850k", "2.8 per 1k pop", "NO"], ["Lakeland MSA", "3,100", "1,800", "775k", "4.0 per 1k pop", "NO"], ["Ocala MSA", "1,800", "1,000", "395k", "4.6 per 1k pop", "WATCH"], ["Daytona MSA", "1,700", "900", "565k", "3.0 per 1k pop", "NO"], ["Tallahassee MSA", "1,500", "700", "395k", "3.8 per 1k pop", "NO"], ["Pensacola MSA", "1,700", "1,000", "510k", "3.3 per 1k pop", "NO"], ["Gainesville MSA", "1,400", "800", "345k", "4.1 per 1k pop", "NO"], ["Hickory MSA", "600", "350", "365k", "1.6 per 1k pop", "NO"], ["Crestview/FWB MSA", "900", "500", "315k", "2.9 per 1k pop", "NO"], ["Tupelo MSA", "200", "150", "170k", "1.2 per 1k pop", "NO \u2014 first mover"], ["Lexington-Fayette MSA", "1,800", "950", "520k", "3.5 per 1k pop", "NO"], ["Bowling Green MSA", "650", "400", "180k", "3.6 per 1k pop", "NO"], ["Elizabethtown MSA", "350", "200", "155k", "2.3 per 1k pop", "NO \u2014 BlueOval SK demand catalyst"], ["Owensboro MSA", "200", "120", "120k", "1.7 per 1k pop", "NO"]];
+  makeGrid('grid-pipe', ['Market','U/C Units','Announced','MSA Pop','Ratio','Oversupply Flag'], pipeData);
+
+  const offData = [["Charleston, SC", "Owners of 30+ ac MF-zoned tracts in N. Charleston outside Joint Base", "Charleston basis at $200-280k/ac on entitled \u2014 assembling un-entitled is the basis play", "Direct-to-owner letter via assessor pull"], ["Auburn-Opelika, AL", "105-ac OZ gateway corridor (US-280 W) owner", "OZ + Tiger Town adjacency = institutional-grade basis", "Summit Commercial broker introduction"], ["Crestview, FL", "Owners of 10-25 ac parcels w/in 1mi of I-10 / Eglin commute corridor", "BAH-tied demand persistent; HG-1 listing validates", "Okaloosa County GIS pull \u2192 letter campaign"], ["Statesboro, GA", "Owners w/in 2mi of Hyundai-influenced I-16 Gateway annexation zone (un-listed)", "Yesterday's HG-1 & HG-2 are listed; off-market basis discount achievable", "Bulloch County GIS + city annexation map overlay"], ["Tupelo, MS", "10-25 ac MUCC/MDR parcels along Veterans Blvd / North Gloster", "First-mover advantage; no institutional pipeline tracking", "Lee County assessor pull \u2192 mail-merge"], ["Hickory, NC", "Larger landowners adjacent to I-40 exits 121-130 (Mountain View / Conover)", "Lowest-basis NC market with real jobs story", "Catawba County GIS + National Land Realty intro"]];
+  makeGrid('grid-off', ['Market','Target','Rationale','Approach'], offData);
+
+  const scenarioData = [["BASE", "5.40%", "$63.3M", "-10 bps", "8.52%", "1.65x", "PROCEED (CONDITIONAL)"], ["RECESSION", "5.40%", "$55.7M", "-85 bps", "5.18%", "1.32x", "BORDERLINE"], ["COST SPIKE", "4.92%", "$63.3M", "-58 bps", "6.71%", "1.41x", "BORDERLINE"], ["LEASE-UP DELAY", "5.01%", "$63.3M", "-49 bps", "6.98%", "1.49x", "CONDITIONAL"], ["INSURANCE 2x", "5.03%", "$63.3M", "-47 bps", "7.12%", "1.51x", "CONDITIONAL"], ["UPSIDE", "5.93%", "$67.8M", "+43 bps", "9.78%", "1.84x", "PROCEED"]];
+  makeGrid('grid-scenarios', ['Scenario','YoC','Stabilized Value','Spread','Lev. IRR','EM','Verdict'], scenarioData, false);
+</script>
+
+</body>
+</html>
