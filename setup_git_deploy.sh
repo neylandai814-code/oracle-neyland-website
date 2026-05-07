@@ -64,22 +64,26 @@ fi
 REMOTE_URL_HTTPS="https://github.com/${GH_USER}/${GH_REPO}.git"
 REMOTE_URL_AUTH="https://${GH_USER}:${GH_PAT}@github.com/${GH_USER}/${GH_REPO}.git"
 
-# Step 2: write PAT to credentials file (mode 600, gitignored)
-# Note: git config --local must wait until after `git init` (Step 3).
+# Step 2: keep a backup of the PAT outside .git/ (mode 600, gitignored)
+# This lets you re-init the repo later without having to regenerate the token.
+# It is NOT used by git directly — git reads the embedded URL from .git/config.
 echo
-echo "Step 2/4: Write credentials file"
+echo "Step 2/4: Save PAT backup file"
 echo "https://${GH_USER}:${GH_PAT}@github.com" > .git-credentials
 chmod 600 .git-credentials
-echo "  ✓ Credentials stored at ./.git-credentials (mode 600, gitignored)"
+echo "  ✓ PAT saved to ./.git-credentials (mode 600, gitignored)"
 
 # Make sure .git-credentials is in .gitignore (so we never push the PAT itself)
 if ! grep -q "^\.git-credentials$" .gitignore 2>/dev/null; then
   echo ".git-credentials" >> .gitignore
 fi
 
-# Step 3: init repo (idempotent), connect remote, configure credential helper
+# Step 3: init repo (idempotent) and connect remote with embedded PAT
+# Embedding the PAT in the remote URL avoids credential-helper parsing issues
+# when the repo path contains spaces (like "Oracle Reports"). The PAT lives
+# in .git/config which is local-only — it is never pushed to GitHub.
 echo
-echo "Step 3/4: Initialize repo + connect remote + wire credentials"
+echo "Step 3/4: Initialize repo + connect authenticated remote"
 if [[ ! -d ".git" ]]; then
   # Older git (<2.28) doesn't support `git init -b main`; fall back gracefully.
   git init >/dev/null 2>&1
@@ -89,17 +93,18 @@ else
   echo "  ✓ already a git repo"
 fi
 
-# Now that .git exists, --local works
-git config credential.helper "store --file=$(pwd)/.git-credentials"
-echo "  ✓ credential.helper -> store --file=./.git-credentials"
-
 if git remote get-url origin >/dev/null 2>&1; then
-  git remote set-url origin "$REMOTE_URL_HTTPS"
-  echo "  ✓ origin remote updated to $REMOTE_URL_HTTPS"
+  git remote set-url origin "$REMOTE_URL_AUTH"
+  echo "  ✓ origin remote updated (PAT embedded in .git/config — local-only)"
 else
-  git remote add origin "$REMOTE_URL_HTTPS"
-  echo "  ✓ origin remote added: $REMOTE_URL_HTTPS"
+  git remote add origin "$REMOTE_URL_AUTH"
+  echo "  ✓ origin remote added (PAT embedded in .git/config — local-only)"
 fi
+
+# Clear any stale credential.helper config left behind by a prior failed run.
+# (Old versions of this script tried `store --file=$(pwd)/.git-credentials`
+# which breaks when the path contains spaces, like "Oracle Reports".)
+git config --unset credential.helper 2>/dev/null || true
 
 # Set Oracle Bot identity locally so scheduled-task pushes don't require
 # a global git user.name/user.email.
