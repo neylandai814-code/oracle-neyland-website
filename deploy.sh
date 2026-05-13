@@ -54,9 +54,16 @@ fi
 # Step 2: Detect mode
 # ----------------------------------------------------------------------------
 GIT_OK=0
+GIT_BLOCKED_REASON=""
 if [[ -d ".git" ]]; then
   if git -C . config --get remote.origin.url >/dev/null 2>&1; then
-    GIT_OK=1
+    # Detect stale lock files left behind by a crashed sandbox process — these
+    # cannot always be removed from inside the sandbox (see Run #11 / #12 history).
+    if [[ -f ".git/HEAD.lock" ]] || [[ -f ".git/index.lock" ]]; then
+      GIT_BLOCKED_REASON="stale lock file present (.git/HEAD.lock or .git/index.lock); git mode unusable"
+    else
+      GIT_OK=1
+    fi
   fi
 fi
 
@@ -89,6 +96,9 @@ else
   echo "  - vercel CLI + token (run ./setup_token_deploy.sh), OR" >&2
   echo "  - global vercel CLI + interactive login on this host" >&2
   exit 1
+fi
+if [[ -n "$GIT_BLOCKED_REASON" ]]; then
+  echo "==> NOTE: git mode skipped — $GIT_BLOCKED_REASON"
 fi
 echo "==> Mode: $MODE"
 

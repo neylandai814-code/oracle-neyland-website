@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORACLE Dashboard — May 12, 2026</title>
+<style>
+
+:root { color-scheme: light; --navy:#1F3864; --gold:#BF9000; --bg:#fafafa; --paper:#fff; --line:#e5e5e5; --ink:#222; --ink2:#555; }
+* { box-sizing: border-box; }
+body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:14px; line-height:1.5; }
+header.brand { background:var(--navy); color:#fff; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:4px solid var(--gold); }
+header.brand h1 { margin:0; font-size:20px; letter-spacing:0.4px; }
+header.brand .subtitle { font-size:13px; opacity:0.85; }
+header.brand .meta { text-align:right; font-size:12px; opacity:0.85; }
+nav.tabs { background:#fff; border-bottom:1px solid var(--line); padding:0 14px; display:flex; flex-wrap:wrap; }
+nav.tabs button { background:none; border:0; padding:14px 14px; font-size:13px; cursor:pointer; color:var(--ink2); border-bottom:3px solid transparent; font-weight:500; }
+nav.tabs button:hover { color:var(--navy); }
+nav.tabs button.active { color:var(--navy); border-bottom-color:var(--gold); font-weight:700; }
+main { padding:24px 28px; max-width:1400px; margin:0 auto; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+h2 { color:var(--navy); margin-top:0; margin-bottom:14px; }
+h3 { color:var(--navy); margin-top:24px; margin-bottom:10px; border-bottom:2px solid var(--gold); padding-bottom:4px; display:inline-block; }
+.kpi-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:18px; }
+.kpi { background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:14px; }
+.kpi label { display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink2); margin-bottom:4px; }
+.kpi span { font-size:22px; font-weight:700; color:var(--navy); }
+.kpi span.small { font-size:13px; font-weight:500; color:var(--ink); }
+.parcel-card { background:var(--paper); border:1px solid var(--line); border-left:4px solid var(--gold); border-radius:6px; padding:16px; margin-bottom:14px; }
+.parcel-head { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
+.parcel-rank { background:var(--navy); color:#fff; min-width:46px; height:36px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; padding:0 10px; }
+.parcel-title { flex:1; }
+.parcel-title h4 { margin:0 0 2px 0; color:var(--navy); font-size:15px; }
+.parcel-locator { color:var(--ink2); font-size:13px; }
+.parcel-meta { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+.parcel-score { font-size:11px; color:var(--ink2); }
+.parcel-score span { font-size:18px; color:var(--navy); font-weight:700; }
+.parcel-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:8px; padding:10px; background:#f7f7f7; border-radius:4px; margin-bottom:10px; }
+.parcel-grid > div label { display:block; font-size:10px; text-transform:uppercase; color:var(--ink2); }
+.parcel-grid > div span, .parcel-grid > div a { font-size:13px; color:var(--ink); }
+.parcel-grid a { color:var(--navy); text-decoration:none; }
+.parcel-grid a:hover { text-decoration:underline; }
+.parcel-flags { font-size:13px; padding:8px 10px; background:#fff7e6; border-left:3px solid var(--gold); margin-bottom:8px; }
+.parcel-flags ul { margin:6px 0 0 0; padding-left:20px; }
+.parcel-next { font-size:13px; padding:8px 10px; background:#e8f4ea; border-left:3px solid #2e7d32; }
+.thesis-card { background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:14px; margin-bottom:10px; }
+.thesis-card h4 { margin:0 0 6px 0; color:var(--navy); }
+.thesis-card p { margin:4px 0; font-size:13px; }
+.pf-card { background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:18px; margin-bottom:18px; }
+.pf-card h3 { margin-top:0; }
+.pf-meta { font-size:13px; color:var(--ink2); margin-bottom:12px; }
+table.data-tbl { width:100%; border-collapse:collapse; font-size:13px; }
+table.data-tbl th { background:var(--navy); color:#fff; padding:8px 10px; text-align:left; font-weight:600; }
+table.data-tbl td { padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+table.data-tbl tr:hover td { background:#fafafa; }
+.verdict { padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700; color:#fff; white-space:nowrap; display:inline-block; }
+.v-proceed { background:#2e7d32; }
+.v-conditional { background:#bf9000; }
+.v-borderline { background:#e65100; }
+.v-does { background:#b71c1c; }
+.callout { background:#fff8e1; border-left:4px solid var(--gold); padding:14px 16px; border-radius:4px; margin:14px 0; }
+.callout strong { color:var(--navy); }
+ul.compact { margin:8px 0; padding-left:22px; }
+ul.compact li { margin:3px 0; font-size:13px; }
+code { font-family:ui-monospace,SFMono-Regular,monospace; background:#f0f0f0; padding:1px 4px; border-radius:3px; font-size:12px; }
+footer { padding:24px 28px; color:var(--ink2); font-size:12px; border-top:1px solid var(--line); margin-top:40px; }
+@media (max-width:780px) {
+  nav.tabs { overflow-x:auto; flex-wrap:nowrap; }
+  nav.tabs button { flex-shrink:0; }
+}
+
+</style>
+</head>
+<body>
+<header class="brand">
+  <div>
+    <h1>ORACLE — Daily Site-Sourcing Dashboard</h1>
+    <div class="subtitle">Neyland Development · May 12, 2026 · Run #11 · Brain config v2.2</div>
+  </div>
+  <div class="meta">
+    State scope: TN · GA · SC · NC · FL · KY · AL<br>
+    8 daily parcels · 4 Tier-A HG · 6 Tier-B theses
+  </div>
+</header>
+<nav class="tabs"><button data-tab="overview" class="active">Overview</button><button data-tab="daily">Daily Parcels</button><button data-tab="hidden">Hidden Gems</button><button data-tab="proforma">Pro Forma</button><button data-tab="execsum">Exec Summary</button><button data-tab="comps">Comp Tracker</button><button data-tab="outreach">Outreach</button><button data-tab="dd">DD Checklist</button><button data-tab="submarkets">Submarkets</button><button data-tab="climate">Climate Risk</button><button data-tab="pipeline">Pipeline</button><button data-tab="offmarket">Off-Market</button><button data-tab="capital">Capital Markets</button><button data-tab="templates">Templates</button><button data-tab="system">System</button></nav>
+<main>
+
+<div class="tab-panel active" id="panel-overview">
+<h2>Overview</h2>
+<div class="kpi-row">
+<div class="kpi"><label>Run #</label><span>11</span></div>
+<div class="kpi"><label>Date</label><span class="small">2026-05-12</span></div>
+<div class="kpi"><label>Daily Parcels</label><span>8</span></div>
+<div class="kpi"><label>Tier-A HG</label><span>4</span></div>
+<div class="kpi"><label>Tier-B Theses</label><span>6</span></div>
+<div class="kpi"><label>Brain v</label><span>2.2</span></div>
+</div>
+
+<div class="callout"><strong>MATERIAL MARKET INTEL:</strong> Auburn moratorium re-confirmed through 11/30/2026 (5/5/2026 City Council update). Building moratorium on developments with 2+ unattached or 3+ attached dwelling units on a single undivided lot continues. Auburn-proper pursuit timeline DOWNGRADED; pivot to Opelika-side carve-out for 234.04-ac 5/04+ tracked tract (now 7th consecutive HG appearance).</div>
+
+<div class="callout"><strong>Inventory caveat:</strong> Day-11 cadence honest deliver: 8 daily parcels (below 15 ceiling). 11th consecutive run below ceiling. 60-day dedup window covers 140+ prior parcels — fresh-listing yield ~1-2 per Tier-1 market per week. Off-market layering + same-broker cluster consolidation remain the deal-flow density levers. Pad-prevention discipline holds.</div>
+
+<h3>Top 5 Quick Reference</h3>
+<table class="data-tbl"><thead><tr><th>Rank</th><th>Score</th><th>Parcel</th><th>Note</th></tr></thead><tbody><tr><td>D-1</td><td>73</td><td>Bowling Green, KY (Warren County)</td><td>Listing-broker call to confirm asking + zoning detail; pre-app with BG Planning re: RM-4 carve-out path; comparable basis check vs Sterling SBP 19.69-ac at $5.6M</td></tr><tr><td>D-2</td><td>65</td><td>Aiken, SC (Aiken County) — Westside</td><td>Off-market direct-to-Taft-Mills outreach for adjacent parcel pipeline; map Westside RMF rezone precedents for Atlas&#x27;s off-market targets</td></tr><tr><td>D-3</td><td>60</td><td>Greenville County, SC (southern county, outside city limits)</td><td>Cross-check parcel ID against 5/09 ledger; desktop NWI + slope analysis; pre-app meeting Greenville County Planning if distinct</td></tr><tr><td>D-4</td><td>58</td><td>Knoxville, TN (Knox County) — Hardin Valley</td><td>Cross-check parcel ID against 4/30 + 5/08 + 5/11 Knox ledger entries; broker call for survey + utilities; pre-app PR rezone path</td></tr><tr><td>D-5</td><td>55</td><td>Statesboro / Bulloch County, GA</td><td>Broker call for asking + survey; Bulloch County Planning pre-app for annexation + rezone path; Hyundai supplier workforce rent ceiling validation</td></tr></tbody></table>
+
+<h3>Status Updates (4)</h3>
+<table class="data-tbl"><thead><tr><th>Reference</th><th>Update / Next Step</th><th>Urgency</th></tr></thead><tbody><tr><td><strong>Auburn-Opelika 234.04-ac large tract (5/04 + 5/07 + 5/09 + 5/10 + 5/11 HG-2/4)</strong></td><td>MATERIAL UPDATE — Auburn City Council 5/5/2026 confirmed building moratorium on developments with 2+ unattached or 3+ attached dwelling units on a single undivided lot continues through 11/30/2026. Studies (traffic, zoning, stormwater, sanitary sewer) on schedule but final recommendations may not be ready until moratorium expires. Auburn proper deprioritized until Q1 2027. Opelika may still be workable but verify scope.<br><em>DOWNGRADE Auburn-proper pursuit timeline; pivot to Opelika-side carve-out if 234.04-ac tract straddles boundary; BHHS Preferred direct broker call to confirm moratorium impact on 234.04-ac parcel and Opelika-zoned acreage availability.</em></td><td><span class="verdict v-does">URGENT — Auburn moratorium re-confirmation impacts cumulative HG cluster</span></td></tr><tr><td><strong>Meybohm 36.88-ac MF (Aiken/N. Augusta) — 5/01 HG-2 / 5/07-5/11 RE-ELEVATED 6x WEEK 2</strong></td><td>12-day open status without broker contact (6th re-elevation, Week 2 ESCALATE).<br><em>URGENT broker call THIS WEEK — Meybohm Commercial; consolidate with 5/08 HG-1 Sweetwater 18.57-ac (same broker) AND today&#x27;s HG-1 Wire Road 55-ac (Blackston — different broker).</em></td><td><span class="verdict v-does">WEEK 2 URGENT — 6th re-elevation</span></td></tr><tr><td><strong>C&amp;W Sunbelt MFA cluster (Greer + Beaufort + Brunswick + Augusta Birdwell + Clayton NC)</strong></td><td>5 parcels across 3 states (SC + SC + GA + GA + NC); same broker office.<br><em>Schedule SINGLE consolidated C&amp;W Sunbelt MFA broker call covering all 5 parcels this week. Per 5/08+5/09+5/10+5/11 calibration — institutional broker relationship is the primary asset.</em></td><td><span class="verdict v-proceed">STANDARD — 4-day open</span></td></tr><tr><td><strong>Lakeland W Pipkin 15.46-ac LoopNet (5/07 D-1 PRO FORMA BASE 6.33% PROCEED COMFORTABLE)</strong></td><td>Strongest BASE pro forma in 11 runs persists; Mosaic English Creek RH precedent continues. 8 new apartment complexes coming to Lakeland (per LALtoday 5/07) — submarket pipeline pressure rising but still below oversupply threshold. Balanced-WATCH status forming.<br><em>Broker indication on asking remains gating variable. Polk Planning pre-app to validate rezone-to-RH timeline given Mosaic precedent. Track 8-complex pipeline absorption.</em></td><td><span class="verdict v-proceed">STANDARD — continue tracking</span></td></tr></tbody></table>
+
+<h3>Pro Forma Snapshot</h3>
+<div class="pf-card">
+<h3>D-1 Bowling Green KY 24.45-ac Russellville Rd (BASE) — <span class="verdict v-proceed">PROCEED</span></h3>
+<p class="pf-meta">24.45 ac whole tract · MF carve-out 220u · TDC $49,098,500 · NOI Yr3 stab $2,769,360 · YoC BASE 5.64%</p>
+<p>BASE 5.64% PROCEED. Multi-anchor BG (WKU + GM Corvette + Fruit of the Loom HQ + healthcare) — no single-anchor premium. INSURANCE 2x → 5.21% CONDITIONAL; COST SPIKE → 5.06% CONDITIONAL; UPSIDE → 6.14% PROCEED COMFORTABLE. Partition strategy — allocate 50% land basis ($1.65M of $3.3M whole tract) to 12-ac MF carve at 18 du/ac. Across-the-street from Sterling Business Park RM-4 entitled product (5/01 KY-1 ledger). Listing-broker call + BG Planning pre-app on MF carve density verification are gating before LOI.</p>
+</div>
+<div class="pf-card">
+<h3>HG-1 Aiken SC Wire Road 55-ac PUD-B partition (BASE) — <span class="verdict v-conditional">CONDITIONAL</span></h3>
+<p class="pf-meta">55 ac whole tract · MF carve 25 ac · 325u · TDC $69,482,159 · NOI Yr3 stab $3,579,550 · YoC BASE 5.15%</p>
+<p>BASE 5.15% CONDITIONAL. Multi-anchor Aiken (SRS + USC Aiken + healthcare + Fort Eisenhower commuters) — no single-anchor premium per 5/10 calibration. INSURANCE 2x → 4.59% BORDERLINE; COST SPIKE → 4.61% BORDERLINE; UPSIDE → 5.61% PROCEED. Partition strategy on PUD-B in process (Blackston & Associates active broker). Allocate land basis proportional to MF carve (25/55 × $3.0M whole-tract placeholder = $1.36M). PUD-B modification is the entitlement gate — pre-app gating before LOI.</p>
+</div>
+</div>
+
+<div class="tab-panel" id="panel-daily">
+<h2>Daily Parcels (8)</h2>
+<p>State scope: TN · GA · SC · NC · FL · KY · AL. Honest deliver below 15-ceiling for 11th consecutive run.</p>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-1</div>
+    <div class="parcel-title">
+      <h4>Bowling Green, KY (Warren County)</h4>
+      <div class="parcel-locator">24.45-ac mixed-use tract Russellville Rd (across from Sterling Business Park)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>73</span></div>
+      <div class="parcel-score">Status <strong>GREEN</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>24.45</span></div>
+    <div><label>Zoning</label><span>Mixed-use (8.6 ac General Business + balance highway business / partition MF carve)</span></div>
+    <div><label>Yield</label><span>192–240 u</span></div>
+    <div><label>Asking</label><span>$3,300,000 ($134,969/ac)</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Listing</label><a href="https://www.landsearch.com/properties/russellville-rd-bowling-green-ky-42101/3532898" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> WKU + GM Corvette + Fruit of the Loom HQ + healthcare multi-anchor<br><strong>Red flags:</strong><ul><li>Mixed-use parcel — MF carve-out requires PUD modification or rezone-to-RM-4</li><li>Across-the-street from RM-4 entitled product (5/01 KY-1 19.69-ac SBP); verify density allowance</li><li>Sterling Business Park 185-ac mixed-use master plan precedent supports density argument</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Listing-broker call to confirm asking + zoning detail; pre-app with BG Planning re: RM-4 carve-out path; comparable basis check vs Sterling SBP 19.69-ac at $5.6M</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Listing summary verification; exact zoning split per parcel; access easements</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-2</div>
+    <div class="parcel-title">
+      <h4>Aiken, SC (Aiken County) — Westside</h4>
+      <div class="parcel-locator">10.03-ac Gregg Hwy × Lokey Dr (Taft-Mills &#x27;Seter Ridge Trace&#x27; 80u approved by Planning Commission)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>65</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>10.03</span></div>
+    <div><label>Zoning</label><span>Rezoning approved by Planning Commission (Taft-Mills application 6-0)</span></div>
+    <div><label>Yield</label><span>80–80 u</span></div>
+    <div><label>Asking</label><span>Not for sale (process reference)</span></div>
+    <div><label>Friction</label><span>4/10</span></div>
+    <div><label>Listing</label><a href="https://www.postandcourier.com/aikenstandard/news/local-government/aiken-westside-new-apartment-complex/article_068602c0-e21a-11ee-ad24-97393ff18d12.html" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Aiken multi-anchor (SRS + USC Aiken + healthcare + Fort Eisenhower commuters)<br><strong>Red flags:</strong><ul><li>BELOW 200u institutional floor (80u total)</li><li>Process reference — not for sale</li><li>Reinforces Aiken Westside / Gregg Hwy pro-development climate</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Off-market direct-to-Taft-Mills outreach for adjacent parcel pipeline; map Westside RMF rezone precedents for Atlas&#x27;s off-market targets</div>
+  
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-3</div>
+    <div class="parcel-title">
+      <h4>Greenville County, SC (southern county, outside city limits)</h4>
+      <div class="parcel-locator">17.50-ac southern Greenville County tract (wet weather creek + reforested hardwoods + level-to-gently-sloping)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>60</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>17.5</span></div>
+    <div><label>Zoning</label><span>Agricultural (rezone-to-MF/PUD required)</span></div>
+    <div><label>Yield</label><span>180–245 u</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Listing</label><a href="https://www.land.com/Greenville-County-SC/all-land/5-15-acres/" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Greenville-Spartanburg pipeline 2,188u vs ~1,310 absorption — less than year&#x27;s supply, pro-supply signal<br><strong>Red flags:</strong><ul><li>Wet weather creek + reforested hardwoods → wetland delineation + tree-clearing cost</li><li>AG zoning → 6-9 mo Greenville Co rezone cycle + Planning Commission discretion</li><li>Possible dedup risk against 5/09 D-2 Greer Hwy 9 × Hospitality 17.5-ac — verify distinct parcel</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Cross-check parcel ID against 5/09 ledger; desktop NWI + slope analysis; pre-app meeting Greenville County Planning if distinct</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Asking; exact parcel location; distinctness from 5/09 D-2</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-4</div>
+    <div class="parcel-title">
+      <h4>Knoxville, TN (Knox County) — Hardin Valley</h4>
+      <div class="parcel-locator">60+ ac West Knoxville tract close to interstate and Hardin Valley Rd (multi-family + SF + neighborhood mix potential)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>58</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>60.0</span></div>
+    <div><label>Zoning</label><span>Residential (convertible to commercial per listing summary)</span></div>
+    <div><label>Yield</label><span>300–480 u</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Listing</label><a href="https://www.homes.com/knoxville-tn/hardin-valley-neighborhood/land-for-sale/" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> ETN 23k-unit undersupply 2025 thesis; West Knox highest-demand submarket<br><strong>Red flags:</strong><ul><li>Partition strategy candidate — full MF probably too large; carve-out 25-35 ac MF (300-450u) + SF/JV residual</li><li>Rolling terrain — slope analysis non-negotiable</li><li>Hardin Valley sewer extension cost key feasibility variable (similar to 5/08 30-ac entry)</li><li>Distinctness from 4/30 Hardin Valley 30-ac and 5/08 30-ac entries — verify parcel ID</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Cross-check parcel ID against 4/30 + 5/08 + 5/11 Knox ledger entries; broker call for survey + utilities; pre-app PR rezone path</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Asking; exact location; parcel distinctness</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-5</div>
+    <div class="parcel-title">
+      <h4>Statesboro / Bulloch County, GA</h4>
+      <div class="parcel-locator">130-ac south of Statesboro — cultivated farmland + pine plantation</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>55</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>130.0</span></div>
+    <div><label>Zoning</label><span>Agricultural (rezone + annexation gated for utilities)</span></div>
+    <div><label>Yield</label><span>250–400 u</span></div>
+    <div><label>Asking</label><span>TBV (large-tract median in metro ~$273k)</span></div>
+    <div><label>Friction</label><span>7/10</span></div>
+    <div><label>Listing</label><a href="https://www.redfin.com/city/18668/GA/Statesboro/land" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Hyundai supplier catchment + GSU baseline; Statesboro pipeline 3,970 units citywide = WATCH per 5/06 intel<br><strong>Red flags:</strong><ul><li>Pipeline pressure crossing WATCH threshold for 82k MSA — absorption capacity concern</li><li>Partition strategy candidate (35-45 ac MF carve + SF/BTR JV)</li><li>Rezone + annexation 9-15 mo gate</li><li>Basis-discount-only play per 5/06 intel reaffirmed today</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Broker call for asking + survey; Bulloch County Planning pre-app for annexation + rezone path; Hyundai supplier workforce rent ceiling validation</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Asking; specific parcel; access; utilities</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-6</div>
+    <div class="parcel-title">
+      <h4>Lakeland, FL (Polk County)</h4>
+      <div class="parcel-locator">Pipkin corridor / 8 new apartment complexes pipeline reference</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>52</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>TBV</span></div>
+    <div><label>Zoning</label><span>Various (RH + A-RR rezone-to-RH precedent active)</span></div>
+    <div><label>Yield</label><span>TBV</span></div>
+    <div><label>Asking</label><span>Pipeline reference</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Listing</label><a href="https://www.crexi.com/properties/FL/Lakeland/Multifamily" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Lakeland I-4 corridor Class A blended $1,925/u/mo continues<br><strong>Red flags:</strong><ul><li>8 new apartment complexes pipeline pressure rising per LALtoday 5/07</li><li>Polk Planning rezone cycle 9-15 mo — Mosaic English Creek precedent helps</li><li>Pre-app gating mandatory</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Continue tracking Pipkin corridor; verify whether any new fresh listings sit on corridor; Polk Planning pre-app conversation</div>
+  
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-7</div>
+    <div class="parcel-title">
+      <h4>Volusia County, FL (Orange City)</h4>
+      <div class="parcel-locator">Two shovel-ready Volusia multifamily land parcels (Maury Carter listing summary)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>50</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>TBV</span></div>
+    <div><label>Zoning</label><span>Multifamily (shovel-ready per listing)</span></div>
+    <div><label>Yield</label><span>TBV</span></div>
+    <div><label>Asking</label><span>TBV</span></div>
+    <div><label>Friction</label><span>5/10</span></div>
+    <div><label>Listing</label><a href="https://www.maurycarter.com/properties-for-sale/" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Daytona Beach / Volusia metro median MF list $400k; Orange City I-4 corridor adjacency<br><strong>Red flags:</strong><ul><li>Listing detail TBV — acreage + density + asking not in summary</li><li>Orange City is Volusia/Seminole boundary — verify zoning + entitlement scope</li><li>FL property tax + insurance load punishing OpEx</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Maury Carter broker call to pull OM for both Orange City parcels; FEMA + NWI desktop pre-call</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Acreage; density; asking; entitlement status</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">D-8</div>
+    <div class="parcel-title">
+      <h4>Wilmington / New Hanover County, NC</h4>
+      <div class="parcel-locator">Z-22-24 Wilmington St Assemblage rezoning; 50.17-ac S 17th × Independence Blvd approved 570u (process reference)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>48</span></div>
+      <div class="parcel-score">Status <strong>RED</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>50.17</span></div>
+    <div><label>Zoning</label><span>Rezoning approved (process reference)</span></div>
+    <div><label>Yield</label><span>570–570 u</span></div>
+    <div><label>Asking</label><span>Not for sale (rezone process reference)</span></div>
+    <div><label>Friction</label><span>8/10</span></div>
+    <div><label>Listing</label><a href="https://www.wilmingtonnc.gov/files/assets/city/v/1/government/city-clerk/boards-amp-commissions/planning-commission/04-april/z-4-426-136-e-westwood-pc-packet.pdf" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Wilmington NHC pipeline absorbing — do not surface per 5/07-5/11 discipline<br><strong>Red flags:</strong><ul><li>DO NOT PURSUE — Brunswick + NHC cumulative pipeline &gt;23,500 units (per 5/11 calibration)</li><li>Re-evaluate Q3 2026 quarterly absorption</li><li>Reference data only — reinforces Wilmington saturation thesis</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> DO NOT pursue; monitor Q3 2026 Brunswick/NHC absorption data; reference for pipeline tab</div>
+  
+</div>
+
+</div>
+
+<div class="tab-panel" id="panel-hidden">
+<h2>Hidden Gems</h2>
+<h3>Tier-A Hidden Gems (specific parcels) — 4</h3>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-1</div>
+    <div class="parcel-title">
+      <h4>Aiken / N. Augusta, SC (Aiken County)</h4>
+      <div class="parcel-locator">Wire Road 55-ac PUD-B subdivision rezone (Blackston &amp; Associates in process) — partition strategy MF carve-out</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>76</span></div>
+      <div class="parcel-score">Status <strong>GREEN</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>55.0</span></div>
+    <div><label>Zoning</label><span>PUD-B in process (smaller-lot SF + MF carve-out candidate)</span></div>
+    <div><label>Yield</label><span>280–380 u</span></div>
+    <div><label>Asking</label><span>TBV (~$40-90k/ac whole-tract placeholder)</span></div>
+    <div><label>Friction</label><span>7/10</span></div>
+    <div><label>Source</label><a href="https://www.postandcourier.com/aikenstandard/business/aiken-wire-road-subdivisions-development/article_961a179e-8b4a-11ef-9d74-6bc7d9a6d2ff.html" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Aiken multi-anchor (SRS + USC Aiken + healthcare + Fort Eisenhower); pipeline 4,492 units / 1,327 ac per Post &amp; Courier<br><strong>Red flags:</strong><ul><li>Partition strategy — coordinate with Blackston PUD-B applicant</li><li>Whole-tract acquisition + PUD modification path (5-9 mo)</li><li>Allocate land basis proportional to MF carve (25-30 ac MF carve of 55 ac total = 45-55% allocation)</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Blackston &amp; Associates broker call; Aiken County Planning pre-app for PUD-B modification; MF carve sizing + SF/BTR JV partner outreach</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Asking; broker direct; carve-out feasibility</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-2</div>
+    <div class="parcel-title">
+      <h4>Bowling Green, KY (Warren County)</h4>
+      <div class="parcel-locator">Sterling Business Park 6309 Russellville Rd Lot 7 19.69-ac RM-4 entitled 456 units (5/01 KY-1 CONTINUED, 12-day status update)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>80</span></div>
+      <div class="parcel-score">Status <strong>GREEN</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>19.69</span></div>
+    <div><label>Zoning</label><span>RM-4 entitled (456 units approved)</span></div>
+    <div><label>Yield</label><span>456–456 u</span></div>
+    <div><label>Asking</label><span>$5,600,000 ($284,400/ac; $12,281/unit)</span></div>
+    <div><label>Friction</label><span>3/10</span></div>
+    <div><label>Source</label><a href="https://www.crexi.com/properties/KY/Bowling_Green/Multifamily" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> WKU + GM Corvette + Fruit of the Loom HQ + healthcare multi-anchor; BG vacancy ~7.0%, rent +1.8% YoY<br><strong>Red flags:</strong><ul><li>12-day open status — competitive process risk material</li><li>456u is large for tertiary market — phasing strategy (228u + 228u Phase 2) reduces lease-up exposure</li><li>RE/MAX (Stephen Stucy / MLS RA20233019) is listing broker per 5/01 intel</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> RE/MAX broker call this week — Stephen Stucy; OM access; entitled product premium basis sensitivity</div>
+  
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-3</div>
+    <div class="parcel-title">
+      <h4>Hickory, NC (Catawba County) — I-40 corridor</h4>
+      <div class="parcel-locator">I-40 corridor exits 121-130 (Mountain View / Conover) — 15-30 ac assemblage candidates at $50-130k/ac</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>70</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>20.0</span></div>
+    <div><label>Zoning</label><span>Various (rezone-to-MF workable in 6-9 mo Catawba cycle)</span></div>
+    <div><label>Yield</label><span>240–400 u</span></div>
+    <div><label>Asking</label><span>TBV ($50-130k/ac range per 5/01 intel)</span></div>
+    <div><label>Friction</label><span>6/10</span></div>
+    <div><label>Source</label><a href="https://www.landsearch.com/properties/hickory-nc" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> Fiber optics + EV components + furniture rebound; Class A rent $1,300-1,450/u/mo blended; few national developers active<br><strong>Red flags:</strong><ul><li>No specific fresh parcel today — market thesis surfacing for off-market layering</li><li>Hickory blended Class A rent ceiling ~$1,400 binds YoC at base case</li><li>National Land Realty active broker per 5/01 intel</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> National Land Realty broker call for off-market pipeline; map I-40 exits 121-130 corridor for direct-to-owner outreach campaign</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Specific parcel — currently market-level thesis only</div>
+</div>
+
+<div class="parcel-card">
+  <div class="parcel-head">
+    <div class="parcel-rank">HG-4</div>
+    <div class="parcel-title">
+      <h4>Hattiesburg, MS (Forrest County)</h4>
+      <div class="parcel-locator">42-ac mostly-wooded tract just outside city limits (5/08 HG-3 CONTINUED; cluster now 4+ parcels in 60-day window)</div>
+    </div>
+    <div class="parcel-meta">
+      <div class="parcel-score">Score <span>68</span></div>
+      <div class="parcel-score">Status <strong>AMBER</strong></div>
+    </div>
+  </div>
+  <div class="parcel-grid">
+    <div><label>Acres</label><span>42.0</span></div>
+    <div><label>Zoning</label><span>AG/R (rezone + annexation gated)</span></div>
+    <div><label>Yield</label><span>250–320 u</span></div>
+    <div><label>Asking</label><span>TBV (avg $26,823/ac — sits at $25k env-flag threshold per LandWatch)</span></div>
+    <div><label>Friction</label><span>7/10</span></div>
+    <div><label>Source</label><a href="https://www.landwatch.com/mississippi-land-for-sale/hattiesburg" target="_blank">View</a></div>
+  </div>
+  <div class="parcel-flags"><strong>Demand:</strong> USM + Forrest General + Camp Shelby anchor; tertiary MS Class A $1,400-1,550/u/mo binds YoC<br><strong>Red flags:</strong><ul><li>AUTO-FLAG threshold ($25k/ac) sits on the line — desktop env triage if specific parcel priced &lt;$25k/ac</li><li>Annexation 6-12 mo gate before city utilities apply</li><li>Cluster forming: 4+ parcels in 60-day window — institutional first-mover thesis intact</li><li>USM enrollment trend flat-to-down per 5/04 intel</li></ul></div>
+  <div class="parcel-next"><strong>Next step:</strong> Verify asking from local broker; desktop FEMA + NWI; Forrest County + Hattiesburg City Planning joint pre-app</div>
+  <div style="font-size:11px;color:#888;margin-top:6px;">TBV: Asking; specific parcel; annexation feasibility</div>
+</div>
+
+<h3>Tier-B Market Theses — 6</h3>
+<div class="thesis-card"><h4>The Shoals, AL (Florence-Muscle Shoals)</h4><p>Limited public listing inventory; off-market sourcing playbook. UA workforce + manufacturing + healthcare; Class A rent ~$1,300-1,450/u/mo blended.</p><p><strong>Next:</strong> Develop direct-to-owner outreach list via The Shoals Economic Development Authority broker network.</p></div><div class="thesis-card"><h4>Owensboro, KY (Daviess County)</h4><p>120k MSA; aluminum smelting + Toyotetsu + healthcare; commercial $50-110k/ac; MF-zoned scarce. Below 200u floor absent specific catalyst.</p><p><strong>Next:</strong> Monitor MF-zoned tract surface events; Hayes Lemmerz workforce housing thesis if expansion announced.</p></div><div class="thesis-card"><h4>Tupelo, MS (Lee County)</h4><p>Toyota MS + NMMC anchor; no institutional pipeline tracking — first-mover advantage. Rent ceiling $1,500-1,650/u/mo Class A. Cluster (3+ parcels in 60-day window).</p><p><strong>Next:</strong> Continue Hwy 6 + N. Veterans Blvd corridor tracking; desktop env triage on env-flagged parcels before broker calls.</p></div><div class="thesis-card"><h4>Brunswick / Glynn County, GA</h4><p>Coastal-GA — INSURANCE 2x scenario MANDATORY. PD modification carve-out playbook continues (Brunswick Villa BTR→MF, PD 965-lot). Class A blended $1,625/u/mo.</p><p><strong>Next:</strong> C&amp;W Sunbelt MFA consolidated broker call covers Brunswick Villa 14.98-ac (5/09 HG-1) + PD 965-lot (5/08 HG-2).</p></div><div class="thesis-card"><h4>Valdosta, GA (Lowndes County)</h4><p>Approved-PD + I-75 Exit 13 secondary market — partition strategy candidate. Moody AFB + VSU + South GA Medical Center demand stack. Apply +25bps single-anchor exit cap premium.</p><p><strong>Next:</strong> Track 140.61-ac approved P-D (5/06 HG-1) carve-out modification feasibility; add Valdosta to focus_markets_hidden_gem next config bump pending Atlas confirmation.</p></div><div class="thesis-card"><h4>Dothan, AL (Houston County)</h4><p>Wiregrass tertiary; Class A $1,400-1,550/u/mo binds YoC. AL whitelist hit but NOT primary focus. Surface borderline reference; Atlas confirmation on Birmingham/Tuscaloosa/Dothan/Decatur AL non-primary pursuit policy.</p><p><strong>Next:</strong> Atlas confirmation on AL secondary market scope before broker call expansion.</p></div>
+</div>
+
+<div class="tab-panel" id="panel-proforma">
+<h2>Pro Forma — D-1 + HG-1 (BASE + 5 scenarios)</h2>
+
+<div class="pf-card">
+<h3>D-1: D-1 Bowling Green KY 24.45-ac Russellville Rd (MF carve-out 220u)</h3>
+<p class="pf-meta">Assumptions — 220u · Land MF carve $1,650,000 · Hard $190,000/u · Soft 13% · Rent $1,800/u/mo · OpEx all-in $7,500/u/yr · Insurance carved $950/u/yr · Vac 7% · Exit cap 6.00% · LTC 60% · Debt rate 6.25%</p>
+<table class="data-tbl"><thead><tr><th>Scenario</th><th>TDC</th><th>NOI Yr3</th><th>YoC</th><th>IRR (lev)</th><th>EM</th><th>Verdict</th></tr></thead><tbody><tr>
+<td>BASE</td>
+<td>$49,098,500</td>
+<td>$2,769,360</td>
+<td>5.64%</td>
+<td>2.59%</td>
+<td>1.13x</td>
+<td><span class="verdict v-proceed">PROCEED</span></td>
+</tr><tr>
+<td>RECESSION</td>
+<td>$50,143,500</td>
+<td>$2,769,360</td>
+<td>5.52%</td>
+<td>-4.46%</td>
+<td>0.80x</td>
+<td><span class="verdict v-proceed">PROCEED</span></td>
+</tr><tr>
+<td>COST SPIKE</td>
+<td>$54,766,580</td>
+<td>$2,769,360</td>
+<td>5.06%</td>
+<td>-4.03%</td>
+<td>0.81x</td>
+<td><span class="verdict v-conditional">CONDITIONAL</span></td>
+</tr><tr>
+<td>LEASE-UP DELAY</td>
+<td>$50,979,500</td>
+<td>$2,769,360</td>
+<td>5.43%</td>
+<td>0.40%</td>
+<td>1.02x</td>
+<td><span class="verdict v-conditional">CONDITIONAL</span></td>
+</tr><tr>
+<td>INSURANCE 2x</td>
+<td>$49,098,500</td>
+<td>$2,560,360</td>
+<td>5.21%</td>
+<td>-2.08%</td>
+<td>0.90x</td>
+<td><span class="verdict v-conditional">CONDITIONAL</span></td>
+</tr><tr>
+<td>UPSIDE</td>
+<td>$48,725,600</td>
+<td>$2,990,328</td>
+<td>6.14%</td>
+<td>7.26%</td>
+<td>1.41x</td>
+<td><span class="verdict v-proceed">PROCEED COMFORTABLE</span></td>
+</tr></tbody></table>
+<p style="font-size:12px;color:#555;margin-top:10px;"><strong>Verdict thresholds:</strong> ≥6.0% PROCEED COMFORTABLE · ≥5.5% PROCEED · ≥5.0% CONDITIONAL · ≥4.5% BORDERLINE · &lt;4.5% DOES NOT PENCIL.</p>
+</div>
+
+<div class="pf-card">
+<h3>HG-1: HG-1 Aiken SC Wire Road 55-ac PUD-B partition (MF carve 25 ac, 325u)</h3>
+<p class="pf-meta">Assumptions — 325u · 55-ac whole / 25-ac MF carve · Land MF carve $1,363,636 · Hard $185,000/u · Soft 13% · Rent $1,650/u/mo · OpEx all-in $7,400/u/yr · Insurance carved $1,200/u/yr · Vac 7% · Exit cap 6.25% · LTC 60% · Debt rate 6.35%</p>
+<table class="data-tbl"><thead><tr><th>Scenario</th><th>TDC</th><th>NOI Yr3</th><th>YoC</th><th>IRR (lev)</th><th>EM</th><th>Verdict</th></tr></thead><tbody><tr>
+<td>BASE</td>
+<td>$69,482,159</td>
+<td>$3,579,550</td>
+<td>5.15%</td>
+<td>-5.14%</td>
+<td>0.77x</td>
+<td><span class="verdict v-conditional">CONDITIONAL</span></td>
+</tr><tr>
+<td>RECESSION</td>
+<td>$70,985,284</td>
+<td>$3,579,550</td>
+<td>5.04%</td>
+<td>-13.55%</td>
+<td>0.48x</td>
+<td><span class="verdict v-conditional">CONDITIONAL</span></td>
+</tr><tr>
+<td>COST SPIKE</td>
+<td>$77,635,109</td>
+<td>$3,579,550</td>
+<td>4.61%</td>
+<td>-13.25%</td>
+<td>0.48x</td>
+<td><span class="verdict v-borderline">BORDERLINE</span></td>
+</tr><tr>
+<td>LEASE-UP DELAY</td>
+<td>$72,187,784</td>
+<td>$3,579,550</td>
+<td>4.96%</td>
+<td>-7.76%</td>
+<td>0.66x</td>
+<td><span class="verdict v-borderline">BORDERLINE</span></td>
+</tr><tr>
+<td>INSURANCE 2x</td>
+<td>$69,482,159</td>
+<td>$3,189,550</td>
+<td>4.59%</td>
+<td>-13.61%</td>
+<td>0.47x</td>
+<td><span class="verdict v-borderline">BORDERLINE</span></td>
+</tr><tr>
+<td>UPSIDE</td>
+<td>$69,173,977</td>
+<td>$3,878,778</td>
+<td>5.61%</td>
+<td>0.19%</td>
+<td>1.01x</td>
+<td><span class="verdict v-proceed">PROCEED</span></td>
+</tr></tbody></table>
+<p style="font-size:12px;color:#555;margin-top:10px;"><strong>Pre-LOI validation:</strong> broker indication on asking + entitlement scope · RealPage/CoStar Class A rent comps · two GC budgets · insurance broker indication · FEMA + NWI desktop · pre-app Aiken County Planning (PUD-B modification).</p>
+</div>
+</div>
+
+<div class="tab-panel" id="panel-execsum">
+<h2>Executive Summary</h2>
+<h3>1. Methodology</h3>
+<p>Brain config v2.2 weights: Market Demand 25 · Regulatory/Policy 20 · Physical Feasibility 20 · Location/Access 15 · Financial Attractiveness 20. 60-day dedup window covers 140+ prior parcels (11th consecutive run). Honest deliver: 8 daily parcels (below 15 ceiling), 4 Tier-A HG, 6 Tier-B theses, 4 status updates. Fresh-listing yield continues ~1-2 per Tier-1 market per week per playbook 5/05+.</p>
+
+<h3>2. Headline Findings</h3>
+<ul class="compact">
+<li><strong>MATERIAL MARKET INTEL:</strong> Auburn moratorium re-confirmed through 11/30/2026 (per 5/5/2026 City Council update). Auburn-proper deprioritized until Q1 2027; pivot to Opelika carve-out on 234.04-ac tract.</li>
+<li><strong>D-1 PRO FORMA TARGET:</strong> Bowling Green KY 24.45-ac Russellville Rd at $3.3M ($134,969/ac). MF carve partition. BASE YoC 5.64% PROCEED. Multi-anchor; INSURANCE 2x → 5.21% CONDITIONAL; UPSIDE → 6.14% PROCEED COMFORTABLE.</li>
+<li><strong>HG-1 PRO FORMA TARGET:</strong> Aiken SC Wire Road 55-ac PUD-B (5/11 HG-2 continued). Partition 25-ac MF carve, 325u. BASE YoC 5.15% CONDITIONAL. Multi-anchor Aiken; INSURANCE 2x → 4.59% BORDERLINE; UPSIDE → 5.61% PROCEED.</li>
+<li>Aiken cluster reinforced: Taft-Mills Seter Ridge Trace 80u approved 6-0 by Aiken Planning Commission at Gregg Hwy × Lokey Dr (10.03-ac). Below 200u floor — process reference only — compounds Aiken pipeline thesis (4,492u / 1,327 ac per 5/11 P&amp;C).</li>
+<li>C&amp;W Sunbelt MFA institutional broker cluster: 5 parcels across 3 states (Greer + Beaufort + Brunswick + Augusta Birdwell + Clayton NC). Single consolidated broker call remains highest-leverage execution.</li>
+<li>Meybohm Commercial 36.88-ac MF (Aiken/N. Augusta) RE-ELEVATED 6th time — WEEK 2 URGENT — 12-day open status without broker contact.</li>
+<li>Greenville-Spartanburg supply: Q4 2025 / Q1 2026 reporting confirms pipeline 2,188 units vs annual absorption ~1,310 — &lt;1yr supply remaining; pro-supply signal supports Tier-1 SC primary pursuit.</li>
+<li>Wilmington / Brunswick NC pipeline unchanged at 23,500+ cumulative. DO NOT surface NHC/Brunswick parcels until Q3 2026.</li>
+</ul>
+
+<h3>3. Pro Forma Verdicts (BASE)</h3>
+<table class="data-tbl"><thead><tr><th>Parcel</th><th>BASE YoC</th><th>Verdict</th><th>Worst-case</th><th>Best-case</th></tr></thead>
+<tbody>
+<tr><td>D-1 Bowling Green KY 24.45-ac MF carve (220u)</td><td>5.64%</td><td><span class="verdict v-proceed">PROCEED</span></td><td>5.06% CONDITIONAL (COST SPIKE)</td><td>6.14% PROCEED COMFORTABLE</td></tr>
+<tr><td>HG-1 Aiken Wire Rd 55-ac MF carve (325u)</td><td>5.15%</td><td><span class="verdict v-conditional">CONDITIONAL</span></td><td>4.59% BORDERLINE (INSURANCE 2x)</td><td>5.61% PROCEED</td></tr>
+</tbody></table>
+
+<h3>4. Urgent Actions (Week)</h3>
+<ul class="compact">
+<li><strong>URGENT</strong> — Meybohm Commercial broker call (Aiken/N. Augusta 36.88-ac, 12-day open, 6th re-elevation Week 2).</li>
+<li><strong>URGENT</strong> — C&amp;W Sunbelt MFA single consolidated broker call (Greer + Beaufort + Brunswick + Augusta Birdwell + Clayton NC).</li>
+<li><strong>URGENT</strong> — BHHS Preferred Auburn call to confirm 234.04-ac moratorium impact + Opelika carve-out feasibility.</li>
+<li><strong>PRIORITY</strong> — RE/MAX Stephen Stucy broker call (BG KY Sterling Business Park 19.69-ac RM-4 entitled 456u).</li>
+<li><strong>PRIORITY</strong> — Listing-broker call on D-1 BG KY 24.45-ac Russellville Rd + BG Planning pre-app on MF carve density.</li>
+<li><strong>PRIORITY</strong> — Blackston &amp; Associates broker call (Aiken Wire Road 55-ac PUD-B subdivision).</li>
+</ul>
+
+<h3>5. Inventory Caveat</h3>
+<p>11th consecutive honest deliver below 15-parcel ceiling. Recommend Atlas confirm cadence preference: (1) twice-weekly (Tu/Th) + Friday weekly synthesis; (2) daily with rotating focus by state; (3) maintain daily and accept 8-12 honest deliver as the new floor.</p>
+</div>
+
+<div class="tab-panel" id="panel-comps">
+<h2>Comp Tracker</h2>
+<p>Land sale comps and rent benchmarks. Refreshed when material updates exist; cross-referenced against today's parcels for basis-check trigger.</p>
+<h3>Land Sale Comps (recent)</h3>
+<table class="data-tbl"><thead><tr><th>Market</th><th>Comp / Listing</th><th>Acres</th><th>Price</th><th>$/Ac</th><th>Notes</th></tr></thead><tbody><tr><td>Bowling Green KY</td><td>Sterling Business Park RM-4 entitled 456u</td><td>19.69</td><td>$5,600,000</td><td>$284,408/ac</td><td>Reference for entitled product premium (5/01 KY-1)</td></tr><tr><td>Bowling Green KY</td><td>Russellville Rd 24.45-ac across SBP (D-1 TODAY)</td><td>24.45</td><td>$3,300,000</td><td>$134,969/ac</td><td>Below comp basis suggests valuation room (mixed-use partition path)</td></tr><tr><td>Aiken/N. Augusta SC</td><td>Meybohm 36.88-ac MF</td><td>36.88</td><td>$1,807,120</td><td>$49,000/ac</td><td>RE-ELEVATED 6x; well below typical Aiken band</td></tr><tr><td>Aiken SC</td><td>Wire Road 55-ac PUD-B (HG-1 TODAY)</td><td>55.0</td><td>$3,000,000 placeholder</td><td>$54,545/ac whole</td><td>Partition; allocate 25/55 to MF carve</td></tr><tr><td>Augusta GA</td><td>Birdwell Rd 57.49-ac (5/10 D-1)</td><td>57.49</td><td>$4,500,000</td><td>$78,274/ac</td><td>Phase-1 carve approach</td></tr><tr><td>Augusta GA</td><td>13.98-ac MF-zoned 228u (5/11 D-1)</td><td>13.98</td><td>$2,447,000</td><td>$175,036/ac</td><td>Entitlement-in-hand premium</td></tr><tr><td>Greer/Spartanburg SC</td><td>Freeman Farm 19.31-ac by-right MF (5/08 D-1)</td><td>19.31</td><td>$5,000,000</td><td>$258,932/ac</td><td>By-right MF rare in SC</td></tr><tr><td>Lexington KY</td><td>21.68-ac (5/09 D-1)</td><td>21.68</td><td>$4,703,360</td><td>$217,000/ac</td><td>Un-entitled R-4/R-5 mid-band</td></tr><tr><td>Lakeland FL</td><td>W Pipkin 15.46-ac (5/07 D-1)</td><td>15.46</td><td>$3,000,000</td><td>$194,049/ac</td><td>Mosaic precedent same corridor</td></tr><tr><td>Brunswick GA</td><td>Brunswick Villa 14.98-ac BTR→MF (5/09 HG-1)</td><td>14.98</td><td>$1,800,000</td><td>$120,160/ac</td><td>Coastal-GA INSURANCE 2x mandatory</td></tr><tr><td>Hattiesburg MS</td><td>Forrest Co 42-ac (5/08 HG-3)</td><td>42.0</td><td>$1,126,566 implied (avg $26,823)</td><td>$26,823/ac</td><td>At env-flag threshold; cluster</td></tr><tr><td>Panama City FL</td><td>PCB Pkwy 13.82-ac Live Local conv (5/10 HG-1)</td><td>13.82</td><td>$2,418,500</td><td>$175,000/ac</td><td>Tyndall BAH + Panhandle ins load</td></tr></tbody></table>
+<h3>Rent Comps (Class A blended)</h3>
+<table class="data-tbl"><thead><tr><th>Market</th><th>$/u/mo</th><th>Source</th></tr></thead><tbody>
+<tr><td>Charleston SC (Mt. Pleasant)</td><td>$2,250</td><td>RealPage broker survey 2026 Q1</td></tr>
+<tr><td>Greenville-Spartanburg SC</td><td>$1,725</td><td>Q1 2026 Colliers</td></tr>
+<tr><td>Lexington KY</td><td>$1,800</td><td>Continental Springs at Polo Club indication</td></tr>
+<tr><td>Bowling Green KY</td><td>$1,800</td><td>Market intel 5/01 + SBP catchment premium</td></tr>
+<tr><td>Augusta GA (Tobacco Rd + BAH)</td><td>$1,750</td><td>BAH-eligible product premium</td></tr>
+<tr><td>Aiken/N. Augusta SC</td><td>$1,650</td><td>Market intel 5/07</td></tr>
+<tr><td>Knoxville TN (West/Hardin Valley)</td><td>$1,725</td><td>RealPage broker survey</td></tr>
+<tr><td>Chattanooga TN</td><td>$1,650</td><td>RealPage broker survey</td></tr>
+<tr><td>Lakeland FL (I-4 corridor)</td><td>$1,925</td><td>Market intel 5/07</td></tr>
+<tr><td>Tallahassee FL</td><td>$1,775</td><td>Market intel 5/04</td></tr>
+<tr><td>Brunswick-Golden Isles GA</td><td>$1,625</td><td>Q3 2025 comp sale $239k/u at 6.4% cap</td></tr>
+<tr><td>Hickory NC</td><td>$1,400</td><td>Market intel 5/01</td></tr>
+<tr><td>Tupelo MS</td><td>$1,575</td><td>Market intel 5/04 — validate</td></tr>
+<tr><td>Hattiesburg MS</td><td>$1,475</td><td>Market intel 5/04</td></tr>
+<tr><td>Statesboro GA</td><td>$1,575</td><td>Market intel 5/05 — validate</td></tr>
+<tr><td>Panama City FL</td><td>$1,575</td><td>Market intel 5/10</td></tr>
+</tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-outreach">
+<h2>Outreach Tracker</h2>
+<p>Active broker / owner conversations. Status reflects consolidated broker cluster discipline (per playbook 5/08+).</p>
+<table class="data-tbl"><thead><tr><th>Broker / Owner</th><th>Firm</th><th>Parcel(s)</th><th>Urgency</th><th>Next Action</th></tr></thead><tbody><tr><td>Stephen Stucy</td><td>RE/MAX (BG KY)</td><td>BG Sterling Business Park 19.69-ac RM-4 entitled 456u (HG-2)</td><td><span class="verdict v-conditional">PRIORITY</span></td><td>Schedule call this week — entitled product premium discussion</td></tr><tr><td>BG D-1 Listing Broker</td><td>TBV — LandSearch</td><td>BG KY Russellville Rd 24.45-ac (D-1 PRO FORMA)</td><td><span class="verdict v-conditional">PRIORITY</span></td><td>Schedule call — asking + zoning + MF carve density verification</td></tr><tr><td>Cushman &amp; Wakefield Sunbelt MFA</td><td>C&amp;W (Atlanta + Augusta + Charlotte)</td><td>5 parcels: Greer + Beaufort + Brunswick + Augusta Birdwell + Clayton NC</td><td><span class="verdict v-does">URGENT</span></td><td>Single consolidated broker call this week</td></tr><tr><td>Meybohm Commercial</td><td>Meybohm (Aiken/N. Augusta)</td><td>36.88-ac MF — RE-ELEVATED 6x WEEK 2</td><td><span class="verdict v-does">URGENT</span></td><td>URGENT call this week — 12-day open; competitor risk material</td></tr><tr><td>BHHS Preferred Auburn</td><td>BHHS (Auburn-Opelika)</td><td>234.04-ac large tract — MORATORIUM IMPACT</td><td><span class="verdict v-does">URGENT</span></td><td>Confirm moratorium impact + Opelika carve-out feasibility</td></tr><tr><td>Blackston &amp; Associates</td><td>Blackston (Aiken)</td><td>Wire Road 55-ac PUD-B (today HG-1)</td><td><span class="verdict v-conditional">PRIORITY</span></td><td>Coordinate PUD-B modification + MF carve sizing</td></tr><tr><td>Taft-Mills Group</td><td>Taft Family Ventures (NC)</td><td>Aiken Westside Seter Ridge Trace 10.03-ac approved 80u</td><td><span class="verdict v-conditional">PRIORITY</span></td><td>Off-market outreach re: adjacent Westside assemblage pipeline</td></tr><tr><td>RE/MAX / SVN / Goldman Knoxville</td><td>Multiple brokers Knoxville</td><td>Hardin Valley 30-ac + 60-ac West Knox</td><td><span class="verdict v-proceed">STANDARD</span></td><td>Verify parcel IDs against 4/30+5/08 ledger; consolidate calls</td></tr></tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-dd">
+<h2>DD Checklist (template)</h2>
+<p>Per-parcel copies during active DD. Phases align with PSA timeline.</p>
+<table class="data-tbl"><thead><tr><th>Phase</th><th>Task</th><th>Notes</th></tr></thead><tbody><tr><td>Pre-LOI</td><td>Listing-broker call (OM + asking)</td><td>Mandatory before LOI</td></tr><tr><td>Pre-LOI</td><td>Comp Tracker basis check (&gt;25% over local comps?)</td><td>Per config v2.2 auto-trigger</td></tr><tr><td>Pre-LOI</td><td>Pipeline oversupply check (&gt;2,000 U/C in &lt;250k MSA?)</td><td>Per config v2.2 auto-trigger</td></tr><tr><td>Pre-LOI</td><td>Climate / insurance auto-flag (coastal? HIGH/EXTREME flood?)</td><td>Per config v2.2 auto-trigger</td></tr><tr><td>Pre-LOI</td><td>Desktop FEMA + NWI check</td><td></td></tr><tr><td>Pre-LOI</td><td>Desktop env triage (if $/ac &lt; $25k AND &gt;15 ac)</td><td>Per config v2.2 auto-flag</td></tr><tr><td>Pre-LOI</td><td>Pre-application meeting (Planning/Zoning)</td><td>For rezone-required parcels</td></tr><tr><td>Pre-LOI</td><td>Indicative GC budget (one or two GCs)</td><td>Hard cost validation</td></tr><tr><td>LOI</td><td>Submit non-binding LOI</td><td>Counsel review mandatory</td></tr><tr><td>Inspection (0-60d)</td><td>Title commitment ordered</td><td></td></tr><tr><td>Inspection (0-60d)</td><td>Survey (ALTA)</td><td></td></tr><tr><td>Inspection (0-60d)</td><td>Phase I ESA</td><td></td></tr><tr><td>Inspection (0-60d)</td><td>Geotech (soils)</td><td></td></tr><tr><td>Inspection (0-60d)</td><td>Traffic study (TIA)</td><td>Required for rezone hearings</td></tr><tr><td>Inspection (0-60d)</td><td>Utility verification</td><td></td></tr><tr><td>Inspection (0-60d)</td><td>Wetlands delineation</td><td></td></tr><tr><td>Inspection (0-60d)</td><td>Insurance broker indication</td><td>Mandatory for coastal / FL Panhandle</td></tr><tr><td>Inspection (0-60d)</td><td>Market feasibility (rent comps)</td><td>RealPage / CoStar</td></tr><tr><td>Inspection (30-90d)</td><td>Phase II ESA (if triggered)</td><td>Industrial/salvage redev</td></tr><tr><td>Inspection (30-90d)</td><td>Formal pre-application meeting</td><td></td></tr><tr><td>Inspection (30-90d)</td><td>Financing term sheets</td><td></td></tr><tr><td>Pre-close</td><td>PSA amendments + IC approval</td><td></td></tr><tr><td>Close</td><td>Funding + recording</td><td></td></tr></tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-submarkets">
+<h2>Submarket Fundamentals</h2>
+<table class="data-tbl"><thead><tr><th>Submarket</th><th>MSA Pop</th><th>Class A Rent</th><th>Vacancy</th><th>Status</th></tr></thead><tbody><tr><td>Charleston SC</td><td>825k</td><td>$2,250</td><td>5.8%</td><td>BALANCED-TIGHT</td></tr><tr><td>Greenville-Spartanburg SC</td><td>938k</td><td>$1,725</td><td>7.2%</td><td>BALANCED-TIGHT</td></tr><tr><td>Knoxville TN</td><td>945k</td><td>$1,725</td><td>6.5%</td><td>TIGHT-UNDERSUPPLY</td></tr><tr><td>Chattanooga TN</td><td>570k</td><td>$1,650</td><td>7.0%</td><td>BALANCED</td></tr><tr><td>Lexington-Fayette KY</td><td>520k</td><td>$1,800</td><td>7.5%</td><td>BALANCED</td></tr><tr><td>Bowling Green KY</td><td>180k</td><td>$1,800</td><td>7.0%</td><td>BALANCED</td></tr><tr><td>Wilmington NC (NHC)</td><td>295k</td><td>$1,900</td><td>8.0%</td><td>WATCH-PIPELINE</td></tr><tr><td>Brunswick County NC</td><td>155k</td><td>$1,750</td><td>7.5%</td><td>WATCH EXTREME</td></tr><tr><td>Asheville NC</td><td>470k</td><td>$1,950</td><td>6.5%</td><td>TIGHT (partnership only)</td></tr><tr><td>Hickory NC</td><td>365k</td><td>$1,400</td><td>6.8%</td><td>TIGHT (off-market)</td></tr><tr><td>Augusta GA</td><td>615k</td><td>$1,650 (+BAH prem $1,750)</td><td>6.8%</td><td>BALANCED-TIGHT (multi-anchor)</td></tr><tr><td>Savannah GA</td><td>415k</td><td>$1,975</td><td>6.0%</td><td>BALANCED-TIGHT (Hyundai)</td></tr><tr><td>Statesboro GA</td><td>82k</td><td>$1,575</td><td>7.0%</td><td>WATCH-PIPELINE</td></tr><tr><td>Brunswick GA</td><td>120k</td><td>$1,625</td><td>7.2%</td><td>BALANCED-COASTAL</td></tr><tr><td>Aiken/N. Augusta SC</td><td>175k</td><td>$1,650</td><td>6.8%</td><td>BALANCED-PRO-DEV</td></tr><tr><td>Sumter SC</td><td>105k</td><td>$1,525</td><td>7.5%</td><td>TIGHT (off-market)</td></tr><tr><td>Florence SC</td><td>200k</td><td>$1,550</td><td>7.0%</td><td>BALANCED (restrictive)</td></tr><tr><td>Lakeland FL</td><td>800k</td><td>$1,925</td><td>7.0%</td><td>BALANCED-WATCH</td></tr><tr><td>Ocala FL</td><td>405k</td><td>$1,700</td><td>8.0%</td><td>WATCH</td></tr><tr><td>Daytona Beach FL</td><td>700k</td><td>$1,850</td><td>7.5%</td><td>BALANCED</td></tr><tr><td>Tallahassee FL</td><td>395k</td><td>$1,775</td><td>6.8%</td><td>BALANCED</td></tr><tr><td>Pensacola FL</td><td>510k</td><td>$1,725</td><td>7.8%</td><td>BALANCED-COASTAL</td></tr><tr><td>Gainesville FL</td><td>340k</td><td>$1,650</td><td>6.5%</td><td>BALANCED</td></tr><tr><td>Panama City FL</td><td>200k</td><td>$1,575</td><td>7.8%</td><td>BALANCED-COASTAL</td></tr><tr><td>Crestview/FWB FL</td><td>270k</td><td>$1,950</td><td>7.0%</td><td>BALANCED-COASTAL</td></tr><tr><td>Huntsville-Madison AL</td><td>510k</td><td>$1,800</td><td>10.4%</td><td>OVERSUPPLY (SUSPENDED)</td></tr><tr><td>Auburn-Opelika AL</td><td>175k</td><td>$1,725</td><td>6.0%</td><td>BALANCED — MORATORIUM Auburn proper thru 11/30/2026</td></tr><tr><td>Tupelo MS</td><td>165k</td><td>$1,575</td><td>7.5%</td><td>TIGHT (no inst pipeline)</td></tr><tr><td>Hattiesburg MS</td><td>145k</td><td>$1,475</td><td>7.8%</td><td>BALANCED</td></tr><tr><td>Dothan AL</td><td>150k</td><td>$1,475</td><td>7.0%</td><td>BALANCED (out-of-focus)</td></tr><tr><td>Valdosta GA</td><td>145k</td><td>$1,475</td><td>7.5%</td><td>TIGHT-OFFMARKET</td></tr></tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-climate">
+<h2>Climate Risk</h2>
+<p>Per-parcel climate exposure with default insurance load and INSURANCE 2x scenario trigger.</p>
+<table class="data-tbl"><thead><tr><th>Parcel</th><th>Market</th><th>Coastal?</th><th>Flood Tier</th><th>Default $/u/yr</th><th>INSURANCE 2x?</th></tr></thead><tbody><tr><td>D-1</td><td>Bowling Green, KY (Warren County)</td><td>No</td><td>LOW</td><td>$900</td><td>No</td></tr><tr><td>D-2</td><td>Aiken, SC (Aiken County) — Westside</td><td>No</td><td>LOW-MODERATE</td><td>$1,200</td><td>No</td></tr><tr><td>D-3</td><td>Greenville County, SC (southern county, outside city limits)</td><td>No</td><td>LOW-MODERATE</td><td>$1,200</td><td>No</td></tr><tr><td>D-4</td><td>Knoxville, TN (Knox County) — Hardin Valley</td><td>No</td><td>LOW</td><td>$950</td><td>No</td></tr><tr><td>D-5</td><td>Statesboro / Bulloch County, GA</td><td>No</td><td>MODERATE</td><td>$1,400</td><td>No</td></tr><tr><td>D-6</td><td>Lakeland, FL (Polk County)</td><td>No</td><td>MODERATE</td><td>$1,500</td><td>No</td></tr><tr><td>D-7</td><td>Volusia County, FL (Orange City)</td><td>No</td><td>MODERATE</td><td>$1,500</td><td>No</td></tr><tr><td>D-8</td><td>Wilmington / New Hanover County, NC</td><td>Yes</td><td>HIGH</td><td>$2,000</td><td>Yes</td></tr><tr><td>HG-1</td><td>Aiken / N. Augusta, SC (Aiken County)</td><td>No</td><td>LOW-MODERATE</td><td>$1,200</td><td>No</td></tr><tr><td>HG-2</td><td>Bowling Green, KY (Warren County)</td><td>No</td><td>LOW</td><td>$900</td><td>No</td></tr><tr><td>HG-3</td><td>Hickory, NC (Catawba County) — I-40 corridor</td><td>No</td><td>MODERATE</td><td>$1,400</td><td>No</td></tr><tr><td>HG-4</td><td>Hattiesburg, MS (Forrest County)</td><td>No</td><td>MODERATE</td><td>$1,400</td><td>No</td></tr></tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-pipeline">
+<h2>Pipeline Intelligence</h2>
+<table class="data-tbl"><thead><tr><th>Market</th><th>Pipeline U/C</th><th>Annual Absorption</th><th>Status</th></tr></thead><tbody><tr><td>Charleston SC</td><td>4,200</td><td>3,200</td><td>BALANCED-TIGHT</td></tr><tr><td>Greenville-Spartanburg SC</td><td>2,188</td><td>1,310</td><td>BALANCED-TIGHT (pro-supply)</td></tr><tr><td>Knoxville TN</td><td>1,800</td><td>2,100</td><td>TIGHT-UNDERSUPPLY</td></tr><tr><td>Lexington KY</td><td>1,650</td><td>1,500</td><td>BALANCED</td></tr><tr><td>Bowling Green KY</td><td>850</td><td>600</td><td>BALANCED</td></tr><tr><td>Wilmington NHC NC</td><td>3,200</td><td>1,400</td><td>WATCH-PIPELINE</td></tr><tr><td>Brunswick County NC</td><td>23,500+ cumulative</td><td>1,800</td><td>WATCH EXTREME</td></tr><tr><td>Augusta GA</td><td>1,400</td><td>1,500</td><td>BALANCED-TIGHT (multi-anchor)</td></tr><tr><td>Savannah GA (Hyundai)</td><td>2,800</td><td>2,200</td><td>BALANCED-TIGHT</td></tr><tr><td>Statesboro GA</td><td>3,970 planned citywide</td><td>600</td><td>WATCH-PIPELINE</td></tr><tr><td>Aiken/N. Augusta SC</td><td>4,492 pipeline / 1,327 ac</td><td>1,100</td><td>BALANCED-PRO-DEV (rising)</td></tr><tr><td>Lakeland FL</td><td>2,400</td><td>1,900</td><td>BALANCED-WATCH (8 new complexes)</td></tr><tr><td>Huntsville AL</td><td>3,200 + 3,000u annexed Limestone</td><td>2,100</td><td>OVERSUPPLY (pricing reset)</td></tr><tr><td>Auburn-Opelika AL</td><td>1,100</td><td>950</td><td>BALANCED — MORATORIUM thru 11/30/2026</td></tr></tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-offmarket">
+<h2>Off-Market Targets</h2>
+<table class="data-tbl"><thead><tr><th>Market</th><th>Corridor / Strategy</th><th>Status</th></tr></thead><tbody><tr><td>Aiken SC</td><td>Westside Gregg Hwy × Lokey Dr (Taft-Mills adj)</td><td>ACTIVE — NEW today</td></tr><tr><td>Pooler/Bryan Co GA</td><td>1-mi Hyundai Metaplant catchment</td><td>ACTIVE</td></tr><tr><td>Brunswick/Glynn GA</td><td>PD-approved tracts adjacent applicants</td><td>ACTIVE</td></tr><tr><td>Auburn-Opelika AL</td><td>234.04-ac Opelika-side carve-out</td><td>URGENT — moratorium update</td></tr><tr><td>Hattiesburg MS</td><td>Oak Grove + US-49 corridor + Forrest Co</td><td>ACTIVE</td></tr><tr><td>Tupelo MS</td><td>Hwy 6 + N. Veterans Blvd I-22 cluster</td><td>ACTIVE</td></tr><tr><td>Statesboro/Bulloch GA</td><td>South Statesboro 100+ ac AG</td><td>WATCH</td></tr><tr><td>Sumter SC</td><td>Patriot Pkwy / Carter Rd + Shaw AFB radius</td><td>ACTIVE</td></tr><tr><td>Hickory NC</td><td>I-40 exits 121-130 Mountain View/Conover</td><td>ACTIVE</td></tr><tr><td>Florence SC</td><td>McLeod Health / I-95 corridor</td><td>WATCH</td></tr><tr><td>The Shoals AL</td><td>Manufacturing + healthcare cluster</td><td>DEVELOP</td></tr><tr><td>Murray KY</td><td>Murray State catchment</td><td>WATCH</td></tr><tr><td>Owensboro KY</td><td>Aluminum + Toyotetsu corridor</td><td>WATCH</td></tr></tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-capital">
+<h2>Capital Markets Brief</h2>
+<p>Indicative rates / spreads / cap rates based on broker + lender survey commentary (May 2026). Refresh quarterly. Live deal pricing requires conversations with active capital partners.</p>
+<h3>Debt Markets (May 2026 indicative)</h3>
+<table class="data-tbl"><thead><tr><th>Product</th><th>Terms</th><th>Indicative Range</th></tr></thead><tbody>
+<tr><td>10-Yr Treasury</td><td>Benchmark</td><td>~4.20-4.40%</td></tr>
+<tr><td>Fannie/Freddie MF perm</td><td>10-yr fixed, 30-yr amort, 60-65% LTV</td><td>5.50-6.10% all-in</td></tr>
+<tr><td>Construction loan</td><td>65-70% LTC, SOFR + spread</td><td>5.75-6.50% all-in</td></tr>
+<tr><td>Bridge / value-add</td><td>SOFR + 350-475 bps, IO, 50-65% LTV</td><td>6.75-7.75%</td></tr>
+</tbody></table>
+<h3>Exit Cap Rates</h3>
+<table class="data-tbl"><thead><tr><th>Tier</th><th>Markets</th><th>Cap Rate</th></tr></thead><tbody>
+<tr><td>Tier-1 primary</td><td>Charleston / Greenville-Spartanburg / Knoxville / Lexington</td><td>5.25-5.75%</td></tr>
+<tr><td>Tier-2 secondary</td><td>Augusta / Savannah / Asheville / Wilmington</td><td>5.75-6.25%</td></tr>
+<tr><td>Tier-3 tertiary</td><td>Aiken / Hickory / Statesboro / Bowling Green</td><td>6.00-6.50%</td></tr>
+<tr><td>Tier-4 HG</td><td>Tupelo / Hattiesburg / Brunswick / Dothan / Valdosta</td><td>6.25-7.00%</td></tr>
+<tr><td>Modifier: FL Panhandle / coastal</td><td>+25-50 bps for insurance + storm exposure</td><td>—</td></tr>
+<tr><td>Modifier: single-anchor markets</td><td>+25 bps unless ≥3 distinct major employers</td><td>—</td></tr>
+</tbody></table>
+<h3>Insurance Load (defaults)</h3>
+<table class="data-tbl"><thead><tr><th>Region</th><th>Default $/u/yr</th><th>INSURANCE 2x?</th></tr></thead><tbody>
+<tr><td>FL coastal</td><td>$2,000-2,800</td><td>MANDATORY</td></tr>
+<tr><td>GA / NC / SC coastal</td><td>$1,800-2,500</td><td>MANDATORY</td></tr>
+<tr><td>Inland SE Sun Belt</td><td>$900-1,400</td><td>Standard stress</td></tr>
+<tr><td>KY / TN / inland AL</td><td>$750-1,200</td><td>Standard stress</td></tr>
+</tbody></table>
+</div>
+
+<div class="tab-panel" id="panel-templates">
+<h2>Templates</h2>
+<h3>Letter of Intent (boilerplate)</h3>
+<p>Counsel review required prior to delivery. State-specific modifications required. See <code>ORACLE_LOI_Template_2026-05-12.docx</code> in archive.</p>
+<div class="callout">Key LOI sections: Property / Purchase Price / Earnest Money / Inspection Period (60-120d) / Closing (30-60d post-inspection) / Conditions to Close (DD satisfaction, entitlement path confirmation, utility verification, clear title, no material adverse change) / Non-binding clause.</div>
+<h3>Off-Market Outreach Letter</h3>
+<p>Mailed letter campaigns + 7-10 day phone follow-up. Expected hit rate ~1-3% net to deal touch. See <code>ORACLE_Off_Market_Outreach_Letter_2026-05-12.docx</code> in archive.</p>
+<div class="callout">Letter framing: identify Neyland Development LLC, reference parcel via public records, offer no-broker direct conversation, no-obligation indicative value within 7-10 days, confidential desktop DD at no cost, expedited PSA path.</div>
+</div>
+
+<div class="tab-panel" id="panel-system">
+<h2>System</h2>
+<h3>Run Metadata</h3>
+<table class="data-tbl"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<tr><td>Date</td><td>2026-05-12</td></tr>
+<tr><td>Run #</td><td>11</td></tr>
+<tr><td>Brain config version</td><td>v2.2</td></tr>
+<tr><td>State scope</td><td>TN · GA · SC · NC · FL · KY · AL</td></tr>
+<tr><td>Focus markets primary</td><td>17 (per config v2.2)</td></tr>
+<tr><td>Focus markets hidden gem</td><td>24 (per config v2.2)</td></tr>
+<tr><td>Daily parcels (today)</td><td>8</td></tr>
+<tr><td>Tier-A Hidden Gems (today)</td><td>4</td></tr>
+<tr><td>Tier-B theses (today)</td><td>6</td></tr>
+<tr><td>Status updates (today)</td><td>4</td></tr>
+<tr><td>60-day dedup window</td><td>140+ prior parcels</td></tr>
+<tr><td>Consecutive runs below 15-parcel ceiling</td><td>11</td></tr>
+</tbody></table>
+
+<h3>Data Limitations</h3>
+<ul class="compact">
+<li>Asking prices marked TBV when not publicly available — never fabricated.</li>
+<li>Owner names + parcel IDs marked TBV when not in public assessor / GIS records.</li>
+<li>Cross-aggregator dedup applied (60-day window per config v2.2 — 140+ ledger parcels).</li>
+<li>Pro forma assumptions calibrated to historical baseline patterns in market_intel; rent + hard cost require RealPage / CoStar + GC budget validation pre-LOI.</li>
+<li>Insurance loads default to playbook tiers; site-specific insurance broker indication mandatory before LOI on coastal / FL Panhandle.</li>
+</ul>
+
+<h3>Methodology Changes Today</h3>
+<ul class="compact">
+<li>NEW MATERIAL INTEL: Auburn AL building moratorium re-confirmed through 11/30/2026 per 5/5/2026 City Council update; logged to market_intel.md.</li>
+<li>NEW MARKET INTEL: Greenville-Spartanburg supply data — pipeline 2,188u vs absorption ~1,310/yr — pro-supply signal logged to market_intel.md + pipeline_intel.xlsx.</li>
+<li>NEW MARKET INTEL: Aiken Westside Taft-Mills Seter Ridge Trace 80u approved 6-0 by Planning Commission — reinforces Aiken pipeline (4,492 units / 1,327 ac).</li>
+<li>No config version bump today (no rubric weight changes; new intel only).</li>
+</ul>
+
+<h3>Cadence Decision (still pending Atlas)</h3>
+<p>11th consecutive run with honest deliver below 15-parcel ceiling. Three options remain on the table for Atlas:</p>
+<ul class="compact">
+<li>(1) Twice-weekly cadence (Tu/Th) + Friday weekly synthesis report.</li>
+<li>(2) Daily with rotating focus by state (Mon TN+KY; Tue GA+SC; Wed NC; Thu FL primary; Fri HG + status).</li>
+<li>(3) Maintain daily and accept 8-12 honest deliver as the new floor.</li>
+</ul>
+</div>
+
+</main>
+<footer>
+  ORACLE site-sourcing agent · Run #11 · Brain v2.2 · Generated 2026-05-12 ·
+  Methodology: TBV fields never fabricated; 60-day dedup discipline; honest deliver below 15-parcel ceiling.
+</footer>
+<script>
+
+document.querySelectorAll('nav.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.tab;
+    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + t).classList.add('active');
+  });
+});
+
+</script>
+</body>
+</html>
